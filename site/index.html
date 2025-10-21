@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Microagents — minimal AI assistants for your workflows</title>
+  <meta name="description" content="Deploy simple micro-agents that handle tasks for you. Start, approve, and let your AI work while you tune configuration, observe progress, and keep control." />
+  <link rel="canonical" href="https://microagents.ai/" />
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
+  <meta name="robots" content="index,follow,max-image-preview:large" />
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://microagents.ai/" />
+  <meta property="og:title" content="Microagents — minimal AI assistants" />
+  <meta property="og:description" content="Start. Approve. Done. Your AI gets to work." />
+  <meta property="og:image" content="https://microagents.ai/assets/og-image.jpg" />
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Microagents — minimal AI assistants" />
+  <meta name="twitter:description" content="Start. Approve. Done. Your AI gets to work." />
+  <meta name="twitter:image" content="https://microagents.ai/assets/og-image.jpg" />
+  <!-- JSON-LD (Organization + WebSite). Use JSON-LD per Google guidance. -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Microagents",
+    "url": "https://microagents.ai",
+    "logo": "https://microagents.ai/assets/logo.png",
+    "sameAs": []
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "url": "https://microagents.ai",
+    "name": "Microagents"
+  }
+  </script>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #111111;
+      --fg: #f4f1ea;
+      --muted: #c9c5bc;
+      --accent: #0ea5e9;
+      --accent-hover: #38bdf8;
+      --border: #2a2a2a;
+      --surface: #1b1b1b;
+      --card-bg: #171717;
+      --shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+      --placeholder-bg: #1f2937;
+      --placeholder-border: #374151;
+      --placeholder-text: #9ca3af;
+      --font-serif: "Helvetica Neue", sans-serif;
+      --font-sans: "Helvetica Neue", sans-serif;
+    }
+    body[data-theme="light"] {
+      color-scheme: light;
+      --bg: #ffffff;
+      --fg: #111111;
+      --muted: #4b5563;
+      --accent: #0ea5e9;
+      --accent-hover: #0284c7;
+      --border: #e5e7eb;
+      --surface: #f8fafc;
+      --card-bg: #ffffff;
+      --shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+      --placeholder-bg: #f8fafc;
+      --placeholder-border: #cbd5e1;
+      --placeholder-text: #4b5563;
+    }
+    *,*::before,*::after{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:var(--font-sans);
+      background:var(--bg);
+      color:var(--fg);
+      transition:background 0.3s ease,color 0.3s ease;
+    }
+    body[data-theme="dark"]{color-scheme:dark}
+    a{color:inherit;text-decoration:none}
+    a:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:12px}
+    .container{max-width:1120px;margin:0 auto;padding:0 32px}
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:32px 0;gap:16px}
+    .logo{font-family:var(--font-serif);font-size:22px;font-weight:600;letter-spacing:-0.01em}
+    .actions{display:flex;align-items:center;gap:16px}
+    .btn{display:inline-block;background:var(--accent);color:#ffffff;padding:16px 28px;border-radius:12px;font-weight:600;border:1px solid transparent;transition:background-color 0.2s ease,box-shadow 0.2s ease}
+    .btn:hover{background:var(--accent-hover)}
+    .btn:focus-visible{box-shadow:0 0 0 4px rgba(14,165,233,0.25)}
+    .theme-toggle{background:transparent;color:var(--muted);border:1px solid var(--border);border-radius:999px;padding:10px 18px;font-weight:600;font-family:var(--font-sans);cursor:pointer;transition:color 0.2s ease,border-color 0.2s ease,background-color 0.2s ease}
+    .theme-toggle:hover{color:var(--fg);border-color:var(--accent);background-color:rgba(14,165,233,0.08)}
+    .theme-toggle:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+    .hero{padding:64px 0 32px;text-align:center}
+    .headline{font-family:var(--font-serif);font-size:48px;line-height:1.05;margin:16px 0}
+    .hero-description{max-width:640px;margin:0 auto 32px auto;color:var(--muted);font-size:18px;line-height:1.6}
+    .hero-visual{margin:40px auto 0 auto;max-width:960px;border:1px solid var(--border);border-radius:20px;padding:24px;background:var(--surface);box-shadow:var(--shadow)}
+    .placeholder{display:flex;align-items:center;justify-content:center;width:100%;aspect-ratio:16/9;border:1px dashed var(--placeholder-border);border-radius:12px;background:var(--placeholder-bg);color:var(--placeholder-text);font-size:16px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase}
+    .placeholder span{opacity:0.7}
+    .hero-placeholder{border-radius:16px}
+    .how{padding:80px 0}
+    .how h2{font-family:var(--font-serif);font-size:32px;margin:0 0 32px 0;text-align:center}
+    .cards{display:grid;gap:32px;grid-template-columns:repeat(3,minmax(0,1fr))}
+    .card{border:1px solid var(--border);border-radius:18px;padding:32px;display:flex;flex-direction:column;gap:24px;background:var(--card-bg);box-shadow:var(--shadow)}
+    .card h3{margin:0;font-size:20px;font-weight:600;font-family:var(--font-serif)}
+    .card p{margin:0;color:var(--muted);line-height:1.6}
+    .card-placeholder{border-radius:12px}
+    footer{padding:48px 0;border-top:1px solid var(--border);color:var(--muted)}
+    footer a{color:var(--accent);text-decoration:underline;text-underline-offset:4px}
+    footer a:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:6px}
+    .footer-inner{display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap}
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    @media (max-width:960px){.headline{font-size:38px}.cards{grid-template-columns:1fr}.hero-visual{margin-top:32px}.nav{padding:24px 0}}
+    @media (max-width:640px){.container{padding:0 20px}.btn{width:100%;text-align:center}.actions{width:100%;flex-direction:column;align-items:stretch}.theme-toggle{width:100%}.footer-inner{flex-direction:column;align-items:flex-start}}
+  </style>
+</head>
+<body data-theme="dark">
+  <header class="container" aria-label="Primary">
+    <div class="nav">
+      <div class="logo" aria-label="Microagents home">Microagents</div>
+      <div class="actions">
+        <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Switch to light mode" aria-pressed="true">Switch to light mode</button>
+        <a class="btn" href="#get-started">Get Started</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO -->
+    <section class="container hero" aria-labelledby="hero-title">
+      <h1 id="hero-title" class="headline">Microagents that work for you</h1>
+      <p class="hero-description">Deploy tiny, purpose-built assistants that pick up your workflows. Start a request, approve the plan, and let your AI handle the work while you observe and refine.</p>
+      <p><a class="btn" href="#get-started">Get Started</a></p>
+      <figure class="hero-visual">
+        <div class="placeholder hero-placeholder" role="img" aria-label="Dashboard preview of a microagent running tasks in sequence"><span aria-hidden="true">Hero Placeholder</span></div>
+      </figure>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section id="get-started" class="container how" aria-labelledby="how-title">
+      <h2 id="how-title">How it works</h2>
+      <div class="cards">
+        <article class="card">
+          <h3>Start talking your needs</h3>
+          <p>Tell us what outcome matters and we’ll assemble a draft microagent.</p>
+          <div class="placeholder card-placeholder" role="img" aria-label="Interface screen for describing your AI needs"><span aria-hidden="true">Step 1 Placeholder</span></div>
+        </article>
+        <article class="card">
+          <h3>Verify and approve your build</h3>
+          <p>Review the proposed steps, data sources, and guardrails before you approve.</p>
+          <div class="placeholder card-placeholder" role="img" aria-label="Approval checklist preview for a microagent build"><span aria-hidden="true">Step 2 Placeholder</span></div>
+        </article>
+        <article class="card">
+          <h3>Done: your AI works; you tweak config</h3>
+          <p>Let the agent execute while you adjust configuration and monitor progress.</p>
+          <div class="placeholder card-placeholder" role="img" aria-label="Live progress view of a microagent completing tasks"><span aria-hidden="true">Step 3 Placeholder</span></div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="container">
+    <div class="footer-inner">
+      <div>© <span id="year"></span> Microagents. All rights reserved.</div>
+      <a href="/docs/">Docs for bots &amp; scrapers</a>
+    </div>
+  </footer>
+  <script>document.getElementById('year').textContent=new Date().getFullYear();</script>
+  <script>
+    (function() {
+      const body = document.body;
+      const toggle = document.getElementById('theme-toggle');
+      const storageKey = 'microagents-theme';
+      if (!toggle) return;
+      const validThemes = new Set(['dark', 'light']);
+      let storedTheme = null;
+      try {
+        storedTheme = localStorage.getItem(storageKey);
+      } catch (error) {
+        storedTheme = null;
+      }
+      const initialTheme = validThemes.has(storedTheme) ? storedTheme : 'dark';
+      const applyTheme = (nextTheme) => {
+        body.setAttribute('data-theme', nextTheme);
+        const isDark = nextTheme === 'dark';
+        const label = isDark ? 'Switch to light mode' : 'Switch to dark mode';
+        toggle.textContent = label;
+        toggle.setAttribute('aria-label', label);
+        toggle.setAttribute('aria-pressed', String(isDark));
+      };
+      applyTheme(initialTheme);
+      toggle.addEventListener('click', () => {
+        const current = body.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+        const next = current === 'dark' ? 'light' : 'dark';
+        applyTheme(next);
+        try {
+          localStorage.setItem(storageKey, next);
+        } catch (error) {
+          /* ignore */
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

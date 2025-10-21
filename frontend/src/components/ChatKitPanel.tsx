@@ -28,19 +28,22 @@ export function ChatKitPanel({
   const chatkit = useChatKit({
     api: { url: CHATKIT_API_URL, domainKey: CHATKIT_API_DOMAIN_KEY },
     theme: {
-      colorScheme: theme,
+      colorScheme: "dark",
       color: {
         grayscale: {
           hue: 220,
           tint: 6,
-          shade: theme === "dark" ? -1 : -4,
+          shade: theme === "dark" ? -1 : -2,
         },
         accent: {
-          primary: theme === "dark" ? "#f1f5f9" : "#0f172a",
-          level: 1,
+          primary: "#0E4F3D",
+          level: 2,
         },
       },
-      radius: "round",
+      radius: "large",
+      typography: {
+        fontFamily: '"Helvetica Neue", sans-serif',
+      },
     },
     startScreen: {
       greeting: GREETING,
