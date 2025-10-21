@@ -5,7 +5,7 @@ from __future__ import annotations
 import asyncio
 import logging
 from typing import Any
-from uuid import uuid4
+from uuid import UUID, uuid4
 
 from chatkit.server import StreamingResult
 from fastapi import Depends, FastAPI, HTTPException, Request, status
@@ -13,14 +13,23 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response, StreamingResponse
 from openai import OpenAI, OpenAIError
 from pydantic import AliasChoices, BaseModel, ConfigDict, Field
+from starlette.middleware.sessions import SessionMiddleware
 from starlette.responses import JSONResponse
 
 from .chat import (
     FactAssistantServer,
     create_chatkit_server,
 )
+from .config import get_settings
 from .constants import WORKFLOW_ID, WORKFLOW_VERSION
+from .dependencies import get_current_user
 from .facts import fact_store
+from .models import User
+from .routes import auth as auth_routes
+from .routes import microagents as microagent_routes
+from .routes import webhooks as webhook_routes
+
+settings = get_settings()
 
 app = FastAPI(title="ChatKit API")
 
@@ -33,7 +42,10 @@ ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
 ]
-ALLOWED_ORIGIN_REGEX = r"https://microgen-git-[\w-]+-.*\.vercel\.app"
+if settings.app_base_url:
+    ALLOWED_ORIGINS.append(settings.app_base_url)
+
+ALLOWED_ORIGIN_REGEX = settings.allowed_origin_regex or r"https://microgen-git-[\w-]+-.*\.vercel\.app"
 
 STREAMING_HEADERS = {
     "Cache-Control": "no-cache",
@@ -51,6 +63,11 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+app.add_middleware(SessionMiddleware, secret_key=settings.session_secret)
+
+app.include_router(auth_routes.router)
+app.include_router(microagent_routes.router)
+app.include_router(webhook_routes.router)
 
 
 class WorkflowOptions(BaseModel):
@@ -76,11 +93,9 @@ class WorkflowOptions(BaseModel):
 
 
 class SessionRequest(WorkflowOptions):
-    user_id: str | None = Field(
-        default=None,
-        validation_alias=AliasChoices("user_id", "userId", "user"),
-        description="Application-scoped identifier for the end user.",
-    )
+    """Request payload for creating a ChatKit session."""
+
+    pass
 
 
 class RefreshRequest(WorkflowOptions):
@@ -88,11 +103,6 @@ class RefreshRequest(WorkflowOptions):
         default=None,
         validation_alias=AliasChoices("session_id", "sessionId"),
         description="Existing session identifier to rotate before minting a new secret.",
-    )
-    user_id: str | None = Field(
-        default=None,
-        validation_alias=AliasChoices("user_id", "userId", "user"),
-        description="Application-scoped identifier for the end user.",
     )
 
 
@@ -120,8 +130,12 @@ def _to_workflow_payload(options: WorkflowOptions) -> dict[str, Any]:
     return payload
 
 
-def _resolve_user_id(user_id: str | None) -> str:
-    return user_id or f"user_{uuid4().hex[:12]}"
+def _resolve_user_id(user_id: str | UUID | None) -> str:
+    if isinstance(user_id, UUID):
+        return str(user_id)
+    if user_id:
+        return str(user_id)
+    return f"user_{uuid4().hex[:12]}"
 
 
 async def _create_session(
@@ -198,20 +212,26 @@ def _session_payload(session: Any) -> dict[str, Any]:
 
 
 @app.post("/api/chatkit/session")
-async def create_chatkit_session(payload: SessionRequest) -> dict[str, Any]:
+async def create_chatkit_session(
+    payload: SessionRequest,
+    current_user: User = Depends(get_current_user),
+) -> dict[str, Any]:
     workflow = _to_workflow_payload(payload)
-    user_id = _resolve_user_id(payload.user_id)
+    user_id = _resolve_user_id(current_user.id)
     session = await _create_session(user_id, workflow)
     logger.info("Created ChatKit session %s for %s", session.id, session.user)
     return _session_payload(session)
 
 
 @app.post("/api/chatkit/refresh")
-async def refresh_chatkit_session(payload: RefreshRequest) -> dict[str, Any]:
+async def refresh_chatkit_session(
+    payload: RefreshRequest,
+    current_user: User = Depends(get_current_user),
+) -> dict[str, Any]:
     if payload.session_id:
         await _cancel_session(payload.session_id)
     workflow = _to_workflow_payload(payload)
-    user_id = _resolve_user_id(payload.user_id)
+    user_id = _resolve_user_id(current_user.id)
     session = await _create_session(user_id, workflow)
     logger.info(
         "Refreshed ChatKit session %s for %s", session.id, session.user
