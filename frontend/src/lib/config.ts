@@ -15,6 +15,7 @@ export const CHATKIT_API_DOMAIN_KEY =
 export const FACTS_API_URL = import.meta.env.VITE_FACTS_API_URL ?? "/facts";
 
 export const THEME_STORAGE_KEY = "chatkit-boilerplate-theme";
+export const AUTH_TOKEN_STORAGE_KEY = "microgen-auth-token";
 
 export const GREETING = "Welcome to the ChatKit Demo";
 
