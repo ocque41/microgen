@@ -12,7 +12,6 @@ export default [
     languageOptions: {
       parser: tsParser,
       parserOptions: {
-        projectService: true,
         ecmaFeatures: {
           jsx: true,
         },
@@ -28,7 +27,7 @@ export default [
       "react-refresh": reactRefresh,
     },
     rules: {
-      ...tseslint.configs["recommended-type-checked"].rules,
+      ...tseslint.configs.recommended.rules,
       ...reactHooks.configs.recommended.rules,
       "react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
     },
