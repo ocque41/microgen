@@ -17,13 +17,14 @@ Static marketing and crawler documentation live in [`site/`](site). Preview them
 npx http-server site -o
 ```
 
-This command opens `site/index.html`. The documentation companion is available at `site/docs/index.html`, with machine-readable metadata at `site/docs/ai.json`.
+This command opens `site/index.html`. All marketing typography now uses the shared Helvetica Neue stack (`"Helvetica Neue", sans-serif`) across headlines, body copy, and code samples. The documentation companion is available at `site/docs/index.html`, with machine-readable metadata at `site/docs/ai.json`.
 
-### SEO & accessibility checklist
+### SEO, accessibility, and theming checklist
 
 - Meta tags: `<title>`, `<meta name="description">`, canonical, Open Graph, Twitter Card, and JSON-LD (`Organization`, `WebSite`) are included in `site/index.html`.
 - Robots & sitemap: `site/robots.txt` allows crawling (with GPTBot notes) and `site/sitemap.xml` lists `/` and `/docs/`.
-- Contrast & focus: Accent `#0ea5e9` on white passes WCAG AA; focus-visible outlines are retained on buttons and links.
+- Dark-first palette: the homepage loads in a dark theme (`--bg: #111111`, `--fg: #f4f1ea`) with a keyboard-focusable toggle that persists to `localStorage`. Toggle to light mode to confirm contrast remains ≥4.5:1 for body text.
+- Contrast & focus: Accent `#0ea5e9` on the dark cards and CTAs keeps WCAG AA contrast, and focus-visible outlines are retained on buttons and links.
 - Imagery: CSS-based placeholders render the hero and cards with descriptive `aria-label` text per W3C guidance.
 
 ## Quickstart
@@ -119,8 +120,6 @@ The backend now includes production-ready scaffolding for user management and St
 - `POST /api/microagents/subscribe` mints a Stripe Checkout session for the selected micro-agent, while `GET /api/microagents/me` lists active subscriptions and `POST /api/microagents/{id}/cancel` stops billing.
 - Stripe events sent to `POST /api/webhooks/stripe` keep micro-agent status in sync after successful payments or cancellations.
 - Password reset emails are queued in the Neon-backed `outbound_emails` table so you can plug in your delivery worker or inspect messages during development (defaults use the `Microagents` sender name and `hi@cumulush.com`).
-- Each user is assigned their own OpenAI vector store (tracked in Neon) so the agent can stash and recall durable facts during future sessions.
-- In Agent Builder, declare `vector_store_id` and `user_id` as workflow state variables and point File Search (or custom nodes) to `{{vector_store_id}}` so saved facts are retrieved automatically.
 
 Run `alembic upgrade head` after configuring `DATABASE_URL` so the new tables (users, password reset tokens, micro agents) are available before serving requests.
 

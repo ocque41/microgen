@@ -1,16 +1,15 @@
-# Microagents Brand Guide (Light Minimal)
+# Microagents Brand Guide (Helvetica Neue Minimal)
 
-The refreshed Microagents identity is bright, formal, and minimal. Marketing surfaces lean on a serif display headline, generous spacing, and a cool cyan accent to communicate clarity.
+The refreshed Microagents identity stays bright, formal, and minimal. Marketing surfaces now rely on a single Helvetica Neue voice, generous spacing, and a cool cyan accent to communicate clarity.
 
 ## Core principles
 - **Neutral light palette** – White backgrounds (#ffffff) with near-black copy (#111111) improve legibility and convey seriousness.
-- **Serif display headline + sans body** – Headlines use the platform serif stack while supporting copy uses the system sans stack.
+- **Helvetica Neue everywhere** – Headlines and body copy both use Helvetica Neue to keep the brand consistent across marketing and app surfaces.
 - **Generous spacing** – Minimum 24px padding/margins to keep the site airy and focused on the copy.
 - **Single accent** – Cyan (#0ea5e9) drives CTAs, focus rings, and data callouts; hover states darken to #0284c7.
 
 ## Typography
-- **Headlines**: `font-family: ui-serif, Georgia, serif;`
-- **Body**: `font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Inter, Helvetica, Arial, sans-serif;`
+- **Type family**: `font-family: "Helvetica Neue", sans-serif;`
 - **Headline casing**: Sentence case only (e.g., “Microagents that work for you”).
 
 ## Color tokens
@@ -29,12 +28,7 @@ The refreshed Microagents identity is bright, formal, and minimal. Marketing sur
 - **Hero media** – 20px outer radius, 8px inner padding, light gray frame for screenshots.
 
 ## Assets
-Placeholder JPEGs live under `site/assets/` and should be replaced with product captures when available:
-- `hero-placeholder.jpg`
-- `step1-placeholder.jpg`
-- `step2-placeholder.jpg`
-- `step3-placeholder.jpg`
-- `og-image.jpg`
+The marketing hero and how-it-works visuals use CSS-based placeholders with descriptive `aria-label` text. Replace them with product captures when assets are ready and keep alt text aligned with the W3C decision tree.
 
 ## Accessibility reminders
 - Ensure text contrast ≥4.5:1 and large headings ≥3:1.

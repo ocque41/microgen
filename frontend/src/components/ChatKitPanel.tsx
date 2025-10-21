@@ -42,8 +42,7 @@ export function ChatKitPanel({
       },
       radius: "large",
       typography: {
-        fontFamily:
-          '-apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, "Noto Sans", "Segoe UI", ui-sans-serif, system-ui, sans-serif',
+        fontFamily: '"Helvetica Neue", sans-serif',
       },
     },
     startScreen: {

@@ -1,3 +1,32 @@
+# Sprint 6 Plan
+
+## Goal
+Standardize the Microagents marketing and chat surfaces on Helvetica Neue while updating documentation and verifying quality gates.
+
+## Work Items
+
+1. **Enforce Helvetica Neue across marketing + chat**
+   - *Acceptance Criteria*
+     - Every font-family reference in marketing HTML, shared CSS tokens, and ChatKit theme uses "Helvetica Neue" without alternate named stacks.
+     - Brand documentation and README reference the Helvetica Neue requirement, replacing prior serif/system stack guidance.
+     - Frontend lint and build commands succeed after the typography update and the outcomes are noted here.
+   - *Status*: ✅ Completed — Updated brand docs, marketing HTML/CSS, ChatKit theming, and example Tailwind configs to the Helvetica Neue stack, refreshed README guidance, and re-ran `npm --prefix frontend run lint` and `npm --prefix frontend run build`.
+
+# Sprint 5 Plan
+
+## Goal
+Document the marketing font stack and ship an accessible theme toggle that defaults to the dark Microagents palette.
+
+## Work Items
+
+1. **Enable dark-first theming on the marketing site**
+   - *Acceptance Criteria*
+     - `site/index.html` exposes a keyboard-accessible theme toggle, persists the selection, and loads the dark palette by default.
+     - CSS custom properties drive both dark and light palettes with WCAG AA contrast for text and interactive states.
+     - The README marketing section notes the font stacks, dark-first behavior, and how to verify the toggle.
+     - Frontend lint and build commands succeed after the update.
+   - *Status*: ✅ Completed — Added the toggle with persistence, refreshed the CSS variables for both themes, documented fonts/dark mode in the README, and re-ran frontend lint/build.
+
 # Sprint 4 Plan
 
 ## Goal
