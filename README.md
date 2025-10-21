@@ -25,7 +25,7 @@ From the repository root you can bootstrap the backend in one step:
 npm run backend
 ```
 
-This command runs `uv sync` for `backend/` and launches Uvicorn on `http://127.0.0.1:8000`. Make sure [uv](https://docs.astral.sh/uv/getting-started/installation/) is installed and `OPENAI_API_KEY` is exported beforehand.
+This command runs `uv sync` for `backend/` and launches Uvicorn on `http://127.0.0.1:8000`. Make sure [uv](https://docs.astral.sh/uv/getting-started/installation/) is installed and both `OPENAI_API_KEY` and `WORKFLOW_ID` are exported beforehand.
 
 If you prefer running the backend from inside `backend/`, follow the manual steps:
 
@@ -33,6 +33,7 @@ If you prefer running the backend from inside `backend/`, follow the manual step
 cd backend
 uv sync
 export OPENAI_API_KEY=sk-proj-...
+export WORKFLOW_ID=workflow_...
 uv run uvicorn app.main:app --reload --port 8000
 ```
 
@@ -43,6 +44,7 @@ cd backend
 python -m venv .venv && source .venv/bin/activate
 pip install -e .
 export OPENAI_API_KEY=sk-proj-...
+export WORKFLOW_ID=workflow_...
 uvicorn app.main:app --reload
 ```
 
@@ -68,7 +70,7 @@ npm run dev
 
 Optional configuration hooks live in [`frontend/src/lib/config.ts`](frontend/src/lib/config.ts) if you want to tweak API URLs or UI defaults.
 
-To launch both the backend and frontend together from the repository root, you can use `npm start`. This command also requires `uv` plus the necessary environment variables (for example `OPENAI_API_KEY`) to be set beforehand.
+To launch both the backend and frontend together from the repository root, you can use `npm start`. This command also requires `uv` plus the necessary environment variables (for example `OPENAI_API_KEY` and `WORKFLOW_ID`) to be set beforehand.
 
 The Vite dev server runs at `http://127.0.0.1:5170`, and this works fine for local development. However, for production deployments:
 

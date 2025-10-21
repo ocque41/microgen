@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 from typing import Final
 
 INSTRUCTIONS: Final[str] = (
@@ -34,3 +35,8 @@ INSTRUCTIONS: Final[str] = (
 )
 
 MODEL = "gpt-4.1-mini"
+
+# Workflow ID published via Agent Builder; optional version overrides keep
+# deployments stable across environments.
+WORKFLOW_ID = os.getenv("WORKFLOW_ID")
+WORKFLOW_VERSION = os.getenv("WORKFLOW_VERSION")
