@@ -9,6 +9,23 @@ The top-level [**backend**](backend) and [**frontend**](frontend) directories pr
 
 The Vite server proxies all `/chatkit` traffic straight to the local FastAPI service so you can develop the client and server in tandem without extra wiring.
 
+## Microagents marketing site
+
+Static marketing and crawler documentation live in [`site/`](site). Preview them locally with any static file server:
+
+```bash
+npx http-server site -o
+```
+
+This command opens `site/index.html`. The documentation companion is available at `site/docs/index.html`, with machine-readable metadata at `site/docs/ai.json`.
+
+### SEO & accessibility checklist
+
+- Meta tags: `<title>`, `<meta name="description">`, canonical, Open Graph, Twitter Card, and JSON-LD (`Organization`, `WebSite`) are included in `site/index.html`.
+- Robots & sitemap: `site/robots.txt` allows crawling (with GPTBot notes) and `site/sitemap.xml` lists `/` and `/docs/`.
+- Contrast & focus: Accent `#0ea5e9` on white passes WCAG AA; focus-visible outlines are retained on buttons and links.
+- Imagery: CSS-based placeholders render the hero and cards with descriptive `aria-label` text per W3C guidance.
+
 ## Quickstart
 
 1. Start FastAPI backend API.

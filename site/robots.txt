@@ -1,0 +1,9 @@
+# General
+User-agent: *
+Allow: /
+Sitemap: https://microagents.ai/sitemap.xml
+
+# OpenAI crawlers (see OpenAI bots overview)
+User-agent: GPTBot
+Allow: /docs/
+Allow: /

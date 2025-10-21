@@ -1,0 +1,21 @@
+{
+  "name": "Microagents public index",
+  "version": "1.0",
+  "contact": "ops@microagents.ai",
+  "formats": ["text/html", "application/json"],
+  "endpoints": [
+    {
+      "path": "/",
+      "purpose": "Marketing homepage with human content and JSON-LD.",
+      "structured_data": ["Organization", "WebSite"]
+    },
+    {
+      "path": "/docs/",
+      "purpose": "Human-readable instructions for bots/agents.",
+      "notes": "Rate ≤ 1 r/s; prefer If-Modified-Since."
+    }
+  ],
+  "sitemap": "https://microagents.ai/sitemap.xml",
+  "robots": "https://microagents.ai/robots.txt",
+  "updated": "2025-10-21"
+}
