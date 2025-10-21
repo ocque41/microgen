@@ -41,6 +41,9 @@ class User(Base, TimestampMixin):
     micro_agents: Mapped[list["MicroAgent"]] = relationship(
         back_populates="user", cascade="all, delete-orphan"
     )
+    vector_store: Mapped["UserVectorStore" | None] = relationship(
+        back_populates="user", cascade="all, delete-orphan", uselist=False
+    )
 
 
 class PasswordResetToken(Base, TimestampMixin):
@@ -93,6 +96,19 @@ class MicroAgent(Base, TimestampMixin):
     user: Mapped[User] = relationship(back_populates="micro_agents")
 
 
+class UserVectorStore(Base, TimestampMixin):
+    """Mapping of application users to their OpenAI vector store identifiers."""
+
+    __tablename__ = "user_vector_store"
+
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), primary_key=True, nullable=False
+    )
+    vector_store_id: Mapped[str] = mapped_column(String(255), nullable=False)
+
+    user: Mapped[User] = relationship(back_populates="vector_store")
+
+
 class OutboundEmail(Base, TimestampMixin):
     """Email messages queued for delivery (stored in Neon)."""
 
@@ -111,6 +127,7 @@ __all__ = [
     "MicroAgent",
     "MicroAgentStatus",
     "OutboundEmail",
+    "UserVectorStore",
     "PasswordResetToken",
     "User",
 ]

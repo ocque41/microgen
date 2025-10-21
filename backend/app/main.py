@@ -11,8 +11,9 @@ from chatkit.server import StreamingResult
 from fastapi import Depends, FastAPI, HTTPException, Request, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response, StreamingResponse
-from openai import OpenAI, OpenAIError
+from openai import OpenAIError
 from pydantic import AliasChoices, BaseModel, ConfigDict, Field
+from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.middleware.sessions import SessionMiddleware
 from starlette.responses import JSONResponse
 
@@ -20,14 +21,20 @@ from .chat import (
     FactAssistantServer,
     create_chatkit_server,
 )
+from .clients import openai_client
 from .config import get_settings
 from .constants import WORKFLOW_ID, WORKFLOW_VERSION
+from .database import get_session
 from .dependencies import get_current_user
 from .facts import fact_store
 from .models import User
 from .routes import auth as auth_routes
 from .routes import microagents as microagent_routes
 from .routes import webhooks as webhook_routes
+from .vector_store import (
+    get_or_create_user_vector_store,
+    get_user_vector_store_id,
+)
 
 settings = get_settings()
 
@@ -53,7 +60,6 @@ STREAMING_HEADERS = {
 }
 
 logger = logging.getLogger(__name__)
-openai_client = OpenAI()
 
 app.add_middleware(
     CORSMiddleware,
@@ -119,14 +125,23 @@ def _ensure_workflow_id(candidate: str | None) -> str:
     return workflow_id
 
 
-def _to_workflow_payload(options: WorkflowOptions) -> dict[str, Any]:
+def _to_workflow_payload(
+    options: WorkflowOptions,
+    *,
+    extra_state: dict[str, Any] | None = None,
+) -> dict[str, Any]:
     workflow_id = _ensure_workflow_id(options.workflow_id)
     payload: dict[str, Any] = {"id": workflow_id}
     version = options.workflow_version or WORKFLOW_VERSION
     if version:
         payload["version"] = version
+    state_variables: dict[str, Any] = {}
     if options.workflow_state:
-        payload["state_variables"] = options.workflow_state
+        state_variables.update(options.workflow_state)
+    if extra_state:
+        state_variables.update(extra_state)
+    if state_variables:
+        payload["state_variables"] = state_variables
     return payload
 
 
@@ -189,10 +204,20 @@ async def chatkit_options() -> Response:
 
 @app.post("/chatkit")
 async def chatkit_endpoint(
-    request: Request, server: FactAssistantServer = Depends(get_chatkit_server)
+    request: Request,
+    server: FactAssistantServer = Depends(get_chatkit_server),
+    current_user: User = Depends(get_current_user),
 ) -> Response:
     payload = await request.body()
-    result = await server.process(payload, {"request": request})
+    vector_store_id = await get_user_vector_store_id(current_user.id)
+    result = await server.process(
+        payload,
+        {
+            "request": request,
+            "user": current_user,
+            "vector_store_id": vector_store_id,
+        },
+    )
     if isinstance(result, StreamingResult):
         return StreamingResponse(result, media_type="text/event-stream", headers=STREAMING_HEADERS)
     if hasattr(result, "json"):
@@ -215,8 +240,16 @@ def _session_payload(session: Any) -> dict[str, Any]:
 async def create_chatkit_session(
     payload: SessionRequest,
     current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_session),
 ) -> dict[str, Any]:
-    workflow = _to_workflow_payload(payload)
+    vector_store_id = await get_or_create_user_vector_store(db, current_user.id)
+    workflow = _to_workflow_payload(
+        payload,
+        extra_state={
+            "vector_store_id": vector_store_id,
+            "user_id": str(current_user.id),
+        },
+    )
     user_id = _resolve_user_id(current_user.id)
     session = await _create_session(user_id, workflow)
     logger.info("Created ChatKit session %s for %s", session.id, session.user)
@@ -227,10 +260,18 @@ async def create_chatkit_session(
 async def refresh_chatkit_session(
     payload: RefreshRequest,
     current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_session),
 ) -> dict[str, Any]:
     if payload.session_id:
         await _cancel_session(payload.session_id)
-    workflow = _to_workflow_payload(payload)
+    vector_store_id = await get_or_create_user_vector_store(db, current_user.id)
+    workflow = _to_workflow_payload(
+        payload,
+        extra_state={
+            "vector_store_id": vector_store_id,
+            "user_id": str(current_user.id),
+        },
+    )
     user_id = _resolve_user_id(current_user.id)
     session = await _create_session(user_id, workflow)
     logger.info(

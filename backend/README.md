@@ -12,6 +12,7 @@ This FastAPI service wires up a minimal ChatKit server implementation with a sin
 - **Micro-agent subscription APIs** under `/api/microagents/*` with Stripe checkout handling, listing, and cancellation.
 - **Stripe webhook** at `POST /api/webhooks/stripe` that reconciles subscription lifecycle events with stored micro-agent records.
 - **Neon-backed email queue** storing password reset notifications in the `outbound_emails` table for downstream delivery workers.
+- **Vector store mapping** table (`user_vector_store`) tying each user to their personal OpenAI vector store so the agent can recall prior facts.
 - **Fact recording tool** that renders a confirmation widget with _Save_ and _Discard_ actions.
 - **Guardrail-ready system prompt** extracted into `app/constants.py` so it is easy to modify.
 - **Simple fact store** backed by in-memory storage in `app/facts.py`.
@@ -39,6 +40,7 @@ Export these environment variables so the backend can reach OpenAI and your publ
 - `APP_BASE_URL` – Base URL for your deployed frontend (appended to CORS allowlist).
 - `ALLOWED_ORIGIN_REGEX` – Optional regex to match additional deployment previews for CORS.
 - `EMAIL_SENDER_NAME` / `EMAIL_SENDER_ADDRESS` – Optional metadata if you integrate a real mailer with the `outbound_emails` table (defaults to `Microagents` and `hi@cumulush.com`).
+- `OPENAI_API_KEY` must be authorized for Vector Stores; each user gets a dedicated store referenced via Neon.
 
 ## Getting started
 
@@ -66,3 +68,9 @@ To create new migrations after updating ORM models:
 ```bash
 alembic revision --autogenerate -m "describe change"
 ```
+
+### Vector store workflow tips
+
+- The `/api/chatkit/session` endpoint now ensures every authenticated user has a dedicated OpenAI Vector Store. The store identifier is persisted in the `user_vector_store` table and injected into ChatKit session `state_variables` as `vector_store_id` (alongside `user_id`).
+- In Agent Builder, add matching state variables so workflow nodes (for example a File Search node) can reference `{{vector_store_id}}` and recall user memories.
+- The `save_fact` tool persists each confirmed fact to both the in-memory fact store and the user’s vector store. Facts are stored as small JSON snippets, making them searchable during future conversations.

@@ -24,6 +24,8 @@ export default defineConfig({
       // You can remove these examples added just to demonstrate how to configure the allowlist
       ".ngrok.io",
       ".trycloudflare.com",
+      "microgen.vercel.app",
+      "microagents.cumulush.com",
     ],
   },
 });

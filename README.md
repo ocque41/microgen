@@ -102,6 +102,8 @@ The backend now includes production-ready scaffolding for user management and St
 - `POST /api/microagents/subscribe` mints a Stripe Checkout session for the selected micro-agent, while `GET /api/microagents/me` lists active subscriptions and `POST /api/microagents/{id}/cancel` stops billing.
 - Stripe events sent to `POST /api/webhooks/stripe` keep micro-agent status in sync after successful payments or cancellations.
 - Password reset emails are queued in the Neon-backed `outbound_emails` table so you can plug in your delivery worker or inspect messages during development (defaults use the `Microagents` sender name and `hi@cumulush.com`).
+- Each user is assigned their own OpenAI vector store (tracked in Neon) so the agent can stash and recall durable facts during future sessions.
+- In Agent Builder, declare `vector_store_id` and `user_id` as workflow state variables and point File Search (or custom nodes) to `{{vector_store_id}}` so saved facts are retrieved automatically.
 
 Run `alembic upgrade head` after configuring `DATABASE_URL` so the new tables (users, password reset tokens, micro agents) are available before serving requests.
 

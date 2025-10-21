@@ -39,6 +39,7 @@ from .weather import (
 from .weather import (
     normalize_unit as normalize_temperature_unit,
 )
+from .vector_store import append_fact_for_user
 
 # If you want to check what's going on under the hood, set this to DEBUG
 logging.basicConfig(level=logging.INFO)
@@ -102,6 +103,16 @@ async def save_fact(
             name="record_fact",
             arguments={"fact_id": confirmed.id, "fact_text": confirmed.text},
         )
+        user = ctx.context.request_context.get("user")
+        if user is not None:
+            metadata = {
+                "fact_id": confirmed.id,
+                "source": "save_fact",
+            }
+            try:
+                await append_fact_for_user(user.id, confirmed.text, metadata=metadata)
+            except Exception:  # noqa: BLE001
+                logging.exception("Failed to persist fact to vector store")
         print(f"FACT SAVED: {confirmed}")
         return {"fact_id": confirmed.id, "status": "saved"}
     except Exception:
