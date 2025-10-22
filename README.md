@@ -17,14 +17,14 @@ Static marketing and crawler documentation live in [`site/`](site). Preview them
 npx http-server site -o
 ```
 
-This command opens `site/index.html`. All marketing typography now uses the shared Helvetica Neue stack (`"Helvetica Neue", sans-serif`) across headlines, body copy, and code samples. The documentation companion is available at `site/docs/index.html`, with machine-readable metadata at `site/docs/ai.json`.
+This command opens `site/index.html`. All marketing typography now uses the shared Helvetica Neue stack (`"Helvetica Neue", sans-serif`) across headlines, body copy, and code samples. Shared tokens, spacing, and components live in [`site/styles/brand.css`](site/styles/brand.css) and are reused by `site/index.html` and the crawler notes in `site/docs/index.html` (machine-readable metadata remains at `site/docs/ai.json`).
 
 ### SEO, accessibility, and theming checklist
 
 - Meta tags: `<title>`, `<meta name="description">`, canonical, Open Graph, Twitter Card, and JSON-LD (`Organization`, `WebSite`) are included in `site/index.html`.
 - Robots & sitemap: `site/robots.txt` allows crawling (with GPTBot notes) and `site/sitemap.xml` lists `/` and `/docs/`.
-- Dark-first palette: the homepage loads in a dark theme (`--bg: #111111`, `--fg: #f4f1ea`) with a keyboard-focusable toggle that persists to `localStorage`. Toggle to light mode to confirm contrast remains ≥4.5:1 for body text.
-- Contrast & focus: Accent `#0ea5e9` on the dark cards and CTAs keeps WCAG AA contrast, and focus-visible outlines are retained on buttons and links.
+- Dark-first palette: the homepage and docs consume the centralized variables in `site/styles/brand.css` (`--bg: #171717`, `--text: #f4f1ea`, `--accent: #0E4F3D`, etc.). Every surface (hero, testimonial blockquote, how-it-works cards, and the viewport-height footer) loads in dark mode with no light overrides.
+- Contrast & focus: Body copy uses the cream `var(--text)` on dark surfaces for ≥4.5:1 contrast; headlines meet ≥3:1, while links and buttons rely on the deep green accent with a darker hover state. Focus-visible outlines are retained on buttons and links.
 - Imagery: CSS-based placeholders render the hero and cards with descriptive `aria-label` text per W3C guidance.
 
 ## Quickstart

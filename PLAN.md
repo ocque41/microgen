@@ -1,3 +1,18 @@
+# Sprint 7 Plan
+
+## Goal
+Convert the marketing site to a dark-first system with centralized brand tokens and formal sentence case copy.
+
+## Work Items
+
+1. **Adopt dark-first brand tokens across marketing surfaces**
+   - *Acceptance Criteria*
+     - `/site/styles/brand.css` defines the provided dark-first tokens, base typography, and component styles reused by the homepage and docs.
+     - `site/index.html` and `site/docs/index.html` import the stylesheet, remove prior light-mode overrides, and render hero, how-it-works, blockquote, and footer sections using the tokens with sentence-case copy.
+     - Footer spans the full viewport height with accessible contrast, and placeholders plus blockquote content retain descriptive aria/alt text aligned with WCAG guidance.
+     - README marketing guidance documents the new dark-first defaults, contrast checks, and how to preview the site.
+   - *Status*: ✅ Completed — Centralized the tokens in `site/styles/brand.css`, refreshed the homepage and docs with the dark-first components, updated README guidance, and reran `npm --prefix frontend run lint` (warnings only).
+
 # Sprint 6 Plan
 
 ## Goal

@@ -3,46 +3,40 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Microagents — Docs for Web Scrapers &amp; AI Agents</title>
+  <title>Microagents — docs for web scrapers and AI agents</title>
   <meta name="description" content="Technical notes for crawlers and AI agents: endpoints, formats, rate limits, and JSON examples." />
   <link rel="canonical" href="https://microagents.ai/docs/" />
-  <style>
-    body{font-family:"Helvetica Neue",sans-serif;margin:32px auto;max-width:800px;line-height:1.7;color:#111}
-    h1,h2{font-family:"Helvetica Neue",sans-serif;margin-top:48px}
-    h1{margin-top:0}
-    ul{padding-left:20px}
-    code{background:#f3f4f6;padding:2px 4px;border-radius:4px;font-family:"Helvetica Neue",sans-serif}
-    pre{background:#f3f4f6;padding:16px;border-radius:8px;overflow:auto}
-    a{color:#0ea5e9}
-  </style>
+  <link rel="stylesheet" href="../styles/brand.css" />
 </head>
 <body>
-  <h1>Docs for Web Scrapers &amp; AI Agents</h1>
-  <p>This page makes automated access predictable, respectful, and useful. Human operators are welcome too.</p>
+  <main class="docs-page" aria-labelledby="docs-title">
+    <h1 id="docs-title">Docs for web scrapers and AI agents</h1>
+    <p>This page makes automated access predictable, respectful, and useful. Human operators are welcome too.</p>
 
-  <h2>Machine-readable index</h2>
-  <p>Preferred discovery: <a href="/docs/ai.json">/docs/ai.json</a> (JSON). It lists endpoints, fields, and examples.</p>
+    <h2>Machine-readable index</h2>
+    <p>Preferred discovery: <a href="/docs/ai.json">/docs/ai.json</a> (JSON). It lists endpoints, fields, and examples.</p>
 
-  <h2>Access etiquette</h2>
-  <ul>
-    <li>Respect <code>/robots.txt</code>. We explicitly define allowances for common AI crawlers including GPTBot.</li>
-    <li>Rate: up to 1 request per second; back off for 429 or 503 responses.</li>
-    <li>Send headers: <code>Accept: application/json</code> for JSON; <code>If-Modified-Since</code> to save bandwidth.</li>
-  </ul>
+    <h2>Access etiquette</h2>
+    <ul>
+      <li>Respect <code>/robots.txt</code>. We explicitly define allowances for common AI crawlers including GPTBot.</li>
+      <li>Rate: up to 1 request per second; back off for 429 or 503 responses.</li>
+      <li>Send headers: <code>Accept: application/json</code> for JSON; <code>If-Modified-Since</code> to save bandwidth.</li>
+    </ul>
 
-  <h2>Important notes</h2>
-  <ul>
-    <li>Alt text follows W3C guidance; treat provided descriptions as authoritative when present.</li>
-    <li>Structured data uses JSON-LD only, aligning with Google’s recommendation and omitting deprecated SearchAction markup.</li>
-  </ul>
+    <h2>Important notes</h2>
+    <ul>
+      <li>Alt text follows W3C guidance; treat provided descriptions as authoritative when present.</li>
+      <li>Structured data uses JSON-LD only, aligning with Google’s recommendation and omitting deprecated SearchAction markup.</li>
+    </ul>
 
-  <h2>Example JSON</h2>
-  <pre><code>{
+    <h2>Example JSON</h2>
+    <pre><code>{
   "agent": {
     "name": "microagent-demo",
     "capabilities": ["ingest", "summarize", "notify"],
     "status": "preview"
   }
 }</code></pre>
+  </main>
 </body>
 </html>
