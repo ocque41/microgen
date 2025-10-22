@@ -1,86 +1,109 @@
 import { Link } from "react-router-dom";
 
+const steps = [
+  {
+    title: "Clarify the brief",
+    body: "Capture the workflow, guardrails, and success metrics in a shared template so teams stay aligned.",
+  },
+  {
+    title: "Approve the agent",
+    body: "Share a guided review sandbox with transcript capture before production traffic ever hits the API.",
+  },
+  {
+    title: "Run with confidence",
+    body: "Monitor accountability dashboards with retention-ready logs, safety events, and escalation summaries.",
+  },
+];
+
 export function MarketingPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white via-slate-50 to-slate-100 text-slate-900 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 dark:text-slate-100">
-      <header className="mx-auto flex w-full max-w-6xl flex-col items-center gap-8 px-6 pb-16 pt-20 text-center">
-        <span className="rounded-full border border-slate-200/60 bg-white px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-slate-600 shadow-sm dark:border-slate-800/70 dark:bg-slate-900/80 dark:text-slate-300">
-          Microgen Platform
-        </span>
-        <h1 className="text-4xl font-bold leading-tight sm:text-5xl">
-          Launch AI micro-agents without the infrastructure burden
-        </h1>
-        <p className="max-w-3xl text-lg text-slate-600 dark:text-slate-300">
-          Microgen pairs ChatKit with a curated library of agent templates so teams can onboard assistants in days, not months.
-          Handle authentication, billing, and analytics from a single dashboard while your customers enjoy conversational experiences they trust.
-        </p>
-        <div className="flex flex-wrap items-center justify-center gap-4">
-          <Link
-            to="/handler/sign-up"
-            className="rounded-full bg-slate-900 px-6 py-3 text-sm font-semibold text-white shadow-lg transition hover:bg-slate-700 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200"
-          >
-            Sign up
-          </Link>
-          <Link
-            to="/handler/sign-in"
-            className="rounded-full border border-slate-300 px-6 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:text-slate-900 dark:border-slate-700 dark:text-slate-200 dark:hover:border-slate-500 dark:hover:text-white"
-          >
-            Log in
-          </Link>
-        </div>
-      </header>
-
-      <section className="mx-auto grid w-full max-w-6xl gap-8 px-6 pb-20 md:grid-cols-3">
-        {[
-          {
-            title: "Templates that convert",
-            body: "Choose from a catalog of high-performing micro-agents or bring your own prompt. Every template is optimized for measurable outcomes.",
-          },
-          {
-            title: "Observability built-in",
-            body: "Monitor conversation quality with transcript search, CSAT insights, and safe rollout controls.",
-          },
-          {
-            title: "Secure by default",
-            body: "SOC2-aligned authentication with JWT, OAuth, and domain allowlisting keeps your customer data protected.",
-          },
-        ].map((feature) => (
-          <div
-            key={feature.title}
-            className="rounded-3xl border border-slate-200/60 bg-white/80 p-8 shadow-[0_40px_70px_-50px_rgba(15,23,42,0.35)] backdrop-blur dark:border-slate-800/60 dark:bg-slate-900/70"
-          >
-            <h2 className="text-xl font-semibold">{feature.title}</h2>
-            <p className="mt-3 text-sm text-slate-600 dark:text-slate-300">{feature.body}</p>
+    <div className="min-h-screen bg-brand-background text-brand-text">
+      <section className="border-b border-brand-border bg-brand-background">
+        <div className="mx-auto flex min-h-screen w-full max-w-5xl flex-col items-center justify-center gap-10 px-6 py-24 text-center">
+          <div className="flex max-w-3xl flex-col items-center">
+            <span className="inline-flex items-center rounded-full border border-brand-border bg-brand-backgroundElevated px-4 py-1 text-xs text-brand-textMuted">
+              Microagents
+            </span>
+            <h1 className="mt-4 text-4xl font-semibold leading-tight sm:text-5xl">Microagents that work for you.</h1>
+            <p className="mt-4 max-w-2xl text-lg text-brand-textMuted">
+              Deploy accountable assistants with formal guardrails, audited actions, and predictable integrations. Microagents keeps the brand voice, security posture, and documentation aligned across every surface.
+            </p>
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
+              <Link
+                to="/handler/sign-up"
+                className="inline-flex items-center justify-center rounded-full border border-brand-accent bg-brand-accent px-6 py-3 text-sm font-semibold text-brand-accentInverse shadow-card transition hover:bg-brand-background hover:text-brand-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-accent focus-visible:outline-offset-2"
+              >
+                Request access
+              </Link>
+              <Link
+                to="/handler/sign-in"
+                className="inline-flex items-center justify-center rounded-full border border-brand-border px-6 py-3 text-sm font-semibold text-brand-text transition hover:border-brand-accent hover:text-brand-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-accent focus-visible:outline-offset-2"
+              >
+                Sign in
+              </Link>
+            </div>
           </div>
-        ))}
+          <img
+            src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=960&q=80"
+            alt="Microagents console showing structured analytics and deployment controls."
+            className="h-auto w-full max-w-md rounded-3xl border border-brand-border object-cover shadow-card"
+            loading="lazy"
+          />
+        </div>
       </section>
 
-      <section className="bg-white py-20 dark:bg-slate-950">
-        <div className="mx-auto flex w-full max-w-6xl flex-col gap-10 px-6 md:flex-row md:items-center">
-          <div className="flex-1 space-y-4">
-            <h2 className="text-3xl font-semibold">Pricing that scales with your agents</h2>
-            <p className="text-sm text-slate-600 dark:text-slate-300">
-              Start experimenting for free, then choose the usage tier that matches your customer footprint.
-            </p>
-            <ul className="space-y-3 text-sm text-slate-600 dark:text-slate-300">
-              <li>• Starter: Deploy up to 2 agents with 10k monthly interactions.</li>
-              <li>• Growth: Unlock automation workflows and live analytics.</li>
-              <li>• Enterprise: Dedicated support, SSO, and compliance reviews.</li>
-            </ul>
-          </div>
-          <div className="flex flex-1 flex-col gap-4 rounded-3xl border border-slate-200/60 bg-slate-900 p-10 text-white shadow-[0_30px_60px_-40px_rgba(15,23,42,0.65)] dark:border-slate-700">
-            <h3 className="text-2xl font-semibold">Book a strategy session</h3>
-            <p className="text-sm text-slate-200">
-              Need to migrate a legacy assistant or integrate billing? Our solutions team will map the quickest path to launch.
-            </p>
-            <Link
-              to="/handler/sign-up"
-              className="inline-flex items-center justify-center rounded-full bg-white px-6 py-3 text-sm font-semibold text-slate-900 transition hover:bg-slate-200"
-            >
-              Reserve your spot
-            </Link>
+      <section className="mx-auto w-full max-w-5xl px-6 py-20">
+        <div className="rounded-3xl border border-brand-border bg-brand-backgroundElevated p-10">
+          <h2 className="text-2xl font-semibold">How Microagents works</h2>
+          <p className="mt-3 text-sm text-brand-textMuted">
+            Every launch follows three accountable phases so operations, compliance, and product teams stay in lockstep.
+          </p>
+          <div className="mt-8 grid gap-6 md:grid-cols-3">
+            {steps.map((step) => (
+              <article key={step.title} className="rounded-2xl border border-brand-border bg-brand-background px-6 py-6">
+                <h3 className="text-lg font-semibold text-brand-text">{step.title}</h3>
+                <p className="mt-3 text-sm text-brand-textMuted">{step.body}</p>
+              </article>
+            ))}
           </div>
         </div>
+      </section>
+
+      <section className="border-t border-brand-border bg-brand-backgroundElevated py-20">
+        <div className="mx-auto flex w-full max-w-5xl flex-col gap-12 px-6 md:flex-row md:items-start">
+          <div className="flex-1 space-y-5">
+            <h2 className="text-3xl font-semibold">Transparent pricing, formal support</h2>
+            <p className="text-sm text-brand-textMuted">
+              Select a plan that reflects your deployment posture. Scale usage with predictable billing aligned to active assistants.
+            </p>
+            <ul className="space-y-3 text-sm text-brand-textMuted">
+              <li>Starter: launch one supervised agent with audit-ready logging.</li>
+              <li>Growth: add automation workflows, document sync, and change reviews.</li>
+              <li>Enterprise: dedicated security reviews, SSO, and prioritized response times.</li>
+            </ul>
+          </div>
+          <aside className="flex flex-1 flex-col gap-4 rounded-3xl border border-brand-border bg-brand-background p-10 shadow-card">
+            <h3 className="text-2xl font-semibold text-brand-text">Plan a deployment session</h3>
+            <p className="text-sm text-brand-textMuted">
+              Reserve a one-hour consultation with the Microagents solutions team to map prerequisites, rollout sequencing, and governance controls.
+            </p>
+              <Link
+                to="/handler/sign-up"
+                className="inline-flex items-center justify-center rounded-full border border-brand-accent bg-brand-accent px-6 py-3 text-sm font-semibold text-brand-accentInverse transition hover:bg-brand-background hover:text-brand-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-accent focus-visible:outline-offset-2"
+              >
+                Book time
+              </Link>
+          </aside>
+        </div>
+      </section>
+
+      <section className="mx-auto w-full max-w-4xl px-6 pb-24">
+        <blockquote className="rounded-2xl border border-brand-border bg-brand-backgroundElevated p-10">
+          <p className="text-lg text-brand-text">
+            “Microagents catalogues every agent decision, links evidence, and keeps the team in control. The result is dependable automation that respects our standards.”
+          </p>
+          <footer className="mt-4 text-sm text-brand-textMuted">Director of Operations, pilot cohort</footer>
+        </blockquote>
       </section>
     </div>
   );

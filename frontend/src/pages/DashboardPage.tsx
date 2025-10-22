@@ -148,44 +148,44 @@ export function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 px-6 py-16 dark:bg-slate-950">
+    <div className="min-h-screen bg-brand-background px-6 py-16 text-brand-text">
       <div className="mx-auto w-full max-w-5xl">
         <header className="flex flex-col gap-4 sm:flex-row sm:items-baseline sm:justify-between">
           <div>
-            <h1 className="text-3xl font-semibold text-slate-900 dark:text-white">Customer Dashboard</h1>
-            <p className="text-sm text-slate-600 dark:text-slate-300">
-              Manage your micro-agent subscription and jump back into conversations when you are ready.
+            <h1 className="text-3xl font-semibold">Customer dashboard</h1>
+            <p className="text-sm text-brand-textMuted">
+              Manage your Microagents subscription and return to live conversations when you are ready.
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-3">
             <Link
               to="/chat"
-              className="inline-flex items-center justify-center rounded-full bg-slate-900 px-5 py-2 text-sm font-semibold text-white transition hover:bg-slate-700 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200"
+              className="inline-flex items-center justify-center rounded-full border border-brand-accent bg-brand-accent px-5 py-2 text-sm font-semibold text-brand-accentInverse transition hover:bg-brand-background hover:text-brand-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-accent focus-visible:outline-offset-2"
             >
               Open chat
             </Link>
             <Link
               to="/handler/account-settings"
-              className="inline-flex items-center justify-center rounded-full border border-slate-300 px-5 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:text-slate-900 dark:border-slate-700 dark:text-slate-200 dark:hover:border-slate-500 dark:hover:text-white"
+              className="inline-flex items-center justify-center rounded-full border border-brand-border px-5 py-2 text-sm font-semibold text-brand-text transition hover:border-brand-accent hover:text-brand-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-accent focus-visible:outline-offset-2"
             >
               Account settings
             </Link>
           </div>
         </header>
 
-        <div className="mt-10 rounded-3xl border border-slate-200/60 bg-white p-8 shadow-xl dark:border-slate-800/70 dark:bg-slate-900">
+        <div className="mt-10 rounded-3xl border border-brand-border bg-brand-backgroundElevated p-8 shadow-card">
           {loading ? (
-            <p className="text-sm text-slate-600 dark:text-slate-300">Loading your micro-agent...</p>
+            <p className="text-sm text-brand-textMuted">Loading your micro-agent...</p>
           ) : null}
 
           {error ? (
-            <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600 dark:border-red-500/40 dark:bg-red-500/10 dark:text-red-300">
+            <div className="rounded-xl border border-state-critical bg-state-criticalSurface px-4 py-3 text-sm text-state-critical">
               {error}
             </div>
           ) : null}
 
           {status ? (
-            <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700 dark:border-emerald-500/40 dark:bg-emerald-500/10 dark:text-emerald-300">
+            <div className="rounded-xl border border-state-positive bg-state-positiveSurface px-4 py-3 text-sm text-state-positive">
               {status}
             </div>
           ) : null}
@@ -194,34 +194,34 @@ export function DashboardPage() {
             <div className="mt-6 grid gap-10 md:grid-cols-[2fr_1fr]">
               <div className="space-y-6">
                 <div className="space-y-2">
-                  <h2 className="text-xl font-semibold text-slate-900 dark:text-white">Micro-agent overview</h2>
-                  <p className="text-sm text-slate-600 dark:text-slate-300">
+                  <h2 className="text-xl font-semibold text-brand-text">Micro-agent overview</h2>
+                  <p className="text-sm text-brand-textMuted">
                     Track the status of your assistant and keep its branding up to date.
                   </p>
                 </div>
 
                 <dl className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                  <div className="rounded-2xl border border-slate-200/60 bg-slate-50 p-4 text-sm dark:border-slate-700 dark:bg-slate-800/60">
-                    <dt className="font-medium text-slate-700 dark:text-slate-200">Agent name</dt>
-                    <dd className="mt-1 text-slate-900 dark:text-slate-100">{agent.name}</dd>
+                  <div className="rounded-2xl border border-brand-border bg-brand-background p-4 text-sm">
+                    <dt className="font-medium text-brand-textMuted">Agent name</dt>
+                    <dd className="mt-1 text-brand-text">{agent.name}</dd>
                   </div>
-                  <div className="rounded-2xl border border-slate-200/60 bg-slate-50 p-4 text-sm dark:border-slate-700 dark:bg-slate-800/60">
-                    <dt className="font-medium text-slate-700 dark:text-slate-200">Status</dt>
-                    <dd className="mt-1 capitalize text-slate-900 dark:text-slate-100">{agent.status}</dd>
+                  <div className="rounded-2xl border border-brand-border bg-brand-background p-4 text-sm">
+                    <dt className="font-medium text-brand-textMuted">Status</dt>
+                    <dd className="mt-1 capitalize text-brand-text">{agent.status}</dd>
                   </div>
-                  <div className="rounded-2xl border border-slate-200/60 bg-slate-50 p-4 text-sm dark:border-slate-700 dark:bg-slate-800/60">
-                    <dt className="font-medium text-slate-700 dark:text-slate-200">Plan</dt>
-                    <dd className="mt-1 text-slate-900 dark:text-slate-100">{agent.plan ?? "Starter"}</dd>
+                  <div className="rounded-2xl border border-brand-border bg-brand-background p-4 text-sm">
+                    <dt className="font-medium text-brand-textMuted">Plan</dt>
+                    <dd className="mt-1 text-brand-text">{agent.plan ?? "Starter"}</dd>
                   </div>
-                  <div className="rounded-2xl border border-slate-200/60 bg-slate-50 p-4 text-sm dark:border-slate-700 dark:bg-slate-800/60">
-                    <dt className="font-medium text-slate-700 dark:text-slate-200">Agent ID</dt>
-                    <dd className="mt-1 text-slate-900 dark:text-slate-100">{agent.id}</dd>
+                  <div className="rounded-2xl border border-brand-border bg-brand-background p-4 text-sm">
+                    <dt className="font-medium text-brand-textMuted">Agent ID</dt>
+                    <dd className="mt-1 text-brand-text">{agent.id}</dd>
                   </div>
                 </dl>
 
                 <form className="space-y-4" onSubmit={handleRename}>
                   <div className="space-y-1">
-                    <label className="text-sm font-medium text-slate-700 dark:text-slate-200" htmlFor="rename">
+                    <label className="text-sm font-medium text-brand-text" htmlFor="rename">
                       Rename micro-agent
                     </label>
                     <input
@@ -230,29 +230,29 @@ export function DashboardPage() {
                       value={renameValue}
                       onChange={(event) => setRenameValue(event.target.value)}
                       required
-                      className="w-full rounded-2xl border border-slate-200/60 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-slate-400 focus:ring-2 focus:ring-slate-300 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:focus:border-slate-500 dark:focus:ring-slate-600"
+                      className="w-full rounded-2xl border border-brand-border bg-brand-background px-4 py-3 text-sm text-brand-text transition focus:border-brand-accent focus:outline-none focus:ring-2 focus:ring-brand-accent/40"
                     />
                   </div>
                   <button
                     type="submit"
                     disabled={renameSubmitting}
-                    className="inline-flex items-center justify-center rounded-full bg-slate-900 px-5 py-2 text-sm font-semibold text-white transition hover:bg-slate-700 disabled:opacity-60 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200"
+                    className="inline-flex items-center justify-center rounded-full border border-brand-accent bg-brand-accent px-5 py-2 text-sm font-semibold text-brand-accentInverse transition hover:bg-brand-background hover:text-brand-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-accent focus-visible:outline-offset-2 disabled:opacity-60"
                   >
                     {renameSubmitting ? "Updating..." : "Save"}
                   </button>
                 </form>
               </div>
 
-              <aside className="space-y-4 rounded-3xl border border-slate-200/60 bg-slate-100/70 p-6 text-sm dark:border-slate-700 dark:bg-slate-800/70">
-                <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Manage subscription</h3>
-                <p className="text-slate-600 dark:text-slate-300">
+              <aside className="space-y-4 rounded-3xl border border-brand-border bg-brand-backgroundElevated p-6 text-sm">
+                <h3 className="text-lg font-semibold text-brand-text">Manage subscription</h3>
+                <p className="text-brand-textMuted">
                   Cancel anytime. Your data stays available for 30 days in case you need to reactivate.
                 </p>
                 <button
                   type="button"
                   onClick={handleCancel}
                   disabled={cancelSubmitting}
-                  className="inline-flex w-full items-center justify-center rounded-full border border-red-500/40 bg-red-500/10 px-4 py-2 text-sm font-semibold text-red-600 transition hover:border-red-500 hover:bg-red-500/20 disabled:opacity-60 dark:border-red-500/60 dark:bg-red-500/10 dark:text-red-300"
+                  className="inline-flex w-full items-center justify-center rounded-full border border-state-critical bg-state-criticalSurface px-4 py-2 text-sm font-semibold text-state-critical transition hover:border-state-critical hover:bg-state-criticalSurface/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-state-critical focus-visible:outline-offset-2 disabled:opacity-60"
                 >
                   {cancelSubmitting ? "Processing..." : "Cancel subscription"}
                 </button>
@@ -261,7 +261,7 @@ export function DashboardPage() {
           ) : null}
 
           {!loading && !agent && !error ? (
-            <p className="text-sm text-slate-600 dark:text-slate-300">
+            <p className="text-sm text-brand-textMuted">
               You have not purchased a micro-agent yet. Visit the marketing page to compare plans.
             </p>
           ) : null}

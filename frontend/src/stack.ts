@@ -25,4 +25,8 @@ export const stackClientApp = new StackClientApp({
   publishableClientKey,
   tokenStore: "cookie",
   redirectMethod: { useNavigate },
+  urls: {
+    afterSignIn: "/chat",
+    afterSignUp: "/chat",
+  },
 });

@@ -14,31 +14,31 @@ export const CHATKIT_API_DOMAIN_KEY =
 
 export const FACTS_API_URL = import.meta.env.VITE_FACTS_API_URL ?? "/facts";
 
-export const THEME_STORAGE_KEY = "chatkit-boilerplate-theme";
+export const THEME_STORAGE_KEY = "microagents-theme";
 
-export const GREETING = "Welcome to the ChatKit Demo";
+export const GREETING = "Welcome to Microagents.";
 
 export const STARTER_PROMPTS: StartScreenPrompt[] = [
   {
-    label: "What can you do?",
-    prompt: "What can you do?",
+    label: "How do you operate?",
+    prompt: "Summarize how you keep Microagents accountable and safe for operators.",
     icon: "circle-question",
   },
   {
-    label: "My name is Kaz",
-    prompt: "My name is Kaz",
+    label: "Record a profile fact",
+    prompt: "Store the operator name as Morgan Alvarez for future replies.",
     icon: "book-open",
   },
   {
-    label: "What's the weather in Paris?",
-    prompt: "What's the weather in Paris?",
+    label: "Check today's forecast",
+    prompt: "Provide the Paris weather report for today and cite the data source.",
     icon: "search",
   },
   {
-    label: "Change the theme to dark mode",
-    prompt: "Change the theme to dark mode",
+    label: "Confirm brand theme",
+    prompt: "Confirm the interface is using the Microagents dark theme.",
     icon: "sparkle",
   },
 ];
 
-export const PLACEHOLDER_INPUT = "Share a fact about yourself";
+export const PLACEHOLDER_INPUT = "Provide a clear instruction for your microagent";

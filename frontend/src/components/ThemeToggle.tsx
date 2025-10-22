@@ -8,19 +8,19 @@ type ThemeToggleProps = {
 };
 
 const buttonBase =
-  "inline-flex h-9 w-9 items-center justify-center rounded-full text-[0.7rem] transition-colors duration-200";
+  "inline-flex h-9 w-9 items-center justify-center rounded-full text-[0.7rem] transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-accent focus-visible:outline-offset-2";
 
 export function ThemeToggle({ value, onChange }: ThemeToggleProps) {
   return (
-    <div className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white/60 p-1 shadow-sm backdrop-blur-sm dark:border-slate-800 dark:bg-slate-900/60">
+    <div className="inline-flex items-center gap-1 rounded-full border border-brand-border bg-brand-backgroundElevated p-1 shadow-sm">
       <button
         type="button"
         onClick={() => onChange("light")}
         className={clsx(
           buttonBase,
           value === "light"
-            ? "bg-slate-900 text-white shadow-sm dark:bg-slate-100 dark:text-slate-900"
-            : "text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-100"
+            ? "bg-brand-accent text-brand-accentInverse shadow-sm"
+            : "text-brand-textMuted hover:text-brand-text"
         )}
         aria-label="Use light theme"
         aria-pressed={value === "light"}
@@ -33,8 +33,8 @@ export function ThemeToggle({ value, onChange }: ThemeToggleProps) {
         className={clsx(
           buttonBase,
           value === "dark"
-            ? "bg-slate-900 text-white shadow-sm dark:bg-slate-100 dark:text-slate-900"
-            : "text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-100"
+            ? "bg-brand-accent text-brand-accentInverse shadow-sm"
+            : "text-brand-textMuted hover:text-brand-text"
         )}
         aria-label="Use dark theme"
         aria-pressed={value === "dark"}

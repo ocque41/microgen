@@ -11,14 +11,12 @@ import type { FactAction } from "../hooks/useFacts";
 import type { ColorScheme } from "../hooks/useColorScheme";
 
 type ChatKitPanelProps = {
-  theme: ColorScheme;
   onWidgetAction: (action: FactAction) => Promise<void>;
   onResponseEnd: () => void;
   onThemeRequest: (scheme: ColorScheme) => void;
 };
 
 export function ChatKitPanel({
-  theme,
   onWidgetAction,
   onResponseEnd,
   onThemeRequest,
@@ -33,10 +31,10 @@ export function ChatKitPanel({
         grayscale: {
           hue: 220,
           tint: 6,
-          shade: theme === "dark" ? -1 : -2,
+          shade: -2,
         },
         accent: {
-          primary: "#0E4F3D",
+          primary: "#B57033",
           level: 2,
         },
       },
@@ -98,7 +96,7 @@ export function ChatKitPanel({
   });
 
   return (
-    <div className="relative h-full w-full overflow-hidden border border-slate-200/60 bg-white shadow-card dark:border-slate-800/70 dark:bg-slate-900">
+    <div className="relative h-full w-full overflow-hidden rounded-3xl border border-brand-border bg-brand-backgroundElevated shadow-card">
       <ChatKit control={chatkit.control} className="block h-full w-full" />
     </div>
   );

@@ -4,19 +4,50 @@
 
 @layer base {
   :root {
-    color-scheme: light dark;
+    color-scheme: dark;
+    --bg: #171717;
+    --bg-elev: #1f2518;
+    --bg-overlay: #272b1e;
+    --text: #ede8e0;
+    --text-muted: #d3cebc;
+    --accent: #b57033;
+    --accent-hover: #d1935d;
+    --accent-inverse: #171717;
+    --border: #343929;
+    --neutral-elev: #a7b08a;
+    --critical: #9f5519;
+    --critical-surface: #351c08;
+    --positive: #899465;
+    --positive-surface: #282c1e;
+    --warning: #ba854f;
+    --warning-surface: #3b2917;
+  }
+
+  html:not(.dark) {
+    color-scheme: dark;
   }
 
   body {
-    @apply m-0 min-h-screen font-sans bg-surface-light text-slate-900 transition-colors;
+    @apply m-0 min-h-screen font-sans bg-brand-background text-brand-text transition-colors;
   }
 
-  .dark body {
-    @apply bg-surface-dark text-slate-100;
+  html:not(.dark) body {
+    @apply bg-brand-background text-brand-text;
   }
 
   a {
-    color: inherit;
+    color: var(--accent);
     text-decoration: none;
+  }
+
+  a:hover,
+  a:focus {
+    color: var(--accent-hover);
+    text-decoration: none;
+  }
+
+  ::selection {
+    background: color-mix(in srgb, var(--accent) 65%, black);
+    color: var(--accent-inverse);
   }
 }

@@ -1,36 +1,54 @@
-# Microagents Brand Guide (Helvetica Neue Minimal)
+# Microagents Brand Architecture (Dark Mentor System)
 
-The refreshed Microagents identity stays bright, formal, and minimal. Marketing surfaces now rely on a single Helvetica Neue voice, generous spacing, and a cool cyan accent to communicate clarity.
+The Microagents identity stays rooted in a deep graphite backdrop (#171717) while layering a heritage-inspired earth-and-sage palette for structure, motion, and states. The tones come from premium editorial design patterns—warm metallics for action, grounded greens for trust, and soft clay neutrals for content depth.
 
-## Core principles
-- **Neutral light palette** – White backgrounds (#ffffff) with near-black copy (#111111) improve legibility and convey seriousness.
-- **Helvetica Neue everywhere** – Headlines and body copy both use Helvetica Neue to keep the brand consistent across marketing and app surfaces.
-- **Generous spacing** – Minimum 24px padding/margins to keep the site airy and focused on the copy.
-- **Single accent** – Cyan (#0ea5e9) drives CTAs, focus rings, and data callouts; hover states darken to #0284c7.
+## Strategic hierarchy
+- **Background constant** – `#171717` remains the only base surface so the system feels consistent from marketing to product.
+- **Warm authority accents** – Russet and seal brown hues animate CTAs, alerts, and progress, evoking deliberate craftsmanship rather than hype.
+- **Balanced sages** – Reseda, ebony, and khaki variants provide calm guidance for cards, navigation, and secondary copy.
+- **Tone of voice** – Formal, evidential, and sentence-case; every message should read like a mentor summarizing outcomes.
+
+## Palette roles
+| Token | Hex | Palette source | Purpose |
+| ----- | --- | -------------- | ------- |
+| `--bg` | `#171717` | Base | Primary background on every surface. |
+| `--bg-elev` | `#1f2518` | black_olive 300 | Raised containers, dashboard panes. |
+| `--bg-overlay` | `#272b1e` | ebony 300 | Hover states, table rows, menus. |
+| `--border` | `#343929` | ebony 400 | 1 px separators, input borders. |
+| `--text` | `#ede8e0` | lion 900 | Primary text and headings. |
+| `--text-muted` | `#d3cebc` | khaki 700 | Supporting copy, helper text. |
+| `--accent` | `#b57033` | russet 600 | Primary CTAs, focus ring, key links. |
+| `--accent-hover` | `#d1935d` | russet 700 | CTA hover/active states. |
+| `--accent-inverse` | `#171717` | Base | Text over warm accents. |
+| `--neutral-elev` | `#a7b08a` | reseda_green 700 | Secondary buttons, tabs. |
+| `--positive` | `#899465` | reseda_green 600 | Success text/icons. |
+| `--positive-surface` | `#282c1e` | reseda_green 200 | Success background fills. |
+| `--critical` | `#9f5519` | seal_brown 600 | Errors, destructive actions. |
+| `--critical-surface` | `#351c08` | seal_brown 300 | Error background fills. |
+| `--warning` | `#ba854f` | raw_umber 600 | Pending states, notices. |
+| `--warning-surface` | `#3b2917` | raw_umber 200 | Warning background fills. |
 
 ## Typography
-- **Type family**: `font-family: "Helvetica Neue", sans-serif;`
-- **Headline casing**: Sentence case only (e.g., “Microagents that work for you”).
+- **Typeface**: `"Helvetica Neue", sans-serif` across hierarchy.
+- **Weights**: 600 for headings, 400 for body.
+- **Casing**: Sentence case. Avoid all caps.
 
-## Color tokens
-| Token | Value | Usage |
-| ----- | ----- | ----- |
-| `--bg` | `#ffffff` | Page background |
-| `--fg` | `#111111` | Primary text |
-| `--muted` | `#4b5563` | Supporting copy |
-| `--accent` | `#0ea5e9` | Buttons, links, focus outlines |
-| `--accent-hover` | `#0284c7` | Hover state for interactive controls |
+## Component system
+- **Primary button** – Fill with `var(--accent)`, text uses `var(--accent-inverse)`. Hover swaps background to `var(--bg)` with text `var(--accent)` and `1px` outline in `var(--accent)`.
+- **Secondary button** – Border `var(--neutral-elev)`, text `var(--neutral-elev)`, hover fills with `var(--neutral-elev)` and text flips to `var(--accent-inverse)`.
+- **Cards & overlays** – Background `var(--bg-elev)`, border `var(--border)`, 24px radius, `0 32px 70px -50px rgba(0,0,0,0.65)` shadow.
+- **Feedback** – Status ribbons use `var(--positive)`/`var(--critical)` text over their matching surface tokens.
 
-## Components
-- **Navbar** – Left-aligned “Microagents” wordmark, right-aligned primary CTA. 32px vertical padding, 32px horizontal gutter.
-- **Primary button** – 16px × 28px padding, 12px radius, white text on cyan background, focus-visible ring using the accent.
-- **Cards** – 32px padding, 18px radius, soft shadow (`0 10px 30px rgba(15,23,42,0.06)`).
-- **Hero media** – 20px outer radius, 8px inner padding, light gray frame for screenshots.
+## Motion & spacing
+- **Spacing grid**: 8 px multiples, 24 px minimum outer padding.
+- **Animation**: Ease-out 180 ms for hovers, 320 ms for modals.
 
-## Assets
-The marketing hero and how-it-works visuals use CSS-based placeholders with descriptive `aria-label` text. Replace them with product captures when assets are ready and keep alt text aligned with the W3C decision tree.
+## Accessibility guardrails
+- Maintain contrast ratios (4.5:1 for body, 3:1 for large text). The accent and state pairings above meet AA on `#171717`.
+- Preserve focus-visible outlines (`var(--accent)` or state color) with 2 px offset.
+- Provide descriptive alt text for imagery; the hero photo emphasizes control dashboards and should mention that narrative.
 
-## Accessibility reminders
-- Ensure text contrast ≥4.5:1 and large headings ≥3:1.
-- Maintain focus-visible outlines on all interactive elements.
-- Provide descriptive alt text for informative imagery following the W3C decision tree.
+## Governance
+- Any color tweaks start in this document, then propagate to `src/index.css` tokens.
+- Run ESLint + visual contrast checks before PR approval.
+- Marketing and product teams share a single palette sheet; no ad-hoc hex codes in commits.

@@ -6,34 +6,41 @@ export type ColorScheme = "light" | "dark";
 
 function getInitialScheme(): ColorScheme {
   if (typeof window === "undefined") {
-    return "light";
+    return "dark";
   }
   const stored = window.localStorage.getItem(THEME_STORAGE_KEY) as ColorScheme | null;
-  if (stored === "light" || stored === "dark") {
-    return stored;
+  if (stored === "dark") {
+    return "dark";
   }
-  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  return "dark";
 }
 
 export function useColorScheme() {
   const [scheme, setScheme] = useState<ColorScheme>(getInitialScheme);
 
-  useEffect(() => {
-    if (typeof document === "undefined") return;
-    const root = document.documentElement;
-    if (scheme === "dark") {
-      root.classList.add("dark");
-    } else {
-      root.classList.remove("dark");
+  const applyDark = useCallback(() => {
+    if (typeof document !== "undefined") {
+      document.documentElement.classList.add("dark");
     }
-    window.localStorage.setItem(THEME_STORAGE_KEY, scheme);
-  }, [scheme]);
-
-  const toggle = useCallback(() => {
-    setScheme((current) => (current === "dark" ? "light" : "dark"));
+    if (typeof window !== "undefined") {
+      window.localStorage.setItem(THEME_STORAGE_KEY, "dark");
+    }
   }, []);
 
-  const setExplicit = useCallback((value: ColorScheme) => { setScheme(value); }, []);
+  useEffect(() => {
+    applyDark();
+  }, [applyDark, scheme]);
+
+  const toggle = useCallback(() => {
+    setScheme("dark");
+    applyDark();
+  }, [applyDark]);
+
+  const setExplicit = useCallback((value: ColorScheme) => {
+    void value;
+    setScheme("dark");
+    applyDark();
+  }, [applyDark]);
 
   return { scheme, toggle, setScheme: setExplicit };
 }
