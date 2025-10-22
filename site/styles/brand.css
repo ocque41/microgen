@@ -92,7 +92,7 @@ a {
 }
 
 a:hover {
-  color: var(--accent);
+  text-decoration-color: var(--accent);
 }
 
 a:focus-visible,
@@ -184,7 +184,7 @@ main {
   aspect-ratio: 16 / 9;
   border: 1px dashed var(--border);
   border-radius: var(--radius);
-  background: #191919;
+  background: var(--bg);
   color: var(--text-muted);
   font-size: 1rem;
   letter-spacing: 0.02em;
@@ -228,7 +228,7 @@ blockquote {
   margin: var(--s4) 0;
   padding: var(--s3) var(--s4);
   border-left: 3px solid var(--accent);
-  background: #191919;
+  background: var(--bg-elev);
   border-radius: 0 var(--radius) var(--radius) 0;
   color: var(--text);
 }
@@ -264,10 +264,6 @@ blockquote footer {
   gap: var(--s2);
   text-align: center;
   color: var(--text-muted);
-}
-
-.site-footer a {
-  color: var(--accent);
 }
 
 .sr-only {

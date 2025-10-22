@@ -1,7 +1,6 @@
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-
-import { useAuth } from "../contexts/AuthContext";
+import { useUser } from "@stackframe/react";
 
 type MicroAgent = {
   id: string;
@@ -16,7 +15,7 @@ type MicroAgentResponse = {
 };
 
 export function DashboardPage() {
-  const { token, logout } = useAuth();
+  const user = useUser({ or: "throw" });
   const [agent, setAgent] = useState<MicroAgent | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -25,20 +24,34 @@ export function DashboardPage() {
   const [renameSubmitting, setRenameSubmitting] = useState(false);
   const [cancelSubmitting, setCancelSubmitting] = useState(false);
 
+  const authorizedFetch = useCallback(
+    async (
+      input: Parameters<typeof fetch>[0],
+      init?: Parameters<typeof fetch>[1]
+    ) => {
+      const { accessToken } = await user.currentSession.getTokens();
+      const headers = new Headers(init?.headers ?? {});
+      if (accessToken) {
+        headers.set("Authorization", `Bearer ${accessToken}`);
+      }
+      return fetch(input, {
+        ...init,
+        headers,
+      });
+    },
+    [user]
+  );
+
   useEffect(() => {
     async function loadAgent() {
       setLoading(true);
       setError(null);
       setStatus(null);
       try {
-        const response = await fetch("/api/microagents/me", {
-          headers: {
-            Authorization: token ? `Bearer ${token}` : "",
-          },
-        });
+        const response = await authorizedFetch("/api/microagents/me");
         const payload = (await response.json().catch(() => ({}))) as MicroAgentResponse;
         if (response.status === 401) {
-          logout();
+          await user.signOut();
           throw new Error("Your session expired. Please log in again.");
         }
         if (!response.ok || !payload.agent) {
@@ -58,7 +71,7 @@ export function DashboardPage() {
     }
 
     void loadAgent();
-  }, [token, logout]);
+  }, [authorizedFetch, user]);
 
   async function handleRename(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -68,15 +81,18 @@ export function DashboardPage() {
     setStatus(null);
 
     try {
-      const response = await fetch("/api/microagents/me", {
+      const response = await authorizedFetch("/api/microagents/me", {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
-          Authorization: token ? `Bearer ${token}` : "",
         },
         body: JSON.stringify({ name: renameValue }),
       });
       const payload = (await response.json().catch(() => ({}))) as MicroAgentResponse;
+      if (response.status === 401) {
+        await user.signOut();
+        throw new Error("Your session expired. Please log in again.");
+      }
       if (!response.ok || !payload.agent) {
         throw new Error(payload.message ?? "We could not rename your micro-agent.");
       }
@@ -100,13 +116,14 @@ export function DashboardPage() {
     setStatus(null);
 
     try {
-      const response = await fetch("/api/microagents/me/cancel", {
+      const response = await authorizedFetch("/api/microagents/me/cancel", {
         method: "POST",
-        headers: {
-          Authorization: token ? `Bearer ${token}` : "",
-        },
       });
       const payload = (await response.json().catch(() => ({}))) as MicroAgentResponse;
+      if (response.status === 401) {
+        await user.signOut();
+        throw new Error("Your session expired. Please log in again.");
+      }
       if (!response.ok) {
         throw new Error(payload.message ?? "We could not cancel your subscription.");
       }
@@ -140,12 +157,20 @@ export function DashboardPage() {
               Manage your micro-agent subscription and jump back into conversations when you are ready.
             </p>
           </div>
-          <Link
-            to="/chat"
-            className="inline-flex items-center justify-center rounded-full bg-slate-900 px-5 py-2 text-sm font-semibold text-white transition hover:bg-slate-700 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200"
-          >
-            Open chat
-          </Link>
+          <div className="flex flex-wrap items-center gap-3">
+            <Link
+              to="/chat"
+              className="inline-flex items-center justify-center rounded-full bg-slate-900 px-5 py-2 text-sm font-semibold text-white transition hover:bg-slate-700 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200"
+            >
+              Open chat
+            </Link>
+            <Link
+              to="/handler/account-settings"
+              className="inline-flex items-center justify-center rounded-full border border-slate-300 px-5 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:text-slate-900 dark:border-slate-700 dark:text-slate-200 dark:hover:border-slate-500 dark:hover:text-white"
+            >
+              Account settings
+            </Link>
+          </div>
         </header>
 
         <div className="mt-10 rounded-3xl border border-slate-200/60 bg-white p-8 shadow-xl dark:border-slate-800/70 dark:bg-slate-900">

@@ -16,13 +16,13 @@ export function MarketingPage() {
         </p>
         <div className="flex flex-wrap items-center justify-center gap-4">
           <Link
-            to="/signup"
+            to="/handler/sign-up"
             className="rounded-full bg-slate-900 px-6 py-3 text-sm font-semibold text-white shadow-lg transition hover:bg-slate-700 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200"
           >
             Sign up
           </Link>
           <Link
-            to="/login"
+            to="/handler/sign-in"
             className="rounded-full border border-slate-300 px-6 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:text-slate-900 dark:border-slate-700 dark:text-slate-200 dark:hover:border-slate-500 dark:hover:text-white"
           >
             Log in
@@ -74,7 +74,7 @@ export function MarketingPage() {
               Need to migrate a legacy assistant or integrate billing? Our solutions team will map the quickest path to launch.
             </p>
             <Link
-              to="/signup"
+              to="/handler/sign-up"
               className="inline-flex items-center justify-center rounded-full bg-white px-6 py-3 text-sm font-semibold text-slate-900 transition hover:bg-slate-200"
             >
               Reserve your spot
