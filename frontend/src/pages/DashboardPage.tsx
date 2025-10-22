@@ -153,39 +153,54 @@ export function DashboardPage() {
         <header className="flex flex-col gap-4 sm:flex-row sm:items-baseline sm:justify-between">
           <div>
             <h1 className="text-3xl font-semibold">Customer dashboard</h1>
-            <p className="text-sm text-brand-textMuted">
+            <p className="text-sm text-[color:var(--text-muted)]">
               Manage your Microagents subscription and return to live conversations when you are ready.
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-3">
             <Link
               to="/chat"
-              className="inline-flex items-center justify-center rounded-full border border-brand-accent bg-brand-accent px-5 py-2 text-sm font-semibold text-brand-accentInverse transition hover:bg-brand-background hover:text-brand-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-accent focus-visible:outline-offset-2"
+              className="inline-flex items-center justify-center rounded-full bg-[color:var(--accent)] px-5 py-2 text-sm font-semibold text-[color:var(--accent-inverse)] transition hover:bg-[color:var(--accent-hover)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[color:var(--accent)] focus-visible:outline-offset-3"
             >
               Open chat
             </Link>
             <Link
               to="/handler/account-settings"
-              className="inline-flex items-center justify-center rounded-full border border-brand-border px-5 py-2 text-sm font-semibold text-brand-text transition hover:border-brand-accent hover:text-brand-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-accent focus-visible:outline-offset-2"
+              className="inline-flex items-center justify-center rounded-full bg-[color:rgba(23,23,23,0.65)] px-5 py-2 text-sm font-semibold text-[color:var(--accent-inverse)] transition hover:bg-[color:rgba(23,23,23,0.85)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[color:var(--accent)] focus-visible:outline-offset-3"
             >
               Account settings
             </Link>
           </div>
         </header>
 
-        <div className="mt-10 rounded-3xl border border-brand-border bg-brand-backgroundElevated p-8 shadow-card">
+        <div
+          className="mt-10 rounded-3xl p-8 shadow-[0_40px_120px_-90px_rgba(0,0,0,0.9)] backdrop-blur-sm"
+          style={{
+            backgroundColor: "rgba(244,241,234,0.05)",
+          }}
+        >
           {loading ? (
-            <p className="text-sm text-brand-textMuted">Loading your micro-agent...</p>
+            <p className="text-sm text-[color:var(--text-muted)]">Loading your micro-agent...</p>
           ) : null}
 
           {error ? (
-            <div className="rounded-xl border border-state-critical bg-state-criticalSurface px-4 py-3 text-sm text-state-critical">
+            <div
+              className="mt-4 rounded-2xl px-4 py-3 text-sm text-[color:var(--accent-inverse)]"
+              style={{
+                backgroundColor: "rgba(127,79,36,0.25)",
+              }}
+            >
               {error}
             </div>
           ) : null}
 
           {status ? (
-            <div className="rounded-xl border border-state-positive bg-state-positiveSurface px-4 py-3 text-sm text-state-positive">
+            <div
+              className="mt-4 rounded-2xl px-4 py-3 text-sm text-[color:var(--accent-inverse)]"
+              style={{
+                backgroundColor: "rgba(166,138,100,0.25)",
+              }}
+            >
               {status}
             </div>
           ) : null}
@@ -194,28 +209,48 @@ export function DashboardPage() {
             <div className="mt-6 grid gap-10 md:grid-cols-[2fr_1fr]">
               <div className="space-y-6">
                 <div className="space-y-2">
-                  <h2 className="text-xl font-semibold text-brand-text">Micro-agent overview</h2>
-                  <p className="text-sm text-brand-textMuted">
+                  <h2 className="text-xl font-semibold">Micro-agent overview</h2>
+                  <p className="text-sm text-[color:var(--text-muted)]">
                     Track the status of your assistant and keep its branding up to date.
                   </p>
                 </div>
 
                 <dl className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                  <div className="rounded-2xl border border-brand-border bg-brand-background p-4 text-sm">
-                    <dt className="font-medium text-brand-textMuted">Agent name</dt>
-                    <dd className="mt-1 text-brand-text">{agent.name}</dd>
+                  <div
+                    className="rounded-2xl p-4 text-sm shadow-[0_20px_60px_-60px_rgba(0,0,0,0.9)]"
+                    style={{
+                      backgroundColor: "rgba(244,241,234,0.06)",
+                    }}
+                  >
+                    <dt className="font-medium text-[color:var(--accent)]">Agent name</dt>
+                    <dd className="mt-1">{agent.name}</dd>
                   </div>
-                  <div className="rounded-2xl border border-brand-border bg-brand-background p-4 text-sm">
-                    <dt className="font-medium text-brand-textMuted">Status</dt>
-                    <dd className="mt-1 capitalize text-brand-text">{agent.status}</dd>
+                  <div
+                    className="rounded-2xl p-4 text-sm shadow-[0_20px_60px_-60px_rgba(0,0,0,0.9)]"
+                    style={{
+                      backgroundColor: "rgba(244,241,234,0.06)",
+                    }}
+                  >
+                    <dt className="font-medium text-[color:var(--accent)]">Status</dt>
+                    <dd className="mt-1 capitalize">{agent.status}</dd>
                   </div>
-                  <div className="rounded-2xl border border-brand-border bg-brand-background p-4 text-sm">
-                    <dt className="font-medium text-brand-textMuted">Plan</dt>
-                    <dd className="mt-1 text-brand-text">{agent.plan ?? "Starter"}</dd>
+                  <div
+                    className="rounded-2xl p-4 text-sm shadow-[0_20px_60px_-60px_rgba(0,0,0,0.9)]"
+                    style={{
+                      backgroundColor: "rgba(244,241,234,0.06)",
+                    }}
+                  >
+                    <dt className="font-medium text-[color:var(--accent)]">Plan</dt>
+                    <dd className="mt-1">{agent.plan ?? "Starter"}</dd>
                   </div>
-                  <div className="rounded-2xl border border-brand-border bg-brand-background p-4 text-sm">
-                    <dt className="font-medium text-brand-textMuted">Agent ID</dt>
-                    <dd className="mt-1 text-brand-text">{agent.id}</dd>
+                  <div
+                    className="rounded-2xl p-4 text-sm shadow-[0_20px_60px_-60px_rgba(0,0,0,0.9)]"
+                    style={{
+                      backgroundColor: "rgba(244,241,234,0.06)",
+                    }}
+                  >
+                    <dt className="font-medium text-[color:var(--accent)]">Agent ID</dt>
+                    <dd className="mt-1">{agent.id}</dd>
                   </div>
                 </dl>
 
@@ -230,29 +265,34 @@ export function DashboardPage() {
                       value={renameValue}
                       onChange={(event) => setRenameValue(event.target.value)}
                       required
-                      className="w-full rounded-2xl border border-brand-border bg-brand-background px-4 py-3 text-sm text-brand-text transition focus:border-brand-accent focus:outline-none focus:ring-2 focus:ring-brand-accent/40"
+                      className="w-full rounded-2xl bg-[color:rgba(23,23,23,0.78)] px-4 py-3 text-sm text-[color:var(--accent-inverse)] transition focus:outline focus:outline-2 focus:outline-[color:var(--accent)] focus:outline-offset-2"
                     />
                   </div>
                   <button
                     type="submit"
                     disabled={renameSubmitting}
-                    className="inline-flex items-center justify-center rounded-full border border-brand-accent bg-brand-accent px-5 py-2 text-sm font-semibold text-brand-accentInverse transition hover:bg-brand-background hover:text-brand-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-accent focus-visible:outline-offset-2 disabled:opacity-60"
+                    className="inline-flex items-center justify-center rounded-full bg-[color:var(--accent)] px-5 py-2 text-sm font-semibold text-[color:var(--accent-inverse)] transition hover:bg-[color:var(--accent-hover)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[color:var(--accent)] focus-visible:outline-offset-3 disabled:opacity-60"
                   >
                     {renameSubmitting ? "Updating..." : "Save"}
                   </button>
                 </form>
               </div>
 
-              <aside className="space-y-4 rounded-3xl border border-brand-border bg-brand-backgroundElevated p-6 text-sm">
-                <h3 className="text-lg font-semibold text-brand-text">Manage subscription</h3>
-                <p className="text-brand-textMuted">
+              <aside
+                className="space-y-4 rounded-3xl p-6 text-sm shadow-[0_30px_90px_-80px_rgba(0,0,0,0.9)]"
+                style={{
+                  backgroundColor: "rgba(244,241,234,0.06)",
+                }}
+              >
+                <h3 className="text-lg font-semibold">Manage subscription</h3>
+                <p className="text-[color:var(--text-muted)]">
                   Cancel anytime. Your data stays available for 30 days in case you need to reactivate.
                 </p>
                 <button
                   type="button"
                   onClick={handleCancel}
                   disabled={cancelSubmitting}
-                  className="inline-flex w-full items-center justify-center rounded-full border border-state-critical bg-state-criticalSurface px-4 py-2 text-sm font-semibold text-state-critical transition hover:border-state-critical hover:bg-state-criticalSurface/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-state-critical focus-visible:outline-offset-2 disabled:opacity-60"
+                  className="inline-flex w-full items-center justify-center rounded-full bg-[color:rgba(127,79,36,0.45)] px-4 py-2 text-sm font-semibold text-[color:var(--accent-inverse)] transition hover:bg-[color:rgba(127,79,36,0.55)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[color:var(--accent)] focus-visible:outline-offset-3 disabled:opacity-60"
                 >
                   {cancelSubmitting ? "Processing..." : "Cancel subscription"}
                 </button>
@@ -261,7 +301,7 @@ export function DashboardPage() {
           ) : null}
 
           {!loading && !agent && !error ? (
-            <p className="text-sm text-brand-textMuted">
+            <p className="text-sm text-[color:var(--text-muted)]">
               You have not purchased a micro-agent yet. Visit the marketing page to compare plans.
             </p>
           ) : null}

@@ -1,11 +1,17 @@
-import { defineConfig } from "vite";
+import path from "path";
 import react from "@vitejs/plugin-react-swc";
+import { defineConfig } from "vite";
 
 const backendTarget = process.env.BACKEND_URL ?? "http://127.0.0.1:8000";
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
+    },
+  },
   server: {
     port: 5170,
     host: "0.0.0.0",

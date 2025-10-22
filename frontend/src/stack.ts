@@ -20,9 +20,14 @@ const publishableClientKey = requireEnv(
   "the Stack Auth publishable client key"
 );
 
+const stackBaseUrl =
+  import.meta.env.VITE_STACK_APP_URL ??
+  (typeof window !== "undefined" ? window.location.origin : undefined);
+
 export const stackClientApp = new StackClientApp({
   projectId,
   publishableClientKey,
+  baseUrl: stackBaseUrl,
   tokenStore: "cookie",
   redirectMethod: { useNavigate },
   urls: {

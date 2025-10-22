@@ -1,54 +1,87 @@
 # Microagents Brand Architecture (Dark Mentor System)
 
-The Microagents identity stays rooted in a deep graphite backdrop (#171717) while layering a heritage-inspired earth-and-sage palette for structure, motion, and states. The tones come from premium editorial design patterns—warm metallics for action, grounded greens for trust, and soft clay neutrals for content depth.
+The Microagents interface remains a dark-first experience that prioritises formal calm. We lock the base canvas to deep graphite while layering the heritage palette provided by brand—earth, clay, and sage hues—for controlled atmosphere. Every surface now relies on colour-mixed fields instead of borders so the system feels minimal, editorial, and deliberate.
 
-## Strategic hierarchy
-- **Background constant** – `#171717` remains the only base surface so the system feels consistent from marketing to product.
-- **Warm authority accents** – Russet and seal brown hues animate CTAs, alerts, and progress, evoking deliberate craftsmanship rather than hype.
-- **Balanced sages** – Reseda, ebony, and khaki variants provide calm guidance for cards, navigation, and secondary copy.
-- **Tone of voice** – Formal, evidential, and sentence-case; every message should read like a mentor summarizing outcomes.
+## Foundational constants
+- **Canvas**: `#171717` is the universal backdrop across marketing, product, and docs.
+- **Copy**: `#c2c5aa` (sage 500) covers all body and heading text; supporting copy shifts to `#dadccc` (sage 700).
+- **Radius**: 8 px default system radius (applied via `--radius`).
+- **Voice**: Mentor tone; formal, evidential, sentence case, minimal humour.
 
-## Palette roles
-| Token | Hex | Palette source | Purpose |
-| ----- | --- | -------------- | ------- |
-| `--bg` | `#171717` | Base | Primary background on every surface. |
-| `--bg-elev` | `#1f2518` | black_olive 300 | Raised containers, dashboard panes. |
-| `--bg-overlay` | `#272b1e` | ebony 300 | Hover states, table rows, menus. |
-| `--border` | `#343929` | ebony 400 | 1 px separators, input borders. |
-| `--text` | `#ede8e0` | lion 900 | Primary text and headings. |
-| `--text-muted` | `#d3cebc` | khaki 700 | Supporting copy, helper text. |
-| `--accent` | `#b57033` | russet 600 | Primary CTAs, focus ring, key links. |
-| `--accent-hover` | `#d1935d` | russet 700 | CTA hover/active states. |
-| `--accent-inverse` | `#171717` | Base | Text over warm accents. |
-| `--neutral-elev` | `#a7b08a` | reseda_green 700 | Secondary buttons, tabs. |
-| `--positive` | `#899465` | reseda_green 600 | Success text/icons. |
-| `--positive-surface` | `#282c1e` | reseda_green 200 | Success background fills. |
-| `--critical` | `#9f5519` | seal_brown 600 | Errors, destructive actions. |
-| `--critical-surface` | `#351c08` | seal_brown 300 | Error background fills. |
-| `--warning` | `#ba854f` | raw_umber 600 | Pending states, notices. |
-| `--warning-surface` | `#3b2917` | raw_umber 200 | Warning background fills. |
+## Palette dictionary
+Each palette supplies start / mid / end stops. Outer stops are unique to individual sections; mid stops can be shared to stitch the system together.
 
-## Typography
-- **Typeface**: `"Helvetica Neue", sans-serif` across hierarchy.
-- **Weights**: 600 for headings, 400 for body.
-- **Casing**: Sentence case. Avoid all caps.
+| Palette | 100 | 500 | 900 |
+| ------- | --- | --- | --- |
+| **Seal brown** | `#120903` | `#582f0e` | `#f4d3b8` |
+| **Russet** | `#191007` | `#7f4f24` | `#f0dbc9` |
+| **Raw umber** | `#1d140b` | `#936639` | `#eee0d3` |
+| **Lion** | `#221c13` | `#a68a64` | `#ede8e0` |
+| **Khaki** | `#27241a` | `#b6ad90` | `#f0efe9` |
+| **Sage (deep)** | `#2a2c1e` | `#c2c5aa` | `#f3f3ee` |
+| **Sage (muted)** | `#222419` | `#a4ac86` | `#edeee7` |
+| **Reseda green** | `#14160f` | `#656d4a` | `#e2e5d8` |
+| **Ebony** | `#0d0e0a` | `#414833` | `#dadfd2` |
+| **Black olive** | `#0a0c08` | `#333d29` | `#d6dece` |
 
-## Component system
-- **Primary button** – Fill with `var(--accent)`, text uses `var(--accent-inverse)`. Hover swaps background to `var(--bg)` with text `var(--accent)` and `1px` outline in `var(--accent)`.
-- **Secondary button** – Border `var(--neutral-elev)`, text `var(--neutral-elev)`, hover fills with `var(--neutral-elev)` and text flips to `var(--accent-inverse)`.
-- **Cards & overlays** – Background `var(--bg-elev)`, border `var(--border)`, 24px radius, `0 32px 70px -50px rgba(0,0,0,0.65)` shadow.
-- **Feedback** – Status ribbons use `var(--positive)`/`var(--critical)` text over their matching surface tokens.
+Shared mid accents (russet 600 `#b57033`, lion 500 `#a68a64`, khaki 500 `#b6ad90`) provide the warm articulation points used in buttons, typography accents, and illustrations.
+
+## Section distribution
+
+| Section | Palette | Start (unique) | Shared mids | End (unique) | Notes |
+| ------- | ------- | -------------- | ----------- | ------------- | ----- |
+| Hero | Seal brown | `#120903` | `#b57033`, `#a68a64` | `#f4d3b8` | Gradient field under hero content; CTAs use russet mid, copy stays sage. |
+| How it works | Russet | `#191007` | `#b57033`, `#a68a64` | `#f0dbc9` | Cards float on colour-mix panels; no dividers or strokes. |
+| Pricing + CTA | Raw umber | `#1d140b` | `#b57033`, `#b6ad90` | `#eee0d3` | Booking panel uses semi-transparent umber mix; links reuse shared accents. |
+| Quote & support | Ebony | `#0d0e0a` | `#c2c5aa`, `#a4ac86` | `#dadfd2` | Testimonials, dashboard shells, and ChatKit frame. |
+| Feedback states | Seal brown / Reseda / Raw umber mids | Unique per state | `#c2c5aa` text shared | — | Backgrounds tint via colour-mix with zero outlines. |
+
+## Token map (key exports in `src/index.css`)
+
+| Token | Value | Source |
+| ----- | ----- | ------ |
+| `--bg` | `#171717` | Canvas |
+| `--bg-elev` | `#1a1d14` | Ebony 200 |
+| `--bg-overlay` | `#232417` | Black olive 300 |
+| `--text` | `#c2c5aa` | Sage (deep) 500 |
+| `--text-muted` | `#dadccc` | Sage (deep) 700 |
+| `--accent` | `#b57033` | Russet 600 |
+| `--accent-hover` | `#de7c2b` | Seal brown 700 |
+| `--accent-inverse` | `#c2c5aa` | Matches body text |
+| `--positive` | `#6a7553` | Ebony 600 |
+| `--warning` | `#ba854f` | Raw umber 600 |
+| `--critical` | `#9f5519` | Seal brown 600 |
+| `--positive-surface` | `#1f2518` | Black olive 300 |
+| `--warning-surface` | `#3b2917` | Raw umber 200 |
+| `--critical-surface` | `#351c08` | Seal brown 300 |
+| `--section-hero-start` | `#120903` | Seal brown 100 |
+| `--section-hero-end` | `#f4d3b8` | Seal brown 900 |
+| `--section-how-start` | `#191007` | Russet 100 |
+| `--section-how-end` | `#f0dbc9` | Russet 900 |
+| `--section-pricing-start` | `#1d140b` | Raw umber 100 |
+| `--section-pricing-end` | `#eee0d3` | Raw umber 900 |
+| `--section-quote-start` | `#0d0e0a` | Ebony 100 |
+| `--section-quote-end` | `#dadfd2` | Ebony 900 |
+
+Gradients and panels use `color-mix` to blend these values with the graphite canvas, eliminating the need for contrasting borders.
+
+## Component guidance
+- **Primary actions**: Filled pills (`background: var(--accent)`) with sage text; hover darkens to the section’s unique start colour but keeps text unchanged.
+- **Secondary actions**: Semi-transparent graphite fills (`rgba(23,23,23,0.65)`) with the same focus outline as primary.
+- **Cards & panels**: Use palette-specific colour mixes plus deep soft shadows; no outlines or strokes.
+- **Inputs**: Graphite fills with accent focus outline; idle state has zero border.
+- **Feedback**: State colours tint the backdrop via `color-mix`; copy stays `#c2c5aa`.
 
 ## Motion & spacing
-- **Spacing grid**: 8 px multiples, 24 px minimum outer padding.
-- **Animation**: Ease-out 180 ms for hovers, 320 ms for modals.
+- 8 px spacing grid, 24 px minimum outer padding, hero image radii at 40 px+ for premium feel.
+- Hover transitions at 180 ms ease-out; large overlays at 320 ms.
 
 ## Accessibility guardrails
-- Maintain contrast ratios (4.5:1 for body, 3:1 for large text). The accent and state pairings above meet AA on `#171717`.
-- Preserve focus-visible outlines (`var(--accent)` or state color) with 2 px offset.
-- Provide descriptive alt text for imagery; the hero photo emphasizes control dashboards and should mention that narrative.
+- Body copy maintains ≥4.5:1 contrast on every blended surface; headings are ≥3:1.
+- Focus outlines remain 2 px with 4 px offset for dark-field clarity.
+- All imagery gets descriptive, process-focused alt text to reinforce the mentor voice.
 
 ## Governance
-- Any color tweaks start in this document, then propagate to `src/index.css` tokens.
-- Run ESLint + visual contrast checks before PR approval.
-- Marketing and product teams share a single palette sheet; no ad-hoc hex codes in commits.
+- Palette updates start in this document, then flow to `src/index.css` tokens before component changes.
+- Avoid hard-coded hex values in components—reference CSS variables instead.
+- Run ESLint and contrast checks before shipping; publish palette updates with version tags for downstream teams.

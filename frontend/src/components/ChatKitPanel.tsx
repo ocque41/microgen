@@ -96,7 +96,12 @@ export function ChatKitPanel({
   });
 
   return (
-    <div className="relative h-full w-full overflow-hidden rounded-3xl border border-brand-border bg-brand-backgroundElevated shadow-card">
+    <div
+      className="relative h-full w-full overflow-hidden rounded-3xl shadow-[0_40px_120px_-90px_rgba(0,0,0,0.85)]"
+      style={{
+        backgroundColor: "rgba(244,241,234,0.05)",
+      }}
+    >
       <ChatKit control={chatkit.control} className="block h-full w-full" />
     </div>
   );

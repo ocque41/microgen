@@ -5,49 +5,92 @@
 @layer base {
   :root {
     color-scheme: dark;
+    --radius: 0.5rem;
+
+    --background: 0 0% 9.02%;
+    --foreground: 42 31% 93.73%;
+    --muted: 0 0% 9.02%;
+    --muted-foreground: 42 31% 93.73%;
+    --popover: 0 0% 9.02%;
+    --popover-foreground: 42 31% 93.73%;
+    --card: 0 0% 9.02%;
+    --card-foreground: 42 31% 93.73%;
+    --border: 0 0% 9.02%;
+    --input: 0 0% 9.02%;
+    --primary: 28.35 55.83% 31.96%;
+    --primary-foreground: 42 31% 93.73%;
+    --secondary: 0 0% 9.02%;
+    --secondary-foreground: 42 31% 93.73%;
+    --accent: 33.33 39.44% 36.47%;
+    --accent-foreground: 42 31% 93.73%;
+    --destructive: 33.33 39.44% 36.47%;
+    --destructive-foreground: 42 31% 93.73%;
+    --ring: 33.33 39.44% 36.47%;
+
+    --chart-1: 33.33 39.44% 36.47%;
+    --chart-2: 42 31% 93.73%;
+    --chart-3: 28.35 55.83% 31.96%;
+    --chart-4: 42 31% 93.73%;
+    --chart-5: 28.35 55.83% 31.96%;
+
     --bg: #171717;
-    --bg-elev: #1f2518;
-    --bg-overlay: #272b1e;
-    --text: #ede8e0;
-    --text-muted: #d3cebc;
-    --accent: #b57033;
-    --accent-hover: #d1935d;
-    --accent-inverse: #171717;
-    --border: #343929;
-    --neutral-elev: #a7b08a;
-    --critical: #9f5519;
-    --critical-surface: #351c08;
-    --positive: #899465;
-    --positive-surface: #282c1e;
-    --warning: #ba854f;
-    --warning-surface: #3b2917;
-  }
+    --bg-elev: #171717;
+    --bg-overlay: #171717;
+    --text: #f4f1ea;
+    --text-muted: #f4f1ea;
+    --accent-hover: #a68a64;
+    --accent-inverse: #f4f1ea;
+    --neutral-elev: #171717;
+    --support-surface: #171717;
+    --support-border: #171717;
+    --support-text: #f4f1ea;
+    --critical: #7f4f24;
+    --critical-surface: #171717;
+    --positive: #7f4f24;
+    --positive-surface: #171717;
+    --warning: #7f4f24;
+    --warning-surface: #171717;
 
-  html:not(.dark) {
-    color-scheme: dark;
+    --section-hero-start: #7f4f24;
+    --section-hero-mid: #a68a64;
   }
-
   body {
-    @apply m-0 min-h-screen font-sans bg-brand-background text-brand-text transition-colors;
-  }
-
-  html:not(.dark) body {
-    @apply bg-brand-background text-brand-text;
+    @apply m-0 min-h-screen font-sans text-foreground transition-colors;
+    background: transparent;
   }
 
   a {
-    color: var(--accent);
+    color: var(--text);
     text-decoration: none;
   }
 
-  a:hover,
+  a:hover {
+    color: var(--text);
+    opacity: 0.9;
+    text-decoration: none;
+  }
+
   a:focus {
-    color: var(--accent-hover);
+    color: var(--text);
+    opacity: 1;
     text-decoration: none;
   }
 
   ::selection {
-    background: color-mix(in srgb, var(--accent) 65%, black);
+    background: color-mix(in srgb, var(--accent-hover) 35%, #000);
     color: var(--accent-inverse);
   }
+}
+
+.mesh-background {
+  position: fixed;
+  inset: 0;
+  z-index: -30;
+  background-color: #171717;
+  background-image: url("/background.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 100vw auto;
+  opacity: 0.95;
+  pointer-events: none;
 }
