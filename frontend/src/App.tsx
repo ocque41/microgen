@@ -20,6 +20,15 @@ import { stackClientApp } from "./stack";
 function HandlerRoutes() {
   const location = useLocation();
   const stackLocation = `${location.pathname}${location.search ?? ""}${location.hash ?? ""}`;
+
+  if (location.pathname === "/handler/sign-in") {
+    return <Navigate to="/login" replace />;
+  }
+
+  if (location.pathname === "/handler/sign-up") {
+    return <Navigate to="/signup" replace />;
+  }
+
   return <StackHandler app={stackClientApp} location={stackLocation} fullPage />;
 }
 

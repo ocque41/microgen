@@ -31,6 +31,8 @@ export const stackClientApp = new StackClientApp({
   tokenStore: "cookie",
   redirectMethod: { useNavigate },
   urls: {
+    signIn: "/login",
+    signUp: "/signup",
     afterSignIn: "/chat",
     afterSignUp: "/chat",
   },
