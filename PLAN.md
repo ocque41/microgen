@@ -1,3 +1,17 @@
+# Sprint 8 Plan
+
+## Goal
+Restore the Stack Auth sign-in and sign-up experiences so hosted deployments can access them directly.
+
+## Work Items
+
+1. **Stabilize Stack Auth handler flows**
+   - *Acceptance Criteria*
+     - Visiting `/handler/sign-in` and `/handler/sign-up` on Vercel renders the Stack Auth UI by routing through first-party auth screens instead of a blank handler page.
+     - The marketing page CTA and direct navigation both land on working authentication pages that keep the Stack-powered redirects to `/chat` after completion.
+     - README authentication guidance explains the environment variables and the manual verification steps for the repaired flows.
+   - *Status*: ✅ Completed — Embedded Stack Auth sign-in/sign-up components on the `/login` and `/signup` routes, pointed the marketing CTA at `/signup`, documented the required env vars plus QA steps in the README, and reran frontend lint/build (lint has pre-existing errors).
+
 # Sprint 7 Plan
 
 ## Goal

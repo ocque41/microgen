@@ -298,7 +298,7 @@ export function MarketingPage() {
               </div>
               <div className="flex justify-center">
                 <Link
-                  to="/handler/sign-up"
+                  to="/signup"
                   className="inline-flex items-center justify-center rounded-full bg-[color:var(--accent)] px-8 py-3 text-sm font-semibold text-[color:var(--accent-inverse)] transition hover:bg-[color:var(--accent-hover)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--accent)]"
                 >
                   Get Started

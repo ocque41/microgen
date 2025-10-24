@@ -121,6 +121,14 @@ The backend now includes production-ready scaffolding for user management and St
 - Stripe events sent to `POST /api/webhooks/stripe` keep micro-agent status in sync after successful payments or cancellations.
 - Password reset emails are queued in the Neon-backed `outbound_emails` table so you can plug in your delivery worker or inspect messages during development (defaults use the `Microagents` sender name and `hi@cumulush.com`).
 
+Stack Auth powers the hosted authentication screens that now render directly on `/signup` and `/login`. Supply the following environment variables inside `frontend/.env.local` (or your Vercel project) before building the frontend:
+
+- `VITE_STACK_PROJECT_ID` – the Stack Auth project identifier copied from the Stack dashboard.
+- `VITE_STACK_PUBLISHABLE_CLIENT_KEY` – the publishable client key for the same project.
+- Optionally `VITE_STACK_APP_URL` if the Stack handler runs on a different origin than your deployed frontend.
+
+After wiring the variables, run `npm --prefix frontend run build && npm --prefix frontend run preview`, then visit `/signup` and `/login` to confirm the embedded Stack Auth UI renders and that successful sign-ins redirect to `/chat`.
+
 Run `alembic upgrade head` after configuring `DATABASE_URL` so the new tables (users, password reset tokens, micro agents) are available before serving requests.
 
 ## What's next
