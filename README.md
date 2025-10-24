@@ -19,6 +19,8 @@ npx http-server site -o
 
 This command opens `site/index.html`. All marketing typography now uses the shared Helvetica Neue stack (`"Helvetica Neue", sans-serif`) across headlines, body copy, and code samples. Shared tokens, spacing, and components live in [`site/styles/brand.css`](site/styles/brand.css) and are reused by `site/index.html` and the crawler notes in `site/docs/index.html` (machine-readable metadata remains at `site/docs/ai.json`).
 
+When previewing the React marketing page via `npm run frontend` → `http://127.0.0.1:5170/`, hover the primary navigation link to confirm the dropdown stays visible while your cursor moves between the trigger and the menu surface. Resize the viewport (or adjust browser zoom) and verify the "AI solutions" column allows the trailing "for" to wrap to a new line instead of clipping when horizontal space runs out.
+
 ### SEO, accessibility, and theming checklist
 
 - Meta tags: `<title>`, `<meta name="description">`, canonical, Open Graph, Twitter Card, and JSON-LD (`Organization`, `WebSite`) are included in `site/index.html`.

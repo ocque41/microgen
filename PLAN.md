@@ -123,3 +123,18 @@ Launch a minimal, formal marketing site for Microagents with SEO/SAO assets and 
      - README documents how to view the static site and verify SEO artifacts; lint/build commands succeed locally and results are recorded.
    - *Status*: ✅ Completed — Marketing site, crawler docs, and placeholder imagery shipped with lint/build evidence recorded (CSS placeholders replaced the JPEGs in Sprint 4).
 
+# Sprint 8 Plan
+
+## Goal
+Stabilize the marketing navigation hover behavior and ensure hero copy remains readable across responsive breakpoints.
+
+## Work Items
+
+1. **Fix navigation hover menu persistence and responsive hero text wrapping**
+   - *Acceptance Criteria*
+     - Hovering the navigation link reveals its menu, and moving the cursor into the dropdown keeps it visible until the cursor leaves both the trigger and menu regions.
+     - Hero heading text "AI Solutions For" wraps gracefully so that "For" shifts to a new line when space is constrained without overlapping adjacent content.
+     - Lint/build checks relevant to the static site still pass or are documented with justifications if skipped.
+     - README documents how to preview the updated behavior and any verification steps run.
+   - *Status*: ✅ Completed — Added a delayed hover/blur controller so the dropdown remains open while moving between the trigger and menu, allowed the "AI solutions" copy to wrap via `<wbr />`, documented the verification flow in the README, and re-ran `npm --prefix frontend run lint` (fails today because of pre-existing lint errors about missing React globals and Tailwind config formatting).
+

@@ -1,5 +1,5 @@
 import type { FocusEvent } from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
@@ -82,12 +82,40 @@ export function MarketingPage() {
   const [featureIndex, setFeatureIndex] = useState(0);
   const [isVisible, setIsVisible] = useState(true);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const closeTimeoutRef = useRef<number | null>(null);
 
-  const handleMenuOpen = () => setIsMenuOpen(true);
-  const handleMenuClose = () => setIsMenuOpen(false);
+  const clearCloseTimeout = () => {
+    if (closeTimeoutRef.current !== null) {
+      window.clearTimeout(closeTimeoutRef.current);
+      closeTimeoutRef.current = null;
+    }
+  };
+
+  const handleMenuOpen = () => {
+    clearCloseTimeout();
+    setIsMenuOpen(true);
+  };
+
+  const scheduleMenuClose = () => {
+    clearCloseTimeout();
+    closeTimeoutRef.current = window.setTimeout(() => {
+      setIsMenuOpen(false);
+      closeTimeoutRef.current = null;
+    }, 120);
+  };
+
+  const handleMenuCloseImmediate = () => {
+    clearCloseTimeout();
+    setIsMenuOpen(false);
+  };
+
+  const toggleMenu = () => {
+    clearCloseTimeout();
+    setIsMenuOpen((prev) => !prev);
+  };
   const handleMenuBlur = (event: FocusEvent<HTMLDivElement>) => {
     if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
-      setIsMenuOpen(false);
+      handleMenuCloseImmediate();
     }
   };
 
@@ -104,6 +132,10 @@ export function MarketingPage() {
     return () => {
       window.clearInterval(intervalId);
       window.clearTimeout(fadeTimeoutId);
+      if (closeTimeoutRef.current !== null) {
+        window.clearTimeout(closeTimeoutRef.current);
+        closeTimeoutRef.current = null;
+      }
     };
   }, []);
 
@@ -132,14 +164,14 @@ export function MarketingPage() {
               <div
                 className="relative inline-flex"
                 onMouseEnter={handleMenuOpen}
-                onMouseLeave={handleMenuClose}
+                onMouseLeave={scheduleMenuClose}
                 onFocusCapture={handleMenuOpen}
                 onBlurCapture={handleMenuBlur}
               >
                 <button
                   type="button"
                   aria-expanded={isMenuOpen}
-                  onClick={() => setIsMenuOpen((prev) => !prev)}
+                  onClick={toggleMenu}
                   className="px-1 text-xs font-semibold uppercase tracking-[0.35em] text-[color:var(--accent-inverse)] transition-colors duration-200 hover:text-[color:var(--accent)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--accent)]"
                 >
                   Menu
@@ -149,7 +181,9 @@ export function MarketingPage() {
                     "pointer-events-none invisible absolute left-1/2 top-full z-10 mt-1 w-[min(500px,96vw)] -translate-x-1/2 translate-y-2 rounded-[10px] border border-[color:rgba(244,241,234,0.12)] bg-[color:rgba(23,23,23,0.95)] px-6 py-7 opacity-0 shadow-[0_55px_140px_-110px_rgba(0,0,0,0.85)] transition-all duration-200",
                     isMenuOpen && "pointer-events-auto visible translate-y-0 opacity-100"
                   )}
-                  onClickCapture={handleMenuClose}
+                  onClickCapture={handleMenuCloseImmediate}
+                  onMouseEnter={handleMenuOpen}
+                  onMouseLeave={scheduleMenuClose}
                 >
                   <div className="grid grid-cols-1 gap-6 text-left text-[0.78rem] text-[color:rgba(244,241,234,0.82)] divide-y divide-[color:rgba(244,241,234,0.08)] md:grid-cols-3 md:gap-0 md:divide-x md:divide-y-0">
                     <div className="space-y-3 md:px-6 md:first:pl-0 md:last:pr-6">
@@ -163,8 +197,8 @@ export function MarketingPage() {
                       </ul>
                     </div>
                     <div className="space-y-3 pt-6 md:px-6 md:pt-0">
-                      <p className="whitespace-nowrap text-[0.63rem] uppercase tracking-[0.2em] text-[color:rgba(244,241,234,0.55)]">
-                        AI solutions for
+                      <p className="text-[0.63rem] uppercase tracking-[0.2em] text-[color:rgba(244,241,234,0.55)] leading-snug">
+                        AI solutions<wbr /> for
                       </p>
                       <ul className="space-y-2">
                         <li><Link to="/engineering" className="transition hover:text-[color:var(--accent)]">Engineering</Link></li>
