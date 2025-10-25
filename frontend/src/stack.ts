@@ -21,8 +21,22 @@ const publishableClientKey = requireEnv(
 );
 
 const stackBaseUrl =
-  import.meta.env.VITE_STACK_APP_URL ??
-  (typeof window !== "undefined" ? window.location.origin : undefined);
+  import.meta.env.VITE_STACK_APP_URL ||
+  (typeof window !== "undefined" &&
+  ["localhost", "127.0.0.1"].includes(window.location.hostname)
+    ? window.location.origin
+    : undefined);
+
+if (
+  !import.meta.env.VITE_STACK_APP_URL &&
+  typeof window !== "undefined" &&
+  !["localhost", "127.0.0.1"].includes(window.location.hostname)
+) {
+  // eslint-disable-next-line no-console -- surfaced once to help diagnose misconfiguration in production
+  console.warn(
+    "[Stack Auth] VITE_STACK_APP_URL is not set. Falling back to the default Stack cloud endpoint."
+  );
+}
 
 export const stackClientApp = new StackClientApp({
   projectId,
