@@ -16,6 +16,7 @@ import { LoginPage } from "./pages/LoginPage";
 import { MarketingPage } from "./pages/MarketingPage";
 import { SignupPage } from "./pages/SignupPage";
 import { stackClientApp } from "./stack";
+import { StackNavigationBridge } from "./components/StackNavigationBridge";
 
 function HandlerRoutes() {
   const location = useLocation();
@@ -66,6 +67,7 @@ export default function App() {
       <BrowserRouter>
         <StackProvider app={stackClientApp}>
           <StackTheme theme={stackBrandTheme}>
+            <StackNavigationBridge />
             <Routes>
               <Route path="/handler/*" element={<HandlerRoutes />} />
               <Route path="/" element={<MarketingPage />} />

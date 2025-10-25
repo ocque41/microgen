@@ -1,6 +1,14 @@
 import { StackClientApp } from "@stackframe/react";
 import { useNavigate } from "react-router-dom";
 
+type NavigateFn = (to: string) => void;
+
+let stackNavigate: NavigateFn | undefined;
+
+export function setStackNavigate(fn: NavigateFn | undefined) {
+  stackNavigate = fn;
+}
+
 function requireEnv(
   name: "VITE_STACK_PROJECT_ID" | "VITE_STACK_PUBLISHABLE_CLIENT_KEY",
   description: string
@@ -43,11 +51,20 @@ export const stackClientApp = new StackClientApp({
   publishableClientKey,
   baseUrl: stackBaseUrl,
   tokenStore: "cookie",
-  redirectMethod: { useNavigate },
+  redirectMethod: {
+    useNavigate,
+    navigate: (to: string) => {
+      if (stackNavigate) {
+        stackNavigate(to);
+      } else if (typeof window !== "undefined") {
+        window.location.assign(to);
+      }
+    },
+  },
   urls: {
     signIn: "/login",
     signUp: "/signup",
-    afterSignIn: "/chat",
-    afterSignUp: "/chat",
+    afterSignIn: "/dashboard",
+    afterSignUp: "/dashboard",
   },
 });
