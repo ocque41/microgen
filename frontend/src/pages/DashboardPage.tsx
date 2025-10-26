@@ -178,7 +178,7 @@ export function DashboardPage({
         <div
           className="mt-10 rounded-3xl p-8 shadow-[0_40px_120px_-90px_rgba(0,0,0,0.9)] backdrop-blur-sm"
           style={{
-            backgroundColor: "rgba(244,241,234,0.05)",
+            backgroundColor: "color-mix(in srgb, var(--text-primary) 14%, transparent)",
           }}
         >
           {showLoadingMessage ? (
@@ -189,7 +189,7 @@ export function DashboardPage({
             <div
               className="mt-4 rounded-2xl px-4 py-3 text-sm text-[color:var(--accent-inverse)]"
               style={{
-                backgroundColor: "rgba(127,79,36,0.25)",
+                backgroundColor: "color-mix(in srgb, var(--border-default) 35%, transparent)",
               }}
             >
               {error}
@@ -200,7 +200,7 @@ export function DashboardPage({
             <div
               className="mt-4 rounded-2xl px-4 py-3 text-sm text-[color:var(--accent-inverse)]"
               style={{
-                backgroundColor: "rgba(166,138,100,0.25)",
+                backgroundColor: "color-mix(in srgb, var(--border-strong) 35%, transparent)",
               }}
             >
               {status}
@@ -221,7 +221,7 @@ export function DashboardPage({
                   <div
                     className="rounded-2xl p-4 text-sm shadow-[0_20px_60px_-60px_rgba(0,0,0,0.9)]"
                     style={{
-                      backgroundColor: "rgba(244,241,234,0.06)",
+                      backgroundColor: "color-mix(in srgb, var(--text-primary) 16%, transparent)",
                     }}
                   >
                     <dt className="font-medium text-[color:var(--accent)]">Agent name</dt>
@@ -230,7 +230,7 @@ export function DashboardPage({
                   <div
                     className="rounded-2xl p-4 text-sm shadow-[0_20px_60px_-60px_rgba(0,0,0,0.9)]"
                     style={{
-                      backgroundColor: "rgba(244,241,234,0.06)",
+                      backgroundColor: "color-mix(in srgb, var(--text-primary) 16%, transparent)",
                     }}
                   >
                     <dt className="font-medium text-[color:var(--accent)]">Status</dt>
@@ -239,7 +239,7 @@ export function DashboardPage({
                   <div
                     className="rounded-2xl p-4 text-sm shadow-[0_20px_60px_-60px_rgba(0,0,0,0.9)]"
                     style={{
-                      backgroundColor: "rgba(244,241,234,0.06)",
+                      backgroundColor: "color-mix(in srgb, var(--text-primary) 16%, transparent)",
                     }}
                   >
                     <dt className="font-medium text-[color:var(--accent)]">Plan</dt>
@@ -248,7 +248,7 @@ export function DashboardPage({
                   <div
                     className="rounded-2xl p-4 text-sm shadow-[0_20px_60px_-60px_rgba(0,0,0,0.9)]"
                     style={{
-                      backgroundColor: "rgba(244,241,234,0.06)",
+                      backgroundColor: "color-mix(in srgb, var(--text-primary) 16%, transparent)",
                     }}
                   >
                     <dt className="font-medium text-[color:var(--accent)]">Agent ID</dt>
@@ -283,7 +283,7 @@ export function DashboardPage({
               <aside
                 className="space-y-4 rounded-3xl p-6 text-sm shadow-[0_30px_90px_-80px_rgba(0,0,0,0.9)]"
                 style={{
-                  backgroundColor: "rgba(244,241,234,0.06)",
+                  backgroundColor: "color-mix(in srgb, var(--text-primary) 16%, transparent)",
                 }}
               >
                 <h3 className="text-lg font-semibold">Manage subscription</h3>

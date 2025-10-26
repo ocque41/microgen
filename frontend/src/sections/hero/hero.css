@@ -30,7 +30,11 @@
   position: absolute;
   inset: 0;
   border-radius: 999px;
-  background: linear-gradient(90deg, var(--accent) 0%, rgba(244, 241, 234, 0.24) 100%);
+  background: linear-gradient(
+    90deg,
+    var(--accent) 0%,
+    color-mix(in srgb, var(--text-primary) 28%, transparent) 100%
+  );
   transform-origin: left center;
   transform: scaleX(calc(clamp(0, var(--hero-progress), 1)));
   transition: transform var(--motion-duration-medium) var(--motion-easing-standard);
@@ -39,8 +43,12 @@
 .hero-device-frame {
   position: relative;
   border-radius: var(--radius-xl);
-  border: 1px solid color-mix(in srgb, var(--border-strong) 80%, transparent);
-  background: linear-gradient(160deg, rgba(34, 34, 34, 0.88) 0%, rgba(14, 14, 14, 0.92) 100%);
+  border: 1px solid color-mix(in srgb, var(--border-strong) 70%, transparent);
+  background: linear-gradient(
+    160deg,
+    color-mix(in srgb, var(--surface-base) 88%, transparent) 0%,
+    color-mix(in srgb, var(--surface-muted) 92%, transparent) 100%
+  );
   box-shadow: var(--shadow-glass);
   overflow: hidden;
 }
@@ -50,15 +58,23 @@
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  border: 1px solid rgba(255, 255, 255, 0.04);
+  border: 1px solid color-mix(in srgb, var(--text-primary) 16%, transparent);
   pointer-events: none;
 }
 
 .hero-device-overlay {
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 20% 20%, rgba(107, 114, 255, 0.38), transparent 65%),
-    radial-gradient(circle at 80% 30%, rgba(93, 255, 204, 0.28), transparent 70%);
+  background: radial-gradient(
+      circle at 20% 20%,
+      color-mix(in srgb, var(--status-info) 42%, transparent) 0%,
+      transparent 65%
+    ),
+    radial-gradient(
+      circle at 80% 30%,
+      color-mix(in srgb, var(--accent-primary) 32%, transparent) 0%,
+      transparent 70%
+    );
   mix-blend-mode: screen;
   opacity: clamp(0.1, calc(var(--hero-progress) + 0.05), 0.45);
   transition: opacity var(--motion-duration-medium) var(--motion-easing-standard);
@@ -77,8 +93,12 @@
   justify-content: center;
   padding: 1.5rem;
   text-align: center;
-  background: linear-gradient(160deg, rgba(38, 42, 96, 0.65) 0%, rgba(12, 12, 20, 0.92) 100%);
-  color: rgba(244, 241, 234, 0.76);
+  background: linear-gradient(
+    160deg,
+    color-mix(in srgb, var(--surface-muted) 82%, transparent) 0%,
+    color-mix(in srgb, var(--surface-base) 94%, transparent) 100%
+  );
+  color: color-mix(in srgb, var(--text-primary) 74%, transparent);
   font-size: 0.75rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -93,7 +113,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  background-color: #050505;
+  background-color: var(--surface-overlay-90);
 }
 
 .hero-device-video[hidden] {
@@ -108,8 +128,12 @@
   justify-content: center;
   padding: 1.5rem;
   text-align: center;
-  background: linear-gradient(155deg, rgba(20, 20, 24, 0.86) 0%, rgba(8, 8, 10, 0.94) 100%);
-  color: rgba(244, 241, 234, 0.74);
+  background: linear-gradient(
+    155deg,
+    color-mix(in srgb, var(--surface-base) 88%, transparent) 0%,
+    color-mix(in srgb, var(--surface-muted) 94%, transparent) 100%
+  );
+  color: color-mix(in srgb, var(--text-primary) 70%, transparent);
   font-size: 0.72rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -126,7 +150,7 @@
   align-items: center;
   justify-content: center;
   backdrop-filter: blur(var(--glass-blur));
-  background: color-mix(in srgb, var(--surface-glass) 65%, transparent);
+  background: color-mix(in srgb, var(--surface-overlay-75) 65%, transparent);
   color: var(--text-inverse);
   text-transform: uppercase;
   letter-spacing: 0.4em;
@@ -135,7 +159,7 @@
 
 @supports not (background: color-mix(in srgb, #000 10%, #fff 90%)) {
   .hero-device-frame {
-    background: rgba(20, 20, 20, 0.92);
+    background: var(--surface-overlay-90);
   }
 }
 
@@ -163,4 +187,3 @@
 .motion-disabled.hero-device-poster {
   display: block;
 }
-

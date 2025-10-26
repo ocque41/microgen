@@ -7,32 +7,32 @@
     color-scheme: dark;
     --radius: var(--radius-lg);
 
-    --background: 220 43% 2.8%;
-    --foreground: 228 100% 98%;
-    --muted: 222 36% 11%;
-    --muted-foreground: 214 32% 91%;
-    --popover: 220 33% 7%;
-    --popover-foreground: 228 100% 98%;
-    --card: 220 33% 7%;
-    --card-foreground: 228 100% 98%;
-    --border: 215 20% 65%;
-    --input: 215 20% 65%;
-    --primary: 213 100% 69%;
-    --primary-foreground: 220 43% 2.8%;
-    --secondary: 222 36% 11%;
-    --secondary-foreground: 214 32% 91%;
+    --background: 155 44% 8%;
+    --foreground: 90 8% 85%;
+    --muted: 154 43% 15%;
+    --muted-foreground: 105 5% 67%;
+    --popover: 157 42% 11%;
+    --popover-foreground: 90 8% 85%;
+    --card: 157 42% 11%;
+    --card-foreground: 90 8% 85%;
+    --border: 28 31% 33%;
+    --input: 28 31% 33%;
+    --primary: 152 41% 52%;
+    --primary-foreground: 155 44% 8%;
+    --secondary: 153 40% 24%;
+    --secondary-foreground: 90 8% 85%;
     --accent: var(--accent-primary);
     --accent-foreground: var(--accent-inverse);
-    --accent-hover: color-mix(in srgb, var(--accent) 88%, #ffffff 12%);
-    --destructive: 0 91% 71%;
-    --destructive-foreground: 220 43% 2.8%;
+    --accent-hover: color-mix(in srgb, var(--accent) 82%, #ffffff 18%);
+    --destructive: 9 92% 60%;
+    --destructive-foreground: 155 44% 8%;
     --ring: var(--accent);
 
-    --chart-1: 213 100% 69%;
-    --chart-2: 141 69% 58%;
-    --chart-3: 0 91% 71%;
-    --chart-4: 224 76% 48%;
-    --chart-5: 32 88% 64%;
+    --chart-1: 152 41% 52%;
+    --chart-2: 23 39% 55%;
+    --chart-3: 115 37% 72%;
+    --chart-4: 9 92% 60%;
+    --chart-5: 7 31% 47%;
 
     --surface-background: var(--brand-color-background);
     --surface-base: var(--brand-color-surface);
@@ -52,58 +52,6 @@
     --border-glass: var(--glass-border);
     --shadow-surface: var(--brand-shadow-sm);
     --shadow-elevated: var(--brand-shadow-md);
-    --shadow-glass: var(--brand-shadow-xs);
-  }
-
-  [data-theme="light"] {
-    color-scheme: light;
-    --radius: var(--radius-md);
-
-    --background: 223 47% 97%;
-    --foreground: 220 49% 8%;
-    --muted: 219 59% 94%;
-    --muted-foreground: 220 25% 32%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 220 49% 8%;
-    --card: 0 0% 100%;
-    --card-foreground: 220 49% 8%;
-    --border: 215 20% 65%;
-    --input: 215 20% 65%;
-    --primary: 222 83% 53%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 219 59% 94%;
-    --secondary-foreground: 220 25% 32%;
-    --accent: var(--accent-primary);
-    --accent-foreground: var(--accent-inverse);
-    --accent-hover: color-mix(in srgb, var(--accent) 82%, #0f172a 18%);
-    --destructive: 0 74% 42%;
-    --destructive-foreground: 0 0% 98%;
-    --ring: var(--accent);
-
-    --chart-1: 222 83% 53%;
-    --chart-2: 142 72% 29%;
-    --chart-3: 0 74% 42%;
-    --chart-4: 224 76% 48%;
-    --chart-5: 33 80% 48%;
-
-    --surface-background: var(--brand-color-background);
-    --surface-base: var(--brand-color-surface);
-    --surface-muted: var(--brand-color-surface-muted);
-    --surface-glow: var(--brand-color-surface-glow);
-    --surface-glass: var(--glass-bg);
-    --text-primary: var(--brand-color-text);
-    --text-muted: var(--brand-color-text-secondary);
-    --text-inverse: #ffffff;
-    --accent-primary: var(--brand-color-accent);
-    --accent-strong: var(--brand-color-accent-strong);
-    --accent-soft: var(--brand-color-accent-soft);
-    --accent-on: #ffffff;
-    --accent-inverse: var(--accent-on);
-    --border-default: var(--brand-color-border);
-    --border-strong: var(--brand-color-border-strong);
-    --border-glass: var(--glass-border);
-    --shadow-surface: var(--brand-shadow-xs);
-    --shadow-elevated: var(--brand-shadow-sm);
     --shadow-glass: var(--brand-shadow-xs);
   }
 
@@ -143,7 +91,7 @@
   position: fixed;
   inset: 0;
   z-index: -30;
-  background-color: var(--marketing-background-color, #0b090a);
+  background-color: var(--marketing-background-color, #0b1c15);
   background-image: none;
   opacity: 1;
   pointer-events: none;
@@ -161,8 +109,12 @@
   align-items: center;
   justify-content: center;
   padding: 1.5rem;
-  background: linear-gradient(135deg, rgba(30, 32, 64, 0.75) 0%, rgba(12, 12, 18, 0.9) 100%);
-  color: rgba(244, 241, 234, 0.78);
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--surface-muted) 78%, transparent) 0%,
+    color-mix(in srgb, var(--surface-base) 92%, transparent) 100%
+  );
+  color: color-mix(in srgb, var(--text-primary) 78%, transparent);
   text-transform: uppercase;
   letter-spacing: 0.18em;
   font-size: 0.7rem;
@@ -171,4 +123,72 @@
 
 .marketing-illustration__message {
   max-width: 22ch;
+}
+
+@layer utilities {
+  .bg-\[color:rgba\(23\,23\,23\,0\.92\)\] { background-color: var(--surface-overlay-92) !important; }
+  .bg-\[color:rgba\(23\,23\,23\,0\.85\)\] { background-color: var(--surface-overlay-85) !important; }
+  .bg-\[color:rgba\(23\,23\,23\,0\.78\)\] { background-color: var(--surface-overlay-78) !important; }
+  .bg-\[color:rgba\(23\,23\,23\,0\.75\)\] { background-color: var(--surface-overlay-75) !important; }
+  .bg-\[color:rgba\(23\,23\,23\,0\.65\)\] { background-color: var(--surface-overlay-65) !important; }
+  .bg-\[color:rgba\(16\,20\,32\,0\.92\)\] { background-color: var(--surface-overlay-92) !important; }
+  .bg-\[color:rgba\(16\,20\,32\,0\.78\)\] { background-color: var(--surface-overlay-78) !important; }
+  .bg-\[color:rgba\(16\,18\,26\,0\.72\)\] { background-color: var(--surface-overlay-72) !important; }
+  .bg-\[color:rgba\(12\,16\,26\,0\.6\)\] { background-color: var(--surface-overlay-60) !important; }
+  .bg-\[color:rgba\(12\,14\,20\,0\.6\)\] { background-color: var(--surface-overlay-60) !important; }
+  .bg-\[color:rgba\(12\,12\,12\,0\.66\)\] { background-color: var(--surface-overlay-65) !important; }
+  .bg-\[color:rgba\(12\,18\,30\,0\.82\)\] { background-color: var(--surface-overlay-82) !important; }
+  .bg-\[color:rgba\(14\,18\,28\,0\.6\)\] { background-color: var(--surface-overlay-60) !important; }
+  .bg-\[color:rgba\(10\,14\,22\,0\.9\)\] { background-color: var(--surface-overlay-90) !important; }
+  .bg-\[color:rgba\(7\,12\,22\,0\.82\)\] { background-color: var(--surface-overlay-82) !important; }
+  .bg-\[color:rgba\(17\,20\,30\,0\.78\)\] { background-color: var(--surface-overlay-78) !important; }
+  .bg-\[color:rgba\(18\,20\,30\,0\.72\)\] { background-color: var(--surface-overlay-72) !important; }
+  .bg-\[color:rgba\(18\,20\,30\,0\.45\)\] { background-color: var(--surface-overlay-55) !important; }
+  .bg-\[color:rgba\(20\,22\,32\,0\.6\)\] { background-color: var(--surface-overlay-60) !important; }
+  .bg-\[color:rgba\(30\,30\,30\,0\.7\)\] { background-color: var(--surface-overlay-70) !important; }
+  .bg-\[color:rgba\(30\,30\,30\,0\.88\)\] { background-color: var(--surface-overlay-90) !important; }
+  .bg-\[color:rgba\(18\,18\,18\,0\.85\)\] { background-color: var(--surface-overlay-85) !important; }
+  .bg-\[color:rgba\(221\,83\,83\,0\.18\)\] { background-color: var(--status-surface-critical) !important; }
+  .bg-\[color:rgba\(42\,191\,150\,0\.18\)\] { background-color: color-mix(in srgb, var(--accent-primary) 26%, transparent) !important; }
+  .bg-\[color:rgba\(125\,142\,181\,0\.14\)\] { background-color: var(--status-surface-info) !important; }
+  .bg-\[color:rgba\(127\,79\,36\,0\.45\)\] { background-color: color-mix(in srgb, var(--border-default) 55%, transparent) !important; }
+  .bg-\[color:rgba\(127\,79\,36\,0\.55\)\] { background-color: color-mix(in srgb, var(--border-default) 65%, transparent) !important; }
+  .bg-\[color:rgba\(244\,241\,234\,0\.04\)\] { background-color: color-mix(in srgb, var(--text-primary) 10%, transparent) !important; }
+  .bg-\[color:rgba\(244\,241\,234\,0\.05\)\] { background-color: color-mix(in srgb, var(--text-primary) 14%, transparent) !important; }
+  .bg-\[color:rgba\(244\,241\,234\,0\.06\)\] { background-color: color-mix(in srgb, var(--text-primary) 16%, transparent) !important; }
+  .bg-\[color:rgba\(244\,241\,234\,0\.08\)\] { background-color: color-mix(in srgb, var(--text-primary) 20%, transparent) !important; }
+  .bg-\[color:rgba\(244\,241\,234\,0\.12\)\] { background-color: color-mix(in srgb, var(--text-primary) 28%, transparent) !important; }
+  .bg-\[color:rgba\(255\,255\,255\,0\.06\)\] { background-color: color-mix(in srgb, var(--text-primary) 16%, transparent) !important; }
+  .bg-\[color:rgba\(255\,255\,255\,0\.08\)\] { background-color: color-mix(in srgb, var(--text-primary) 20%, transparent) !important; }
+  .bg-\[color:rgba\(255\,255\,255\,0\.12\)\] { background-color: color-mix(in srgb, var(--text-primary) 28%, transparent) !important; }
+  .text-\[color:rgba\(244\,241\,234\,0\.78\)\] { color: color-mix(in srgb, var(--text-primary) 78%, transparent) !important; }
+  .text-\[color:rgba\(244\,241\,234\,0\.75\)\] { color: color-mix(in srgb, var(--text-primary) 75%, transparent) !important; }
+  .text-\[color:rgba\(244\,241\,234\,0\.68\)\] { color: color-mix(in srgb, var(--text-primary) 68%, transparent) !important; }
+  .text-\[color:rgba\(244\,241\,234\,0\.62\)\] { color: color-mix(in srgb, var(--text-primary) 62%, transparent) !important; }
+  .text-\[color:rgba\(244\,241\,234\,0\.6\)\] { color: color-mix(in srgb, var(--text-primary) 60%, transparent) !important; }
+  .text-\[color:rgba\(244\,241\,234\,0\.56\)\] { color: color-mix(in srgb, var(--text-primary) 56%, transparent) !important; }
+  .text-\[color:rgba\(244\,241\,234\,0\.5\)\] { color: color-mix(in srgb, var(--text-primary) 50%, transparent) !important; }
+  .text-\[color:rgba\(244\,241\,234\,0\.45\)\] { color: color-mix(in srgb, var(--text-primary) 45%, transparent) !important; }
+  .text-\[color:rgba\(244\,241\,234\,0\.12\)\] { color: color-mix(in srgb, var(--text-primary) 18%, transparent) !important; }
+  .text-\[color:rgba\(226\,232\,240\,0\.55\)\] { color: color-mix(in srgb, var(--text-muted) 65%, transparent) !important; }
+  .text-\[color:rgba\(214\,220\,228\,0\.52\)\] { color: color-mix(in srgb, var(--text-muted) 58%, transparent) !important; }
+  .text-\[color:rgba\(214\,220\,228\,0\.58\)\] { color: color-mix(in srgb, var(--text-muted) 64%, transparent) !important; }
+  .text-\[color:rgba\(214\,220\,228\,0\.9\)\] { color: color-mix(in srgb, var(--text-muted) 86%, transparent) !important; }
+  .text-\[color:rgba\(190\,204\,235\,0\.78\)\] { color: color-mix(in srgb, var(--status-info) 42%, transparent) !important; }
+  .text-\[color:rgba\(190\,204\,235\,0\.8\)\] { color: color-mix(in srgb, var(--status-info) 45%, transparent) !important; }
+  .text-\[color:rgba\(190\,204\,235\,0\.82\)\] { color: color-mix(in srgb, var(--status-info) 48%, transparent) !important; }
+  .text-\[color:rgba\(186\,196\,214\,0\.85\)\] { color: color-mix(in srgb, var(--status-info) 50%, transparent) !important; }
+  .text-\[color:rgba\(118\,255\,212\,0\.88\)\] { color: color-mix(in srgb, var(--accent-primary) 88%, #ffffff 12%) !important; }
+  .text-\[color:rgba\(255\,174\,174\,0\.92\)\] { color: color-mix(in srgb, var(--status-critical) 72%, #ffffff 28%) !important; }
+  .border-\[color:rgba\(244\,241\,234\,0\.08\)\] { border-color: color-mix(in srgb, var(--text-primary) 20%, transparent) !important; }
+  .border-\[color:rgba\(244\,241\,234\,0\.1\)\] { border-color: color-mix(in srgb, var(--text-primary) 24%, transparent) !important; }
+  .border-\[color:rgba\(244\,241\,234\,0\.12\)\] { border-color: color-mix(in srgb, var(--text-primary) 28%, transparent) !important; }
+  .border-\[color:rgba\(244\,241\,234\,0\.15\)\] { border-color: color-mix(in srgb, var(--text-primary) 32%, transparent) !important; }
+  .border-\[color:rgba\(244\,241\,234\,0\.24\)\] { border-color: color-mix(in srgb, var(--text-primary) 40%, transparent) !important; }
+  .border-\[color:rgba\(255\,255\,255\,0\.08\)\] { border-color: color-mix(in srgb, var(--text-primary) 20%, transparent) !important; }
+  .border-\[color:rgba\(255\,255\,255\,0\.12\)\] { border-color: color-mix(in srgb, var(--text-primary) 28%, transparent) !important; }
+  .border-\[color:rgba\(255\,255\,255\,0\.18\)\] { border-color: color-mix(in srgb, var(--text-primary) 36%, transparent) !important; }
+  .border-\[color:rgba\(255\,122\,122\,0\.4\)\] { border-color: color-mix(in srgb, var(--status-critical) 45%, transparent) !important; }
+  .border-\[color:rgba\(96\,255\,210\,0\.4\)\] { border-color: color-mix(in srgb, var(--accent-primary) 45%, transparent) !important; }
+  .border-\[color:rgba\(158\,178\,214\,0\.32\)\] { border-color: color-mix(in srgb, var(--status-info) 40%, transparent) !important; }
 }

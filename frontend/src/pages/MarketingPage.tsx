@@ -183,8 +183,8 @@ export function MarketingPage() {
     <div className="relative min-h-screen overflow-x-hidden text-text" style={marketingThemeStyles}>
       <div className="mesh-background pointer-events-none" />
       <div className="relative">
-        <section className="relative flex min-h-screen flex-col">
-          <nav className="relative flex flex-col items-center gap-6 border-b border-[color:rgba(244,241,234,0.08)] bg-transparent px-6 pb-6 pt-8 text-[color:var(--accent-inverse)] lg:flex-row lg:gap-0 lg:px-12 lg:pb-4 lg:pt-10">
+        <section className="relative flex flex-col">
+          <nav className="relative flex flex-col items-center gap-6 border-b border-[color:rgba(244,241,234,0.08)] bg-transparent px-6 pb-6 pt-8 text-[color:var(--text-primary)] lg:flex-row lg:gap-0 lg:px-12 lg:pb-4 lg:pt-10">
             <div className="flex w-full flex-1 justify-start lg:w-auto">
               <span className="text-[0.7rem] font-medium uppercase tracking-[0.55em] text-[color:rgba(244,241,234,0.6)]">
                 Microagents
@@ -202,48 +202,48 @@ export function MarketingPage() {
                   type="button"
                   aria-expanded={isMenuOpen}
                   onClick={toggleMenu}
-                  className="px-1 text-xs font-semibold uppercase tracking-[0.35em] text-[color:var(--accent-inverse)] transition-colors duration-200 hover:text-[color:var(--accent)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--accent)]"
+                  className="px-1 text-xs font-semibold uppercase tracking-[0.35em] text-[color:var(--text-primary)] transition-colors duration-200 hover:text-[color:var(--text-muted)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--accent)]"
                 >
                   Menu
                 </button>
                 <div
                   className={cn(
-                    "pointer-events-none invisible absolute left-1/2 top-full z-10 mt-1 w-[min(500px,96vw)] -translate-x-1/2 translate-y-2 rounded-[10px] border border-[color:rgba(244,241,234,0.12)] bg-[color:rgba(23,23,23,0.95)] px-6 py-7 opacity-0 shadow-[0_55px_140px_-110px_rgba(0,0,0,0.85)] transition-all duration-200",
+                    "pointer-events-none invisible absolute left-1/2 top-full z-10 mt-1 w-[min(500px,96vw)] -translate-x-1/2 translate-y-2 rounded-[10px] border border-[color:rgba(244,241,234,0.12)] bg-[color:rgba(23,23,23,0.92)] px-6 py-7 opacity-0 shadow-[0_55px_140px_-110px_rgba(0,0,0,0.85)] transition-all duration-200",
                     isMenuOpen && "pointer-events-auto visible translate-y-0 opacity-100"
                   )}
                   onClickCapture={handleMenuCloseImmediate}
                   onMouseEnter={handleMenuOpen}
                   onMouseLeave={scheduleMenuClose}
                 >
-                  <div className="grid grid-cols-1 gap-6 text-left text-[0.78rem] text-[color:rgba(244,241,234,0.82)] divide-y divide-[color:rgba(244,241,234,0.08)] md:grid-cols-3 md:gap-0 md:divide-x md:divide-y-0">
+                  <div className="grid grid-cols-1 gap-6 text-left text-[0.78rem] text-[color:var(--text-primary)] divide-y divide-[color:rgba(244,241,234,0.08)] md:grid-cols-3 md:gap-0 md:divide-x md:divide-y-0">
                     <div className="space-y-3 md:px-6 md:first:pl-0 md:last:pr-6">
-                      <p className="whitespace-nowrap text-[0.63rem] uppercase tracking-[0.2em] text-[color:rgba(244,241,234,0.55)]">
+                      <p className="whitespace-nowrap text-[0.63rem] uppercase tracking-[0.2em] text-[color:var(--text-muted)]">
                         Business
                       </p>
                       <ul className="space-y-2">
-                        <li><TransitionLink to="/overview" className="transition hover:text-[color:var(--accent)]">Overview</TransitionLink></li>
-                        <li><TransitionLink to="/contact" className="transition hover:text-[color:var(--accent)]">Contact sales</TransitionLink></li>
-                        <li><TransitionLink to="/merchants" className="transition hover:text-[color:var(--accent)]">Merchants</TransitionLink></li>
+                        <li><TransitionLink to="/overview" className="transition text-[color:var(--text-primary)] hover:text-[color:var(--text-muted)]">Overview</TransitionLink></li>
+                        <li><TransitionLink to="/contact" className="transition text-[color:var(--text-primary)] hover:text-[color:var(--text-muted)]">Contact sales</TransitionLink></li>
+                        <li><TransitionLink to="/merchants" className="transition text-[color:var(--text-primary)] hover:text-[color:var(--text-muted)]">Merchants</TransitionLink></li>
                       </ul>
                     </div>
                     <div className="space-y-3 pt-6 md:px-6 md:pt-0">
-                      <p className="text-[0.63rem] uppercase tracking-[0.2em] text-[color:rgba(244,241,234,0.55)] leading-snug">
+                      <p className="text-[0.63rem] uppercase tracking-[0.2em] text-[color:var(--text-muted)] leading-snug">
                         AI solutions<wbr /> for
                       </p>
                       <ul className="space-y-2">
-                        <li><TransitionLink to="/engineering" className="transition hover:text-[color:var(--accent)]">Engineering</TransitionLink></li>
-                        <li><TransitionLink to="/marketing" className="transition hover:text-[color:var(--accent)]">Sales marketing</TransitionLink></li>
-                        <li><TransitionLink to="/finance" className="transition hover:text-[color:var(--accent)]">Finance</TransitionLink></li>
+                        <li><TransitionLink to="/engineering" className="transition text-[color:var(--text-primary)] hover:text-[color:var(--text-muted)]">Engineering</TransitionLink></li>
+                        <li><TransitionLink to="/marketing" className="transition text-[color:var(--text-primary)] hover:text-[color:var(--text-muted)]">Sales marketing</TransitionLink></li>
+                        <li><TransitionLink to="/finance" className="transition text-[color:var(--text-primary)] hover:text-[color:var(--text-muted)]">Finance</TransitionLink></li>
                       </ul>
                     </div>
                     <div className="space-y-3 pt-6 md:px-6 md:pt-0 md:last:pr-0">
-                      <p className="whitespace-nowrap text-[0.63rem] uppercase tracking-[0.2em] text-[color:rgba(244,241,234,0.55)]">
+                      <p className="whitespace-nowrap text-[0.63rem] uppercase tracking-[0.2em] text-[color:var(--text-muted)]">
                         Plans
                       </p>
                       <ul className="space-y-2">
-                        <li><TransitionLink to="/business" className="transition hover:text-[color:var(--accent)]">Business</TransitionLink></li>
-                        <li><TransitionLink to="/education" className="transition hover:text-[color:var(--accent)]">Education</TransitionLink></li>
-                        <li><TransitionLink to="/enterprise" className="transition hover:text-[color:var(--accent)]">Enterprise</TransitionLink></li>
+                        <li><TransitionLink to="/business" className="transition text-[color:var(--text-primary)] hover:text-[color:var(--text-muted)]">Business</TransitionLink></li>
+                        <li><TransitionLink to="/education" className="transition text-[color:var(--text-primary)] hover:text-[color:var(--text-muted)]">Education</TransitionLink></li>
+                        <li><TransitionLink to="/enterprise" className="transition text-[color:var(--text-primary)] hover:text-[color:var(--text-muted)]">Enterprise</TransitionLink></li>
                       </ul>
                     </div>
                   </div>
@@ -262,7 +262,7 @@ export function MarketingPage() {
           <div className="mx-auto w-full max-w-6xl space-y-16">
             <div className="mx-auto max-w-3xl space-y-4 text-center">
               <h2 className="text-2xl font-semibold">How Microagents works</h2>
-              <p className="text-sm" style={{ color: "rgba(244, 241, 234, 0.72)" }}>
+              <p className="text-sm" style={{ color: "color-mix(in srgb, var(--text-primary) 70%, transparent)" }}>
                 Every launch follows three accountable phases so operations, compliance, and product teams stay in lockstep.
               </p>
             </div>
@@ -277,7 +277,7 @@ export function MarketingPage() {
                       Step {index + 1}
                     </span>
                     <h3 className="text-3xl font-semibold">{step.title}</h3>
-                    <p className="text-sm" style={{ color: "rgba(244, 241, 234, 0.75)" }}>
+                    <p className="text-sm" style={{ color: "color-mix(in srgb, var(--text-primary) 75%, transparent)" }}>
                       {step.body}
                     </p>
                   </div>
@@ -295,7 +295,7 @@ export function MarketingPage() {
             <div className="mx-auto flex max-w-4xl flex-col gap-12 text-left">
               <div className="space-y-4">
                 <h2 className="text-3xl font-semibold">Craft pricing with your micro agent</h2>
-                <p className="text-sm" style={{ color: "rgba(244, 241, 234, 0.72)" }}>
+                <p className="text-sm" style={{ color: "color-mix(in srgb, var(--text-primary) 70%, transparent)" }}>
                   Describe your workloads, compliance needs, and support expectations directly to a Microagents pricing specialist—powered by a conversational agent builders trust every day. The agent assembles a deployment mix and commercial terms that fit how you operate.
                 </p>
               </div>
@@ -303,21 +303,21 @@ export function MarketingPage() {
                 <div className="rounded-[5px] border border-[color:rgba(244,241,234,0.1)] bg-[color:rgba(23,23,23,0.65)] p-6">
                   <p className="text-xs uppercase tracking-[0.25em] text-[color:rgba(244,241,234,0.45)]">Outline</p>
                   <h3 className="mt-4 text-xl font-semibold">Map your operations</h3>
-                  <p className="mt-3 text-sm" style={{ color: "rgba(244, 241, 234, 0.72)" }}>
+                  <p className="mt-3 text-sm" style={{ color: "color-mix(in srgb, var(--text-primary) 70%, transparent)" }}>
                     Share channels, volume expectations, and the accountability rules your assistants must uphold.
                   </p>
                 </div>
                 <div className="rounded-[5px] border border-[color:rgba(244,241,234,0.1)] bg-[color:rgba(23,23,23,0.65)] p-6">
                   <p className="text-xs uppercase tracking-[0.25em] text-[color:rgba(244,241,234,0.45)]">Co-create</p>
                   <h3 className="mt-4 text-xl font-semibold">Tune safeguards live</h3>
-                  <p className="mt-3 text-sm" style={{ color: "rgba(244, 241, 234, 0.72)" }}>
+                  <p className="mt-3 text-sm" style={{ color: "color-mix(in srgb, var(--text-primary) 70%, transparent)" }}>
                     Adjust policy guardrails, review cadences, and retention settings as the agent drafts your bundle.
                   </p>
                 </div>
                 <div className="rounded-[5px] border border-[color:rgba(244,241,234,0.1)] bg-[color:rgba(23,23,23,0.65)] p-6">
                   <p className="text-xs uppercase tracking-[0.25em] text-[color:rgba(244,241,234,0.45)]">Confirm</p>
                   <h3 className="mt-4 text-xl font-semibold">Approve your build</h3>
-                  <p className="mt-3 text-sm" style={{ color: "rgba(244, 241, 234, 0.72)" }}>
+                  <p className="mt-3 text-sm" style={{ color: "color-mix(in srgb, var(--text-primary) 70%, transparent)" }}>
                     Receive a contract-ready package that mirrors the assistant footprint and support depth you confirmed.
                   </p>
                 </div>
@@ -343,7 +343,7 @@ export function MarketingPage() {
               {rowIndex === 0 && (
                 <div className="md:col-span-2 space-y-3 text-center">
                   <h2 className="text-3xl font-semibold">What Microagents delivers</h2>
-                  <p className="text-sm" style={{ color: "rgba(244, 241, 234, 0.72)" }}>
+                  <p className="text-sm" style={{ color: "color-mix(in srgb, var(--text-primary) 70%, transparent)" }}>
                     Evidence-first assistance across every operational lane, packaged for responsible teams.
                   </p>
                 </div>
@@ -358,7 +358,7 @@ export function MarketingPage() {
                   </div>
                   <div className="space-y-3">
                     <h3 className="text-3xl font-semibold">{tile.title}</h3>
-                    <p className="text-sm" style={{ color: "rgba(244, 241, 234, 0.72)" }}>
+                    <p className="text-sm" style={{ color: "color-mix(in srgb, var(--text-primary) 70%, transparent)" }}>
                       {tile.description}
                     </p>
                   </div>
