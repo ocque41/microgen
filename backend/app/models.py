@@ -120,7 +120,7 @@ class OutboundEmail(Base, TimestampMixin):
     to_address: Mapped[str] = mapped_column(String(255), nullable=False)
     subject: Mapped[str] = mapped_column(String(255), nullable=False)
     body: Mapped[str] = mapped_column(Text, nullable=False)
-    metadata: Mapped[str | None] = mapped_column(Text, nullable=True)
+    metadata_json: Mapped[str | None] = mapped_column("metadata", Text, nullable=True)
 
 
 __all__ = [

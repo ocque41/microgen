@@ -23,7 +23,7 @@ async def queue_email(
         to_address=to_address,
         subject=subject,
         body=body,
-        metadata=json.dumps(metadata or {}),
+        metadata_json=json.dumps(metadata or {}),
     )
     session.add(email)
     await session.flush()
