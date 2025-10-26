@@ -16,6 +16,7 @@
   "dependencies": {
     "@openai/chatkit-react": "^0",
     "@stackframe/react": "^2.8.44",
+    "@stackframe/stack": "^2.8.47",
     "class-variance-authority": "^0.7.1",
     "lucide-react": "^0.544.0",
     "react": "^19.2.0",
