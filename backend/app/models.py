@@ -41,7 +41,7 @@ class User(Base, TimestampMixin):
     micro_agents: Mapped[list["MicroAgent"]] = relationship(
         back_populates="user", cascade="all, delete-orphan"
     )
-    vector_store: Mapped["UserVectorStore" | None] = relationship(
+    vector_store: Mapped[UserVectorStore | None] = relationship(
         back_populates="user", cascade="all, delete-orphan", uselist=False
     )
 
