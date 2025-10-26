@@ -1,4 +1,4 @@
-import { StackClientApp } from "@stackframe/react";
+import { StackClientApp } from "@stackframe/stack";
 import { useNavigate } from "react-router-dom";
 
 type NavigateFn = (to: string) => void;
@@ -64,7 +64,12 @@ export const stackClientApp = new StackClientApp({
   urls: {
     signIn: "/login",
     signUp: "/signup",
-    afterSignIn: "/dashboard",
+    afterSignIn: "/chat",
     afterSignUp: "/dashboard",
+    afterSignOut: "/",
+    handler: "/handler",
+    accountSettings: "/handler/account-settings",
+    passwordReset: "/handler/password-reset",
+    forgotPassword: "/handler/forgot-password",
   },
 });

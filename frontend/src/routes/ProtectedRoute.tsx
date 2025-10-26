@@ -7,9 +7,9 @@ type ProtectedRouteProps = {
   children: ReactNode;
 };
 
-export function ProtectedRoute({ children }: ProtectedRouteProps) {
-  const user = useUser({ or: "return-null" });
+export default function ProtectedRoute({ children }: ProtectedRouteProps) {
   const location = useLocation();
+  const user = useUser({ or: "return-null" });
 
   if (!user) {
     return <Navigate to="/login" replace state={{ from: location }} />;

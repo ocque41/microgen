@@ -6,15 +6,13 @@ import {
   Routes,
   useLocation,
 } from "react-router-dom";
-import { StackHandler, StackProvider, StackTheme } from "@stackframe/react";
+import { SignIn, SignUp, StackHandler, StackProvider, StackTheme } from "@stackframe/react";
 
-import { ProtectedRoute } from "./components/ProtectedRoute";
+import ProtectedRoute from "./routes/ProtectedRoute";
 import { ChatPage } from "./pages/ChatPage";
 import { DashboardPage } from "./pages/DashboardPage";
 import { ForgotPasswordPage } from "./pages/ForgotPasswordPage";
-import { LoginPage } from "./pages/LoginPage";
 import { MarketingPage } from "./pages/MarketingPage";
-import { SignupPage } from "./pages/SignupPage";
 import { stackClientApp } from "./stack";
 import { StackNavigationBridge } from "./components/StackNavigationBridge";
 
@@ -71,8 +69,8 @@ export default function App() {
             <Routes>
               <Route path="/handler/*" element={<HandlerRoutes />} />
               <Route path="/" element={<MarketingPage />} />
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/signup" element={<SignupPage />} />
+              <Route path="/login" element={<SignIn automaticRedirect />} />
+              <Route path="/signup" element={<SignUp automaticRedirect />} />
               <Route path="/forgot-password" element={<ForgotPasswordPage />} />
               <Route
                 path="/chat"
