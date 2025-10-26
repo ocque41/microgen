@@ -69,7 +69,7 @@ export function ChatKitPanel({
           shade: -2,
         },
         accent: {
-          primary: "#B57033",
+          primary: "#0091ad",
           level: 2,
         },
       },

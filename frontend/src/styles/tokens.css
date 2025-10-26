@@ -1,22 +1,22 @@
 :root {
   color-scheme: dark;
-  --brand-color-background: #0b1c15;
-  --brand-color-surface: #10271e;
-  --brand-color-surface-muted: #153527;
-  --brand-color-surface-glow: #255640;
-  --brand-color-border: #6e523a;
-  --brand-color-border-strong: #8b6a46;
+  --brand-color-background: #090909;
+  --brand-color-surface: #242423;
+  --brand-color-surface-muted: #333533;
+  --brand-color-surface-glow: #3a7ca5;
+  --brand-color-border: #001427;
+  --brand-color-border-strong: color-mix(in srgb, #001427 65%, #ffffff 15%);
   --brand-color-text: #d9dcd6;
-  --brand-color-text-secondary: #a8aea6;
-  --brand-color-text-muted: #5c5c92;
-  --brand-color-accent: #52b788;
-  --brand-color-accent-strong: #75c5a0;
-  --brand-color-accent-soft: color-mix(in srgb, #52b788 18%, transparent);
-  --brand-color-critical: #f75539;
-  --brand-color-positive: #a0d19c;
-  --brand-color-warning: #b98260;
-  --brand-color-info: #9d5b52;
-  --brand-focus-outline: 0 0 0 3px color-mix(in srgb, #75c5a0 60%, transparent);
+  --brand-color-text-secondary: #c5c9c2;
+  --brand-color-text-muted: #a8aea6;
+  --brand-color-accent: #0091ad;
+  --brand-color-accent-strong: color-mix(in srgb, #0091ad 78%, #22aecd 22%);
+  --brand-color-accent-soft: color-mix(in srgb, #0091ad 20%, transparent);
+  --brand-color-critical: #eb6424;
+  --brand-color-positive: #9ceaef;
+  --brand-color-warning: #fa9500;
+  --brand-color-info: #1b9aaa;
+  --brand-focus-outline: 0 0 0 3px color-mix(in srgb, #1985a1 70%, transparent);
 
   --brand-space-3xs: 0.25rem; /* 4px */
   --brand-space-2xs: 0.5rem; /* 8px */
@@ -43,8 +43,8 @@
   --brand-shadow-md: 0px 24px 48px rgba(4, 16, 12, 0.32);
   --brand-shadow-lg: 0px 32px 64px rgba(4, 20, 16, 0.4);
 
-  --glass-bg: color-mix(in srgb, var(--brand-color-surface) 78%, transparent);
-  --glass-border: color-mix(in srgb, var(--brand-color-border) 55%, transparent);
+  --glass-bg: color-mix(in srgb, var(--brand-color-surface) 82%, transparent);
+  --glass-border: color-mix(in srgb, var(--brand-color-border) 60%, transparent);
   --glass-blur: 22px;
   --glass-sat: 135%;
 
@@ -59,11 +59,11 @@
   --surface-overlay-82: color-mix(in srgb, var(--brand-color-surface) 82%, transparent);
   --surface-overlay-78: color-mix(in srgb, var(--brand-color-surface) 78%, transparent);
   --surface-overlay-75: color-mix(in srgb, var(--brand-color-surface) 75%, transparent);
-  --surface-overlay-72: color-mix(in srgb, var(--brand-color-surface) 72%, transparent);
-  --surface-overlay-70: color-mix(in srgb, var(--brand-color-surface) 70%, transparent);
-  --surface-overlay-65: color-mix(in srgb, var(--brand-color-surface) 65%, transparent);
-  --surface-overlay-60: color-mix(in srgb, var(--brand-color-surface) 60%, transparent);
-  --surface-overlay-55: color-mix(in srgb, var(--brand-color-surface-muted) 55%, transparent);
+  --surface-overlay-72: color-mix(in srgb, var(--brand-color-surface-muted) 72%, transparent);
+  --surface-overlay-70: color-mix(in srgb, var(--brand-color-surface-muted) 70%, transparent);
+  --surface-overlay-65: color-mix(in srgb, var(--brand-color-surface-muted) 65%, transparent);
+  --surface-overlay-60: color-mix(in srgb, var(--brand-color-surface-muted) 60%, transparent);
+  --surface-overlay-55: color-mix(in srgb, var(--brand-color-surface-glow) 45%, transparent);
 
   --text-primary: var(--brand-color-text);
   --text-muted: var(--brand-color-text-secondary);
@@ -78,17 +78,17 @@
   --border-default: var(--brand-color-border);
   --border-strong: var(--brand-color-border-strong);
   --border-glass: var(--glass-border);
-  --border-soft: color-mix(in srgb, var(--brand-color-border) 45%, transparent);
+  --border-soft: color-mix(in srgb, var(--brand-color-border) 40%, transparent);
 
   --status-critical: var(--brand-color-critical);
   --status-positive: var(--brand-color-positive);
   --status-warning: var(--brand-color-warning);
   --status-info: var(--brand-color-info);
 
-  --status-surface-critical: color-mix(in srgb, var(--status-critical) 22%, transparent);
-  --status-surface-positive: color-mix(in srgb, var(--status-positive) 22%, transparent);
-  --status-surface-warning: color-mix(in srgb, var(--status-warning) 22%, transparent);
-  --status-surface-info: color-mix(in srgb, var(--status-info) 22%, transparent);
+  --status-surface-critical: color-mix(in srgb, var(--status-critical) 26%, transparent);
+  --status-surface-positive: color-mix(in srgb, var(--status-positive) 24%, transparent);
+  --status-surface-warning: color-mix(in srgb, var(--status-warning) 20%, transparent);
+  --status-surface-info: color-mix(in srgb, var(--status-info) 24%, transparent);
 
   --focus-ring: var(--brand-focus-outline);
   --radius-xs: var(--brand-radius-xs);
