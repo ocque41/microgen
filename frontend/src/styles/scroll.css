@@ -1,0 +1,82 @@
+:root {
+  --scroll-scene-duration: clamp(600ms, 480ms + 2vw, 1400ms);
+  --scroll-scene-easing: var(--motion-easing-standard);
+  --scroll-scene-delay: 0ms;
+}
+
+.scroll-scene {
+  position: relative;
+}
+
+.scroll-track {
+  --scroll-track-name: scroll-scene;
+  --scroll-track-axis: block;
+  --scroll-animation-range: entry 0% exit 100%;
+}
+
+.scroll-poster {
+  display: none;
+}
+
+@keyframes scroll-fade-in-up {
+  from {
+    opacity: 0;
+    transform: translate3d(0, var(--brand-space-md, 1.5rem), 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes scroll-scale-in {
+  from {
+    opacity: 0;
+    transform: scale3d(0.96, 0.96, 1);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale3d(1, 1, 1);
+  }
+}
+
+@supports (scroll-timeline: auto) {
+  .scroll-track {
+    scroll-timeline: var(--scroll-track-name) var(--scroll-track-axis, block);
+  }
+
+  .scroll-driven {
+    animation-fill-mode: both;
+    animation-duration: var(--scroll-scene-duration);
+    animation-timing-function: var(--scroll-scene-easing);
+    animation-delay: var(--scroll-scene-delay);
+    animation-timeline: var(--scroll-track-name);
+    animation-range: var(--scroll-animation-range);
+  }
+
+  .scroll-driven[data-loop="alternate"] {
+    animation-direction: alternate;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-driven {
+    animation: none !important;
+  }
+
+  .scroll-poster {
+    display: block;
+  }
+}
+
+.motion-disabled .scroll-driven,
+.motion-disabled.scroll-driven {
+  animation: none !important;
+}
+
+.motion-disabled .scroll-poster,
+.motion-disabled.scroll-poster {
+  display: block;
+}

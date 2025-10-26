@@ -4,3 +4,5 @@ export type FactRecord = {
   status: string;
   createdAt: string;
 };
+
+export const FACTS_STORAGE_KEY = "microgen:facts";

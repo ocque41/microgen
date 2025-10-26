@@ -1,12 +1,22 @@
 import path from "path";
 import react from "@vitejs/plugin-react-swc";
+import { imagetools } from "vite-imagetools";
 import { defineConfig } from "vite";
 
 const backendTarget = process.env.BACKEND_URL ?? "http://127.0.0.1:8000";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    imagetools({
+      // Generate modern formats by default; callers can still override per import.
+      defaultDirectives: () => new URLSearchParams({
+        format: "avif;webp;jpeg",
+        quality: "78",
+      }),
+    }),
+  ],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
@@ -33,5 +43,10 @@ export default defineConfig({
       "microgen.vercel.app",
       "microagents.cumulush.com",
     ],
+  },
+  test: {
+    environment: "jsdom",
+    setupFiles: "./src/tests/setup.ts",
+    css: true,
   },
 });

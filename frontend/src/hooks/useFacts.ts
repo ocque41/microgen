@@ -1,6 +1,7 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import type { FactRecord } from "../lib/facts";
+import { FACTS_STORAGE_KEY } from "../lib/facts";
 
 export type FactAction = {
   type: "save" | "discard";
@@ -8,10 +9,23 @@ export type FactAction = {
   factText?: string;
 };
 
-export function useFacts() {
-  const [facts, setFacts] = useState<FactRecord[]>([]);
+export function useFacts(initialFacts: FactRecord[] = []) {
+  const [facts, setFacts] = useState<FactRecord[]>(() => [...initialFacts]);
   const [error] = useState<string | null>(null);
   const loading = false;
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+    try {
+      window.sessionStorage.setItem(FACTS_STORAGE_KEY, JSON.stringify(facts));
+    } catch (storageError) {
+      if (import.meta.env.DEV) {
+        console.warn("[useFacts] Failed to persist facts", storageError);
+      }
+    }
+  }, [facts]);
 
   const performAction = useCallback(async (action: FactAction) => {
     setFacts((current) => {
