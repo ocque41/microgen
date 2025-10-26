@@ -143,7 +143,7 @@
   position: fixed;
   inset: 0;
   z-index: -30;
-  background-color: var(--marketing-background-color, #313638);
+  background-color: var(--marketing-background-color, #0b090a);
   background-image: none;
   opacity: 1;
   pointer-events: none;

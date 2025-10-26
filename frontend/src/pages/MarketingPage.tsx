@@ -1,8 +1,9 @@
 import type { CSSProperties, FocusEvent } from "react";
 import { useEffect, useRef, useState } from "react";
 import { TransitionLink } from "@/components/motion/TransitionLink";
-import { cn } from "@/lib/utils";
 import { marketingTheme } from "@/lib/marketingTheme";
+import { cn } from "@/lib/utils";
+import heroImage from "@/assets/hero.png";
 import { HeroSection } from "@/sections/hero";
 import { StorySections } from "@/sections/story";
 
@@ -10,19 +11,19 @@ const steps = [
   {
     title: "Clarify the brief",
     body: "Capture the workflow, guardrails, and success metrics in a shared template so teams stay aligned.",
-    image: "/hero.png",
+    image: heroImage,
     alt: "Briefing workspace capturing workflow expectations.",
   },
   {
     title: "Approve the agent",
     body: "Share a guided review sandbox with transcript capture before production traffic ever hits the API.",
-    image: "/hero.png",
+    image: heroImage,
     alt: "Approval sandbox view for responsible agent sign-off.",
   },
   {
     title: "Run with confidence",
     body: "Monitor accountability dashboards with retention-ready logs, safety events, and escalation summaries.",
-    image: "/hero.png",
+    image: heroImage,
     alt: "Operational dashboard highlighting accountable agent metrics.",
   },
 ];
@@ -31,43 +32,45 @@ const featureTiles = [
   {
     title: "AI that understands",
     description: "Surface the context, policies, and past resolutions your teams rely on.",
-    image: "/hero.png",
+    image: heroImage,
     alt: "AI workspace synthesizing context for operators.",
   },
   {
     title: "AI that organizes",
     description: "Segment channels, tickets, and logs so operators see what matters first.",
-    image: "/hero.png",
+    image: heroImage,
     alt: "Structured view of prioritized operational queues.",
   },
   {
     title: "AI that builds",
     description: "Compose workflows that stay within evidence-based guardrails end-to-end.",
-    image: "/hero.png",
+    image: heroImage,
     alt: "Workflow builder keeping teams within guardrails.",
   },
   {
     title: "AI that emails",
     description: "Draft respectful responses grounded in records, not improvisation.",
-    image: "/hero.png",
+    image: heroImage,
     alt: "Email composition interface showcasing grounded messaging.",
   },
   {
     title: "AI that creates",
     description: "Prepare study packs, runbooks, and debriefs without losing accountability.",
-    image: "/hero.png",
+    image: heroImage,
     alt: "Creative suite preparing operational documentation.",
   },
   {
     title: "AI that shops",
     description: "Evaluate vendor choices with sourced justifications and cost controls.",
-    image: "/hero.png",
+    image: heroImage,
     alt: "Procurement dashboard comparing compliant vendors.",
   },
 ];
 
 const marketingThemeStyles = {
   "--marketing-background-color": marketingTheme.background,
+  "--surface-background": marketingTheme.background,
+  backgroundColor: marketingTheme.background,
 } as CSSProperties;
 
 function IllustrationMedia({ alt, src, className }: { alt: string; src: string; className?: string }) {
@@ -99,6 +102,29 @@ function IllustrationMedia({ alt, src, className }: { alt: string; src: string; 
 export function MarketingPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const closeTimeoutRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    if (typeof document === "undefined") {
+      return undefined;
+    }
+
+    const root = document.documentElement;
+    const previousSurfaceBackground = root.style.getPropertyValue("--surface-background");
+    const previousBodyBackground = document.body.style.backgroundColor;
+
+    root.style.setProperty("--surface-background", marketingTheme.background);
+    document.body.style.backgroundColor = marketingTheme.background;
+
+    return () => {
+      if (previousSurfaceBackground) {
+        root.style.setProperty("--surface-background", previousSurfaceBackground);
+      } else {
+        root.style.removeProperty("--surface-background");
+      }
+
+      document.body.style.backgroundColor = previousBodyBackground;
+    };
+  }, [marketingTheme.background]);
 
   const clearCloseTimeout = () => {
     if (closeTimeoutRef.current !== null) {
@@ -154,7 +180,7 @@ export function MarketingPage() {
   }, [] as Array<(typeof featureTiles)[number][]>);
 
   return (
-    <div className="relative min-h-screen overflow-hidden text-text" style={marketingThemeStyles}>
+    <div className="relative min-h-screen overflow-x-hidden text-text" style={marketingThemeStyles}>
       <div className="mesh-background pointer-events-none" />
       <div className="relative">
         <section className="relative flex min-h-screen flex-col">

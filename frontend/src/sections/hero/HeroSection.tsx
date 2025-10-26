@@ -128,8 +128,7 @@ export function HeroSection() {
   const showControls = videoConfigured && (manualPlayback || motionSuppressed);
 
   return (
-    <section className="relative isolate overflow-hidden bg-[color:rgba(10,10,10,0.92)] px-6 pb-20 pt-28 text-left text-text md:px-12 lg:pb-28 lg:pt-36">
-      <div className="pointer-events-none absolute inset-x-0 top-[-25%] h-[480px] bg-[radial-gradient(circle_at_top,rgba(110,120,255,0.35),transparent_60%)]" />
+    <section className="relative isolate overflow-hidden bg-[color:var(--marketing-background-color,#0b090a)] px-6 pb-20 pt-28 text-left text-text md:px-12 lg:pb-28 lg:pt-36">
       <div className="relative mx-auto flex max-w-6xl flex-col items-start gap-16 lg:flex-row lg:items-stretch">
         <div className="flex max-w-xl flex-col gap-6">
           <p className="inline-flex items-center gap-2 text-[0.75rem] uppercase tracking-[0.35em] text-[color:rgba(244,241,234,0.56)]">
@@ -190,4 +189,3 @@ export function HeroSection() {
     </section>
   );
 }
-

@@ -3,6 +3,38 @@
     {
       "source": "/handler/:path*",
       "destination": "/index.html"
+    },
+    {
+      "source": "/login",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/signup",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/forgot-password",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/chat",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/dashboard",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/brand",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/workbench/:path*",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/qa",
+      "destination": "/index.html"
     }
   ]
 }

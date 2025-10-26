@@ -3,6 +3,12 @@
   --motion-duration-medium: 240ms;
   --motion-easing-standard: cubic-bezier(0.4, 0, 0.2, 1);
   --motion-easing-emphasized: cubic-bezier(0.34, 1.56, 0.64, 1);
+  scroll-behavior: smooth;
+}
+
+html,
+body {
+  scroll-behavior: inherit;
 }
 
 .motion-disabled,
@@ -49,12 +55,8 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  :root {
-    scroll-behavior: smooth;
-  }
-
   html,
   body {
-    scroll-behavior: smooth;
+    scroll-behavior: inherit;
   }
 }
