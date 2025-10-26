@@ -27,3 +27,9 @@ dist/
 .coverage/
 coverage/
 .vercel
+
+# Generated marketing media (restored locally via scripts/restore-hero-media.mjs)
+frontend/public/background.png
+frontend/public/hero.png
+frontend/public/hero-demo.webm
+frontend/src/assets/hero-demo-poster.jpg

@@ -30,6 +30,7 @@ from .facts import fact_store
 from .models import User
 from .routes import auth as auth_routes
 from .routes import microagents as microagent_routes
+from .routes import rum as rum_routes
 from .routes import webhooks as webhook_routes
 from .vector_store import (
     get_or_create_user_vector_store,
@@ -73,6 +74,7 @@ app.add_middleware(SessionMiddleware, secret_key=settings.session_secret)
 
 app.include_router(auth_routes.router)
 app.include_router(microagent_routes.router)
+app.include_router(rum_routes.router)
 app.include_router(webhook_routes.router)
 
 

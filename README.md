@@ -17,7 +17,7 @@ Static marketing and crawler documentation live in [`site/`](site). Preview them
 npx http-server site -o
 ```
 
-This command opens `site/index.html`. All marketing typography now uses the shared Helvetica Neue stack (`"Helvetica Neue", sans-serif`) across headlines, body copy, and code samples. Shared tokens, spacing, and components live in [`site/styles/brand.css`](site/styles/brand.css) and are reused by `site/index.html` and the crawler notes in `site/docs/index.html` (machine-readable metadata remains at `site/docs/ai.json`).
+This command opens `site/index.html`. Marketing and product surfaces now rely on the shared Inter variable stack (`"InterVariable", "Inter", "Helvetica Neue", Arial, sans-serif`) across headlines, body copy, and code samples. Shared tokens, spacing, and components live in [`site/styles/brand.css`](site/styles/brand.css) and are reused by `site/index.html` and the crawler notes in `site/docs/index.html` (machine-readable metadata remains at `site/docs/ai.json`).
 
 When previewing the React marketing page via `npm run frontend` → `http://127.0.0.1:5170/`, hover the primary navigation link to confirm the dropdown stays visible while your cursor moves between the trigger and the menu surface. Resize the viewport (or adjust browser zoom) and verify the "AI solutions" column allows the trailing "for" to wrap to a new line instead of clipping when horizontal space runs out.
 
@@ -110,7 +110,18 @@ With the app reachable locally or via a tunnel, open it in the browser and try a
 
 1. **Fact Recording** - prompt: `My name is Kaz`
 2. **Weather Info** - prompt: `What's the weather in San Francisco today?`
-3. **Theme Switcher** - prompt: `Change the theme to dark mode` 
+3. **Theme Switcher** - prompt: `Change the theme to dark mode`
+
+### Performance, typography, and motion verification
+
+- **Route-level skeletons**: In Chrome DevTools enable the "Slow 3G" throttle and navigate between `/chat` and `/dashboard`. The Suspense fallbacks (`ChatSkeleton` and `DashboardSkeleton`) render immediately while the route loaders stream data into the view.
+- **Core Web Vitals RUM**: `frontend/src/app/rum/webVitals.ts` posts metrics to `/api/rum/vitals` (override with `VITE_RUM_ENDPOINT`). Open the Network tab after a full page load to confirm the beacon payload fires, and watch the console for errors if LCP (>2.5s), INP (≥200 ms), or CLS (≥0.1) exceed budget.
+- **Scroll timelines**: Open `/brand` and scroll through the Motion section. Cards using `.scroll-driven` should fade up with `scroll-fade-in-up` while the `.scroll-poster` fallback stays hidden. Verify the utilities live in `frontend/src/styles/scroll.css`.
+- **Glass story sections**: Visit `/` and scroll the "Pinned accountability" stack. The left column stays sticky, each glass card animates via scroll timelines, and metrics such as "Policy gaps ↓37%" maintain ≥4.5:1 contrast. Toggle reduce motion (or add `motion-disabled` to `<body>`) to confirm the sections collapse to static panes with no parallax.
+- **View transitions**: In Chrome 126+ or Safari TP, navigate between `/`, `/brand`, and `/dashboard`. Links wired via `TransitionLink` should blend the surfaces using the View Transitions API without blocking loaders. Imperative navigation (Stack Auth) uses `navigateWithViewTransition`.
+- **Reduced motion**: Enable the OS-level "Reduce Motion" preference and reload. Scroll posters appear, view transitions opt out, Framer Motion shared elements snap instantly, and smooth scrolling is disabled. You can also add `motion-disabled` to the `<body>` element in DevTools to trigger the kill switch manually.
+- **Typography**: The self-hosted Inter variable font lives in `frontend/src/styles/typography.css`. Inspect any heading on `/` or `/chat` to verify the computed font-family resolves to `InterVariable` without remote font requests.
+- **Brand system preview**: Open `/brand` to review the new token surfaces, glass panes, and focus halos. Confirm the cards maintain ≥4.5:1 body contrast, ≥3.4:1 secondary contrast, and that the focus control renders a 3px accent halo. See `frontend/docs/brand-system.md` for token references and AA+ guidance.
 
 ### Authentication & subscriptions
 

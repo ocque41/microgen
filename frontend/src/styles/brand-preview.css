@@ -1,0 +1,100 @@
+.brand-page {
+  min-height: 100vh;
+  background: var(--brand-color-background);
+  color: var(--brand-color-text);
+}
+
+.brand-page__container {
+  margin: 0 auto;
+  display: flex;
+  max-width: 72rem;
+  flex-direction: column;
+  padding: var(--brand-space-xl) var(--brand-space-md);
+  gap: var(--brand-space-xl);
+}
+
+.brand-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--brand-space-md);
+}
+
+.brand-grid {
+  gap: var(--brand-space-sm);
+}
+
+.brand-section__intro {
+  display: flex;
+  flex-direction: column;
+  gap: var(--brand-space-2xs);
+}
+
+.brand-secondary-text {
+  color: var(--brand-color-text-secondary);
+}
+
+.brand-body-relaxed {
+  line-height: var(--line-height-relaxed);
+}
+
+.brand-surface-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: var(--brand-space-sm);
+  border-radius: var(--brand-radius-xl);
+  border: 1px solid var(--brand-color-border);
+  box-shadow: var(--brand-shadow-sm);
+  gap: var(--brand-space-2xs);
+}
+
+.brand-focus-card {
+  display: flex;
+  flex-direction: column;
+  padding: var(--brand-space-sm);
+  border-radius: var(--brand-radius-lg);
+  border: 1px solid var(--brand-color-border);
+  gap: var(--brand-space-2xs);
+  background: var(--brand-color-surface-muted);
+}
+
+.brand-contrast-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: var(--brand-space-sm);
+  border-radius: var(--brand-radius-lg);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--brand-shadow-xs);
+  gap: var(--brand-space-2xs);
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
+}
+
+.brand-card-accent {
+  margin-top: var(--brand-space-sm);
+  height: 0.5rem;
+  width: 100%;
+  border-radius: var(--brand-radius-md);
+}
+
+.brand-focus-button {
+  align-self: flex-start;
+  border: 1px solid var(--brand-color-border-strong);
+  border-radius: var(--brand-radius-lg);
+  background: transparent;
+  color: inherit;
+  padding: var(--brand-space-2xs) var(--brand-space-sm);
+  font: inherit;
+  transition: box-shadow var(--motion-duration-short) var(--motion-easing-standard);
+}
+
+.brand-focus-button:focus-visible {
+  outline: none;
+  box-shadow: var(--brand-focus-outline);
+}
+
+@media (min-width: 768px) {
+  .brand-page__container {
+    padding-inline: var(--brand-space-xl);
+  }
+}

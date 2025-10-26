@@ -1,9 +1,9 @@
 import type { FocusEvent } from "react";
 import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
-
-import { Button } from "@/components/ui/button";
+import { TransitionLink } from "@/components/motion/TransitionLink";
 import { cn } from "@/lib/utils";
+import { HeroSection } from "@/sections/hero";
+import { StorySections } from "@/sections/story";
 
 const steps = [
   {
@@ -24,19 +24,6 @@ const steps = [
     image: "/hero.png",
     alt: "Operational dashboard highlighting accountable agent metrics.",
   },
-];
-
-const featurePhrases = [
-  "policy-bound workflows",
-  "evidence-ready reports",
-  "risk-aware escalations",
-  "documented summaries",
-  "guardrailed rollouts",
-  "exception routing cues",
-  "audit-linked transcripts",
-  "SLA steady follow-ups",
-  "permissioned tool runs",
-  "metrics-led retrospectives",
 ];
 
 const featureTiles = [
@@ -78,9 +65,33 @@ const featureTiles = [
   },
 ];
 
+function IllustrationMedia({ alt, src, className }: { alt: string; src: string; className?: string }) {
+  const [isBroken, setIsBroken] = useState(!src);
+
+  if (isBroken) {
+    return (
+      <div
+        role="img"
+        aria-label={`${alt} (placeholder shown until hero.png is restored).`}
+        className={cn("marketing-illustration marketing-illustration--fallback", className)}
+      >
+        <span className="marketing-illustration__message">Restore hero.png for full-fidelity art.</span>
+      </div>
+    );
+  }
+
+  return (
+    <img
+      src={src}
+      alt={alt}
+      loading="lazy"
+      onError={() => setIsBroken(true)}
+      className={cn("marketing-illustration", className)}
+    />
+  );
+}
+
 export function MarketingPage() {
-  const [featureIndex, setFeatureIndex] = useState(0);
-  const [isVisible, setIsVisible] = useState(true);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const closeTimeoutRef = useRef<number | null>(null);
 
@@ -120,18 +131,7 @@ export function MarketingPage() {
   };
 
   useEffect(() => {
-    let fadeTimeoutId: number;
-    const intervalId = window.setInterval(() => {
-      setIsVisible(false);
-      fadeTimeoutId = window.setTimeout(() => {
-        setFeatureIndex((prev) => (prev + 1) % featurePhrases.length);
-        setIsVisible(true);
-      }, 250);
-    }, 3000);
-
     return () => {
-      window.clearInterval(intervalId);
-      window.clearTimeout(fadeTimeoutId);
       if (closeTimeoutRef.current !== null) {
         window.clearTimeout(closeTimeoutRef.current);
         closeTimeoutRef.current = null;
@@ -139,7 +139,6 @@ export function MarketingPage() {
     };
   }, []);
 
-  const currentFeature = featurePhrases[featureIndex];
   const featureRows = featureTiles.reduce((rows, tile, index) => {
     if (index % 2 === 0) {
       rows.push([tile]);
@@ -150,7 +149,7 @@ export function MarketingPage() {
   }, [] as Array<(typeof featureTiles)[number][]>);
 
   return (
-    <div className="relative min-h-screen overflow-hidden text-brand-text">
+    <div className="relative min-h-screen overflow-hidden text-text">
       <div className="mesh-background pointer-events-none" />
       <div className="relative">
         <section className="relative flex min-h-screen flex-col">
@@ -191,9 +190,9 @@ export function MarketingPage() {
                         Business
                       </p>
                       <ul className="space-y-2">
-                        <li><Link to="/overview" className="transition hover:text-[color:var(--accent)]">Overview</Link></li>
-                        <li><Link to="/contact" className="transition hover:text-[color:var(--accent)]">Contact sales</Link></li>
-                        <li><Link to="/merchants" className="transition hover:text-[color:var(--accent)]">Merchants</Link></li>
+                        <li><TransitionLink to="/overview" className="transition hover:text-[color:var(--accent)]">Overview</TransitionLink></li>
+                        <li><TransitionLink to="/contact" className="transition hover:text-[color:var(--accent)]">Contact sales</TransitionLink></li>
+                        <li><TransitionLink to="/merchants" className="transition hover:text-[color:var(--accent)]">Merchants</TransitionLink></li>
                       </ul>
                     </div>
                     <div className="space-y-3 pt-6 md:px-6 md:pt-0">
@@ -201,9 +200,9 @@ export function MarketingPage() {
                         AI solutions<wbr /> for
                       </p>
                       <ul className="space-y-2">
-                        <li><Link to="/engineering" className="transition hover:text-[color:var(--accent)]">Engineering</Link></li>
-                        <li><Link to="/marketing" className="transition hover:text-[color:var(--accent)]">Sales marketing</Link></li>
-                        <li><Link to="/finance" className="transition hover:text-[color:var(--accent)]">Finance</Link></li>
+                        <li><TransitionLink to="/engineering" className="transition hover:text-[color:var(--accent)]">Engineering</TransitionLink></li>
+                        <li><TransitionLink to="/marketing" className="transition hover:text-[color:var(--accent)]">Sales marketing</TransitionLink></li>
+                        <li><TransitionLink to="/finance" className="transition hover:text-[color:var(--accent)]">Finance</TransitionLink></li>
                       </ul>
                     </div>
                     <div className="space-y-3 pt-6 md:px-6 md:pt-0 md:last:pr-0">
@@ -211,9 +210,9 @@ export function MarketingPage() {
                         Plans
                       </p>
                       <ul className="space-y-2">
-                        <li><Link to="/business" className="transition hover:text-[color:var(--accent)]">Business</Link></li>
-                        <li><Link to="/education" className="transition hover:text-[color:var(--accent)]">Education</Link></li>
-                        <li><Link to="/enterprise" className="transition hover:text-[color:var(--accent)]">Enterprise</Link></li>
+                        <li><TransitionLink to="/business" className="transition hover:text-[color:var(--accent)]">Business</TransitionLink></li>
+                        <li><TransitionLink to="/education" className="transition hover:text-[color:var(--accent)]">Education</TransitionLink></li>
+                        <li><TransitionLink to="/enterprise" className="transition hover:text-[color:var(--accent)]">Enterprise</TransitionLink></li>
                       </ul>
                     </div>
                   </div>
@@ -224,43 +223,9 @@ export function MarketingPage() {
               <span className="hidden text-[0.65rem] uppercase tracking-[0.3em] text-transparent md:block">Menu</span>
             </div>
           </nav>
-
-          <div className="relative flex flex-1 flex-col justify-center gap-12 px-6 pb-12 pt-10 text-left lg:gap-16 lg:px-12">
-            <div className="flex flex-col gap-8 md:flex-row md:items-start md:gap-12">
-              <div className="flex flex-col items-start gap-6">
-                <blockquote
-                  className="w-full border-l-2 border-[color:rgba(244,241,234,0.25)] pl-5 text-2xl italic text-[color:rgba(244,241,234,0.9)]"
-                  style={{ whiteSpace: "nowrap" }}
-                >
-                  Accountable employees orchestrating{" "}
-                  <span
-                    className={`inline-block font-semibold text-[color:var(--accent)] transition duration-300 ${
-                      isVisible ? "translate-y-0 opacity-100" : "-translate-y-2 opacity-0"
-                    }`}
-                    style={{ whiteSpace: "nowrap" }}
-                  >
-                    {currentFeature}
-                  </span>
-                </blockquote>
-                <Button
-                  asChild
-                  className="rounded-full bg-[color:var(--accent)] px-6 py-2 text-sm font-semibold text-[color:var(--accent-inverse)] transition hover:bg-[color:var(--accent-hover)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--accent)]"
-                >
-                  <Link to="/signup">Get Started</Link>
-                </Button>
-              </div>
-            </div>
-            <div className="relative mx-auto mt-6 w-full max-w-[94vw] md:mt-4 md:max-w-[80vw] lg:max-w-[70vw]">
-              <div className="relative h-[65vh] min-h-[360px] w-full overflow-hidden rounded-[5px] shadow-[0_80px_200px_-120px_rgba(0,0,0,0.75)]">
-                <img
-                  src="/hero.png"
-                  alt="Microagents interface showcasing accountable workflows."
-                  className="absolute inset-0 h-full w-full object-cover"
-                />
-              </div>
-            </div>
-          </div>
         </section>
+        <HeroSection />
+        <StorySections />
 
         <section className="px-6 py-24 lg:px-12">
           <div className="mx-auto w-full max-w-6xl space-y-16">
@@ -286,11 +251,7 @@ export function MarketingPage() {
                     </p>
                   </div>
                   <div className="overflow-hidden rounded-[5px] border border-[color:rgba(244,241,234,0.08)] bg-[color:rgba(23,23,23,0.65)]">
-                    <img
-                      src={step.image}
-                      alt={step.alt}
-                      className="h-64 w-full object-cover md:h-80"
-                    />
+                    <IllustrationMedia alt={step.alt} src={step.image} className="h-64 w-full object-cover md:h-80" />
                   </div>
                 </article>
               ))}
@@ -331,12 +292,12 @@ export function MarketingPage() {
                 </div>
               </div>
               <div className="flex justify-center">
-                <Link
+                <TransitionLink
                   to="/signup"
                   className="inline-flex items-center justify-center rounded-full bg-[color:var(--accent)] px-8 py-3 text-sm font-semibold text-[color:var(--accent-inverse)] transition hover:bg-[color:var(--accent-hover)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--accent)]"
                 >
                   Get Started
-                </Link>
+                </TransitionLink>
               </div>
             </div>
           </div>
@@ -362,11 +323,7 @@ export function MarketingPage() {
                   className="flex h-full flex-col justify-between gap-8 rounded-[5px] border border-[color:rgba(244,241,234,0.1)] bg-[color:rgba(23,23,23,0.78)] p-9 text-left shadow-[0_70px_180px_-110px_rgba(0,0,0,0.9)]"
                 >
                   <div className="overflow-hidden rounded-[5px] border border-[color:rgba(244,241,234,0.08)] bg-[color:rgba(23,23,23,0.65)]">
-                    <img
-                      src={tile.image}
-                      alt={tile.alt}
-                      className="h-[340px] w-full object-cover"
-                    />
+                    <IllustrationMedia alt={tile.alt} src={tile.image} className="h-[340px] w-full object-cover" />
                   </div>
                   <div className="space-y-3">
                     <h3 className="text-3xl font-semibold">{tile.title}</h3>
@@ -392,21 +349,21 @@ export function MarketingPage() {
               <div className="grid grid-cols-1 gap-8 text-left text-sm text-[color:rgba(244,241,234,0.68)] sm:grid-cols-3">
                 <div className="space-y-2">
                   <p className="text-xs uppercase tracking-[0.3em] text-[color:rgba(244,241,234,0.45)]">Resources</p>
-                  <Link to="/research" className="block transition hover:text-[color:var(--accent)]">Research</Link>
-                  <Link to="/safety" className="block transition hover:text-[color:var(--accent)]">Safety</Link>
-                  <Link to="/api" className="block transition hover:text-[color:var(--accent)]">API</Link>
+                  <TransitionLink to="/research" className="block transition hover:text-[color:var(--accent)]">Research</TransitionLink>
+                  <TransitionLink to="/safety" className="block transition hover:text-[color:var(--accent)]">Safety</TransitionLink>
+                  <TransitionLink to="/api" className="block transition hover:text-[color:var(--accent)]">API</TransitionLink>
                 </div>
                 <div className="space-y-2">
                   <p className="text-xs uppercase tracking-[0.3em] text-[color:rgba(244,241,234,0.45)]">Company</p>
-                  <Link to="/about" className="block transition hover:text-[color:var(--accent)]">About</Link>
-                  <Link to="/careers" className="block transition hover:text-[color:var(--accent)]">Careers</Link>
-                  <Link to="/press" className="block transition hover:text-[color:var(--accent)]">Press</Link>
+                  <TransitionLink to="/about" className="block transition hover:text-[color:var(--accent)]">About</TransitionLink>
+                  <TransitionLink to="/careers" className="block transition hover:text-[color:var(--accent)]">Careers</TransitionLink>
+                  <TransitionLink to="/press" className="block transition hover:text-[color:var(--accent)]">Press</TransitionLink>
                 </div>
                 <div className="space-y-2">
                   <p className="text-xs uppercase tracking-[0.3em] text-[color:rgba(244,241,234,0.45)]">Terms &amp; policies</p>
-                  <Link to="/terms" className="block transition hover:text-[color:var(--accent)]">Terms of use</Link>
-                  <Link to="/privacy" className="block transition hover:text-[color:var(--accent)]">Privacy policy</Link>
-                  <Link to="/usage" className="block transition hover:text-[color:var(--accent)]">Usage policy</Link>
+                  <TransitionLink to="/terms" className="block transition hover:text-[color:var(--accent)]">Terms of use</TransitionLink>
+                  <TransitionLink to="/privacy" className="block transition hover:text-[color:var(--accent)]">Privacy policy</TransitionLink>
+                  <TransitionLink to="/usage" className="block transition hover:text-[color:var(--accent)]">Usage policy</TransitionLink>
                 </div>
               </div>
             </div>
@@ -419,10 +376,10 @@ export function MarketingPage() {
           <div className="flex flex-col gap-6 text-xs text-[color:rgba(244,241,234,0.45)] md:flex-row md:items-center md:justify-between">
             <span>© {new Date().getFullYear()} Microagents, Inc. All rights reserved.</span>
             <div className="flex flex-wrap gap-4">
-              <Link to="/legal" className="transition hover:text-[color:var(--accent)]">Legal</Link>
-              <Link to="/status" className="transition hover:text-[color:var(--accent)]">Status</Link>
-              <Link to="/docs" className="transition hover:text-[color:var(--accent)]">Docs</Link>
-              <Link to="/contact" className="transition hover:text-[color:var(--accent)]">Contact</Link>
+              <TransitionLink to="/legal" className="transition hover:text-[color:var(--accent)]">Legal</TransitionLink>
+              <TransitionLink to="/status" className="transition hover:text-[color:var(--accent)]">Status</TransitionLink>
+              <TransitionLink to="/docs" className="transition hover:text-[color:var(--accent)]">Docs</TransitionLink>
+              <TransitionLink to="/contact" className="transition hover:text-[color:var(--accent)]">Contact</TransitionLink>
             </div>
           </div>
         </footer>

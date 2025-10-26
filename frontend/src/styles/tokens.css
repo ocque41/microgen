@@ -1,0 +1,215 @@
+:root {
+  color-scheme: dark;
+  --brand-color-background: #04060a;
+  --brand-color-surface: #0c1018;
+  --brand-color-surface-muted: #121826;
+  --brand-color-surface-glow: #10192d;
+  --brand-color-border: rgba(148, 163, 184, 0.18);
+  --brand-color-border-strong: rgba(226, 232, 240, 0.32);
+  --brand-color-text: #f5f7ff;
+  --brand-color-text-secondary: rgba(226, 232, 240, 0.72);
+  --brand-color-accent: #63a8ff;
+  --brand-color-accent-strong: #90c9ff;
+  --brand-color-accent-soft: rgba(99, 168, 255, 0.08);
+  --brand-color-critical: #f87171;
+  --brand-color-positive: #4ade80;
+  --brand-focus-outline: 0 0 0 3px color-mix(in srgb, var(--brand-color-accent) 55%, transparent);
+
+  --brand-space-3xs: 0.25rem; /* 4px */
+  --brand-space-2xs: 0.5rem; /* 8px */
+  --brand-space-xs: 0.75rem; /* 12px */
+  --brand-space-sm: 1rem; /* 16px */
+  --brand-space-md: 1.5rem; /* 24px */
+  --brand-space-lg: 2rem; /* 32px */
+  --brand-space-xl: 3rem; /* 48px */
+  --brand-space-2xl: 4rem; /* 64px */
+
+  --brand-radius-xs: 0.375rem;
+  --brand-radius-sm: 0.5rem;
+  --brand-radius-md: 0.75rem;
+  --brand-radius-lg: 1rem;
+  --brand-radius-xl: 1.5rem;
+  --brand-radius-2xl: 2rem;
+
+  --brand-blur-sm: 4px;
+  --brand-blur-md: 12px;
+  --brand-blur-lg: 24px;
+
+  --brand-shadow-xs: 0px 6px 12px rgba(8, 12, 20, 0.18);
+  --brand-shadow-sm: 0px 12px 24px rgba(6, 10, 18, 0.24);
+  --brand-shadow-md: 0px 24px 48px rgba(4, 8, 16, 0.28);
+  --brand-shadow-lg: 0px 32px 64px rgba(4, 8, 16, 0.36);
+
+  --glass-bg: rgba(10, 16, 26, 0.7);
+  --glass-border: rgba(148, 163, 184, 0.24);
+  --glass-blur: 24px;
+  --glass-sat: 135%;
+
+  --surface-background: var(--brand-color-background);
+  --surface-base: var(--brand-color-surface);
+  --surface-muted: var(--brand-color-surface-muted);
+  --surface-glow: var(--brand-color-surface-glow);
+  --surface-glass: var(--glass-bg);
+  --text-primary: var(--brand-color-text);
+  --text-muted: var(--brand-color-text-secondary);
+  --text-inverse: var(--brand-color-background);
+  --accent-primary: var(--brand-color-accent);
+  --accent-strong: var(--brand-color-accent-strong);
+  --accent-soft: var(--brand-color-accent-soft);
+  --accent-on: var(--brand-color-background);
+  --border-default: var(--brand-color-border);
+  --border-strong: var(--brand-color-border-strong);
+  --border-glass: var(--glass-border);
+  --status-critical: var(--brand-color-critical);
+  --status-positive: var(--brand-color-positive);
+  --focus-ring: var(--brand-focus-outline);
+  --radius-xs: var(--brand-radius-xs);
+  --radius-sm: var(--brand-radius-sm);
+  --radius-md: var(--brand-radius-md);
+  --radius-lg: var(--brand-radius-lg);
+  --radius-xl: var(--brand-radius-xl);
+  --radius-2xl: var(--brand-radius-2xl);
+  --shadow-xs: var(--brand-shadow-xs);
+  --shadow-sm: var(--brand-shadow-sm);
+  --shadow-md: var(--brand-shadow-md);
+  --shadow-lg: var(--brand-shadow-lg);
+}
+
+[data-theme="light"] {
+  color-scheme: light;
+  --brand-color-background: #f4f6fb;
+  --brand-color-surface: #ffffff;
+  --brand-color-surface-muted: #e8eef9;
+  --brand-color-surface-glow: #f1f6ff;
+  --brand-color-border: rgba(15, 23, 42, 0.12);
+  --brand-color-border-strong: rgba(15, 23, 42, 0.24);
+  --brand-color-text: #0b1220;
+  --brand-color-text-secondary: rgba(15, 23, 42, 0.72);
+  --brand-color-accent: #2563eb;
+  --brand-color-accent-strong: #1d4ed8;
+  --brand-color-accent-soft: rgba(37, 99, 235, 0.12);
+  --brand-color-critical: #b91c1c;
+  --brand-color-positive: #15803d;
+  --brand-focus-outline: 0 0 0 3px color-mix(in srgb, var(--brand-color-accent) 45%, transparent);
+
+  --glass-bg: rgba(248, 250, 255, 0.82);
+  --glass-border: rgba(37, 99, 235, 0.22);
+  --glass-blur: 16px;
+  --glass-sat: 120%;
+
+  --surface-background: var(--brand-color-background);
+  --surface-base: var(--brand-color-surface);
+  --surface-muted: var(--brand-color-surface-muted);
+  --surface-glow: var(--brand-color-surface-glow);
+  --surface-glass: var(--glass-bg);
+  --text-primary: var(--brand-color-text);
+  --text-muted: var(--brand-color-text-secondary);
+  --text-inverse: #ffffff;
+  --accent-primary: var(--brand-color-accent);
+  --accent-strong: var(--brand-color-accent-strong);
+  --accent-soft: var(--brand-color-accent-soft);
+  --accent-on: #ffffff;
+  --border-default: var(--brand-color-border);
+  --border-strong: var(--brand-color-border-strong);
+  --border-glass: var(--glass-border);
+  --status-critical: var(--brand-color-critical);
+  --status-positive: var(--brand-color-positive);
+  --focus-ring: var(--brand-focus-outline);
+  --radius-xs: var(--brand-radius-xs);
+  --radius-sm: var(--brand-radius-sm);
+  --radius-md: var(--brand-radius-md);
+  --radius-lg: var(--brand-radius-lg);
+  --radius-xl: var(--brand-radius-xl);
+  --radius-2xl: var(--brand-radius-2xl);
+  --shadow-xs: var(--brand-shadow-xs);
+  --shadow-sm: var(--brand-shadow-sm);
+  --shadow-md: var(--brand-shadow-md);
+  --shadow-lg: var(--brand-shadow-lg);
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+  --brand-color-background: #04060a;
+  --brand-color-surface: #0c1018;
+  --brand-color-surface-muted: #121826;
+  --brand-color-surface-glow: #10192d;
+  --brand-color-border: rgba(148, 163, 184, 0.18);
+  --brand-color-border-strong: rgba(226, 232, 240, 0.32);
+  --brand-color-text: #f5f7ff;
+  --brand-color-text-secondary: rgba(226, 232, 240, 0.72);
+  --brand-color-accent: #63a8ff;
+  --brand-color-accent-strong: #90c9ff;
+  --brand-color-accent-soft: rgba(99, 168, 255, 0.08);
+  --brand-color-critical: #f87171;
+  --brand-color-positive: #4ade80;
+  --brand-focus-outline: 0 0 0 3px color-mix(in srgb, var(--brand-color-accent) 55%, transparent);
+
+  --glass-bg: rgba(10, 16, 26, 0.7);
+  --glass-border: rgba(148, 163, 184, 0.24);
+  --glass-blur: 24px;
+  --glass-sat: 135%;
+
+  --surface-background: var(--brand-color-background);
+  --surface-base: var(--brand-color-surface);
+  --surface-muted: var(--brand-color-surface-muted);
+  --surface-glow: var(--brand-color-surface-glow);
+  --surface-glass: var(--glass-bg);
+  --text-primary: var(--brand-color-text);
+  --text-muted: var(--brand-color-text-secondary);
+  --text-inverse: var(--brand-color-background);
+  --accent-primary: var(--brand-color-accent);
+  --accent-strong: var(--brand-color-accent-strong);
+  --accent-soft: var(--brand-color-accent-soft);
+  --accent-on: var(--brand-color-background);
+  --border-default: var(--brand-color-border);
+  --border-strong: var(--brand-color-border-strong);
+  --border-glass: var(--glass-border);
+  --status-critical: var(--brand-color-critical);
+  --status-positive: var(--brand-color-positive);
+  --focus-ring: var(--brand-focus-outline);
+  --radius-xs: var(--brand-radius-xs);
+  --radius-sm: var(--brand-radius-sm);
+  --radius-md: var(--brand-radius-md);
+  --radius-lg: var(--brand-radius-lg);
+  --radius-xl: var(--brand-radius-xl);
+  --radius-2xl: var(--brand-radius-2xl);
+  --shadow-xs: var(--brand-shadow-xs);
+  --shadow-sm: var(--brand-shadow-sm);
+  --shadow-md: var(--brand-shadow-md);
+  --shadow-lg: var(--brand-shadow-lg);
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    color-scheme: light;
+    --brand-color-background: #f4f6fb;
+    --brand-color-surface: #ffffff;
+    --brand-color-surface-muted: #e8eef9;
+    --brand-color-surface-glow: #f1f6ff;
+    --brand-color-border: rgba(15, 23, 42, 0.12);
+    --brand-color-border-strong: rgba(15, 23, 42, 0.24);
+    --brand-color-text: #0b1220;
+    --brand-color-text-secondary: rgba(15, 23, 42, 0.72);
+    --brand-color-accent: #2563eb;
+    --brand-color-accent-strong: #1d4ed8;
+    --brand-color-accent-soft: rgba(37, 99, 235, 0.12);
+    --brand-color-critical: #b91c1c;
+    --brand-color-positive: #15803d;
+    --brand-focus-outline: 0 0 0 3px color-mix(in srgb, var(--brand-color-accent) 45%, transparent);
+
+    --glass-bg: rgba(248, 250, 255, 0.82);
+    --glass-border: rgba(37, 99, 235, 0.22);
+    --glass-blur: 16px;
+    --glass-sat: 120%;
+  }
+}
+
+.glass-surface {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
+  border: 1px solid var(--glass-border);
+}
+
+.focus-ring {
+  box-shadow: var(--brand-focus-outline);
+}

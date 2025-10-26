@@ -1,8 +1,10 @@
 import { FormEvent, useCallback, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useRevalidator } from "react-router-dom";
 import { useUser } from "@stackframe/react";
 
-type MicroAgent = {
+import { TransitionLink } from "@/components/motion/TransitionLink";
+
+export type MicroAgent = {
   id: string;
   name: string;
   status: string;
@@ -14,15 +16,41 @@ type MicroAgentResponse = {
   message?: string;
 };
 
-export function DashboardPage() {
+type DashboardPageProps = {
+  initialAgent: MicroAgent | null;
+  initialError?: string | null;
+  initialStatus?: string | null;
+};
+
+export function DashboardPage({
+  initialAgent,
+  initialError = null,
+  initialStatus = null,
+}: DashboardPageProps) {
   const user = useUser({ or: "throw" });
-  const [agent, setAgent] = useState<MicroAgent | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [status, setStatus] = useState<string | null>(null);
-  const [renameValue, setRenameValue] = useState("");
+  const revalidator = useRevalidator();
+  const [agent, setAgent] = useState<MicroAgent | null>(initialAgent);
+  const [error, setError] = useState<string | null>(initialError);
+  const [status, setStatus] = useState<string | null>(initialStatus);
+  const [renameValue, setRenameValue] = useState(() => initialAgent?.name ?? "");
   const [renameSubmitting, setRenameSubmitting] = useState(false);
   const [cancelSubmitting, setCancelSubmitting] = useState(false);
+
+  useEffect(() => {
+    setAgent(initialAgent);
+  }, [initialAgent]);
+
+  useEffect(() => {
+    setRenameValue(initialAgent?.name ?? "");
+  }, [initialAgent?.name]);
+
+  useEffect(() => {
+    setError(initialError);
+  }, [initialError]);
+
+  useEffect(() => {
+    setStatus(initialStatus);
+  }, [initialStatus]);
 
   const authorizedFetch = useCallback(
     async (
@@ -41,37 +69,6 @@ export function DashboardPage() {
     },
     [user]
   );
-
-  useEffect(() => {
-    async function loadAgent() {
-      setLoading(true);
-      setError(null);
-      setStatus(null);
-      try {
-        const response = await authorizedFetch("/api/microagents/me");
-        const payload = (await response.json().catch(() => ({}))) as MicroAgentResponse;
-        if (response.status === 401) {
-          await user.signOut();
-          throw new Error("Your session expired. Please log in again.");
-        }
-        if (!response.ok || !payload.agent) {
-          throw new Error(payload.message ?? "We could not load your micro-agent details.");
-        }
-        setAgent(payload.agent);
-        setRenameValue(payload.agent.name);
-      } catch (fetchError) {
-        if (fetchError instanceof Error) {
-          setError(fetchError.message);
-        } else {
-          setError("Something went wrong while loading your dashboard.");
-        }
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    void loadAgent();
-  }, [authorizedFetch, user]);
 
   async function handleRename(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -98,6 +95,7 @@ export function DashboardPage() {
       }
       setAgent(payload.agent);
       setStatus("Micro-agent name updated.");
+      void revalidator.revalidate();
     } catch (renameError) {
       if (renameError instanceof Error) {
         setError(renameError.message);
@@ -136,6 +134,7 @@ export function DashboardPage() {
             }
           : current
       );
+      void revalidator.revalidate();
     } catch (cancelError) {
       if (cancelError instanceof Error) {
         setError(cancelError.message);
@@ -147,8 +146,11 @@ export function DashboardPage() {
     }
   }
 
+  const showLoadingMessage = revalidator.state === "loading" && !agent;
+  const showEmptyState = revalidator.state === "idle" && !agent && !error;
+
   return (
-    <div className="min-h-screen bg-brand-background px-6 py-16 text-brand-text">
+    <div className="min-h-screen bg-surface-background px-6 py-16 text-text">
       <div className="mx-auto w-full max-w-5xl">
         <header className="flex flex-col gap-4 sm:flex-row sm:items-baseline sm:justify-between">
           <div>
@@ -158,18 +160,18 @@ export function DashboardPage() {
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-3">
-            <Link
+            <TransitionLink
               to="/chat"
               className="inline-flex items-center justify-center rounded-full bg-[color:var(--accent)] px-5 py-2 text-sm font-semibold text-[color:var(--accent-inverse)] transition hover:bg-[color:var(--accent-hover)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[color:var(--accent)] focus-visible:outline-offset-3"
             >
               Open chat
-            </Link>
-            <Link
+            </TransitionLink>
+            <TransitionLink
               to="/handler/account-settings"
               className="inline-flex items-center justify-center rounded-full bg-[color:rgba(23,23,23,0.65)] px-5 py-2 text-sm font-semibold text-[color:var(--accent-inverse)] transition hover:bg-[color:rgba(23,23,23,0.85)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[color:var(--accent)] focus-visible:outline-offset-3"
             >
               Account settings
-            </Link>
+            </TransitionLink>
           </div>
         </header>
 
@@ -179,7 +181,7 @@ export function DashboardPage() {
             backgroundColor: "rgba(244,241,234,0.05)",
           }}
         >
-          {loading ? (
+          {showLoadingMessage ? (
             <p className="text-sm text-[color:var(--text-muted)]">Loading your micro-agent...</p>
           ) : null}
 
@@ -256,7 +258,7 @@ export function DashboardPage() {
 
                 <form className="space-y-4" onSubmit={handleRename}>
                   <div className="space-y-1">
-                    <label className="text-sm font-medium text-brand-text" htmlFor="rename">
+                    <label className="text-sm font-medium text-text" htmlFor="rename">
                       Rename micro-agent
                     </label>
                     <input
@@ -300,7 +302,7 @@ export function DashboardPage() {
             </div>
           ) : null}
 
-          {!loading && !agent && !error ? (
+          {showEmptyState ? (
             <p className="text-sm text-[color:var(--text-muted)]">
               You have not purchased a micro-agent yet. Visit the marketing page to compare plans.
             </p>
