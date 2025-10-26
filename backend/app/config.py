@@ -49,6 +49,11 @@ class Settings(BaseModel):
     email_sender_name: str = Field(default=os.getenv("EMAIL_SENDER_NAME", "Microagents"))
     email_sender_address: str = Field(default=os.getenv("EMAIL_SENDER_ADDRESS", "hi@cumulush.com"))
 
+    stack_project_id: str | None = Field(default=os.getenv("STACK_PROJECT_ID"))
+    stack_secret_key: str | None = Field(default=os.getenv("STACK_SECRET_KEY"))
+    stack_api_base_url: str = Field(default=os.getenv("STACK_API_BASE_URL", "https://api.stack-auth.com"))
+    stack_timeout_seconds: float = Field(default=float(os.getenv("STACK_TIMEOUT_SECONDS", "10")))
+
     def require_database_url(self) -> str:
         if not self.database_url:
             raise RuntimeError("DATABASE_URL environment variable must be configured.")
@@ -58,6 +63,15 @@ class Settings(BaseModel):
         if not self.jwt_secret:
             raise RuntimeError("JWT_SECRET environment variable must be configured.")
         return self.jwt_secret
+
+    def require_stack_credentials(self) -> tuple[str, str]:
+        project_id = self.stack_project_id
+        secret_key = self.stack_secret_key
+        if not project_id or not secret_key:
+            raise RuntimeError(
+                "STACK_PROJECT_ID and STACK_SECRET_KEY environment variables must be configured."
+            )
+        return project_id, secret_key
 
 
 @lru_cache(maxsize=1)

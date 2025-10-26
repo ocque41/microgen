@@ -17,6 +17,7 @@ import { MarketingPage } from "./pages/MarketingPage";
 import { SignupPage } from "./pages/SignupPage";
 import { stackClientApp } from "./stack";
 import { StackNavigationBridge } from "./components/StackNavigationBridge";
+import { BackendAuthProvider } from "./contexts/BackendAuthContext";
 
 function HandlerRoutes() {
   const location = useLocation();
@@ -66,33 +67,35 @@ export default function App() {
     <Suspense fallback={null}>
       <BrowserRouter>
         <StackProvider app={stackClientApp}>
-          <StackTheme theme={stackBrandTheme}>
-            <StackNavigationBridge />
-            <Routes>
-              <Route path="/handler/*" element={<HandlerRoutes />} />
-              <Route path="/" element={<MarketingPage />} />
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/signup" element={<SignupPage />} />
-              <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-              <Route
-                path="/chat"
-                element={
-                  <ProtectedRoute>
-                    <ChatPage />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/dashboard"
-                element={
-                  <ProtectedRoute>
-                    <DashboardPage />
-                  </ProtectedRoute>
-                }
-              />
-              <Route path="*" element={<Navigate to="/" replace />} />
-            </Routes>
-          </StackTheme>
+          <BackendAuthProvider>
+            <StackTheme theme={stackBrandTheme}>
+              <StackNavigationBridge />
+              <Routes>
+                <Route path="/handler/*" element={<HandlerRoutes />} />
+                <Route path="/" element={<MarketingPage />} />
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/signup" element={<SignupPage />} />
+                <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+                <Route
+                  path="/chat"
+                  element={
+                    <ProtectedRoute>
+                      <ChatPage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/dashboard"
+                  element={
+                    <ProtectedRoute>
+                      <DashboardPage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route path="*" element={<Navigate to="/" replace />} />
+              </Routes>
+            </StackTheme>
+          </BackendAuthProvider>
         </StackProvider>
       </BrowserRouter>
     </Suspense>

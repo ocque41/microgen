@@ -16,6 +16,9 @@ export const FACTS_API_URL = import.meta.env.VITE_FACTS_API_URL ?? "/facts";
 
 export const THEME_STORAGE_KEY = "microagents-theme";
 
+export const STACK_JWT_EXCHANGE_URL =
+  import.meta.env.VITE_STACK_JWT_EXCHANGE_URL ?? "/api/auth/stack/exchange";
+
 export const GREETING = "Welcome to Microagents.";
 
 export const STARTER_PROMPTS: StartScreenPrompt[] = [

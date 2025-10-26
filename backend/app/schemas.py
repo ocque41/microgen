@@ -26,6 +26,7 @@ class TokenResponse(BaseModel):
 
     access_token: str
     token_type: str = "bearer"
+    expires_in: int
     user: UserRead
 
 
@@ -46,6 +47,13 @@ class ForgotPasswordRequest(BaseModel):
 class ResetPasswordRequest(BaseModel):
     token: str
     password: str = Field(min_length=8, max_length=256)
+
+
+class StackTokenExchangeRequest(BaseModel):
+    """Exchange Stack Auth tokens for a backend JWT."""
+
+    access_token: str = Field(min_length=1)
+    refresh_token: str | None = None
 
 
 class MicroAgentSubscribeRequest(BaseModel):
@@ -84,6 +92,7 @@ __all__ = [
     "MicroAgentSubscribeRequest",
     "ResetPasswordRequest",
     "SignupRequest",
+    "StackTokenExchangeRequest",
     "StripeWebhookResponse",
     "TokenResponse",
     "UserRead",

@@ -12,6 +12,10 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  test: {
+    environment: "node",
+    setupFiles: [path.resolve(__dirname, "./src/test/setup.ts")],
+  },
   server: {
     port: 5170,
     host: "0.0.0.0",

@@ -40,3 +40,9 @@ Security & Configuration Tips
 - Export `OPENAI_API_KEY` and `VITE_CHATKIT_API_DOMAIN_KEY` locally; rotate real values via your secret manager and exclude them from Git.
 - Mirror deployed domains in `frontend/vite.config.ts` (`server.allowedHosts`) and in the OpenAI domain allowlist before shipping.
 - Validate user-supplied tool payloads inside `backend/app/chat.py` before invoking external services.
+
+Stack Auth Integration
+----------------------
+- Configure `STACK_PROJECT_ID` and `STACK_SECRET_KEY` for the FastAPI service; optional overrides include `STACK_API_BASE_URL` and `STACK_TIMEOUT_SECONDS`.
+- Frontend clients should call `POST /api/auth/stack/exchange` with the Stack access/refresh tokens to receive the existing backend JWT (`access_token`, `token_type`, `expires_in`, and `user`).
+- Cache the returned JWT on the client and attach `Authorization: Bearer <token>` when invoking `/chatkit` and `/api/chatkit/*` routes; refresh the JWT by re-posting to the exchange endpoint on 401s.

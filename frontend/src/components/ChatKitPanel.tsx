@@ -9,6 +9,7 @@ import {
 } from "../lib/config";
 import type { FactAction } from "../hooks/useFacts";
 import type { ColorScheme } from "../hooks/useColorScheme";
+import { useBackendAuth } from "../contexts/BackendAuthContext";
 
 type ChatKitPanelProps = {
   onWidgetAction: (action: FactAction) => Promise<void>;
@@ -22,9 +23,14 @@ export function ChatKitPanel({
   onThemeRequest,
 }: ChatKitPanelProps) {
   const processedFacts = useRef(new Set<string>());
+  const { authenticatedFetch } = useBackendAuth();
 
   const chatkit = useChatKit({
-    api: { url: CHATKIT_API_URL, domainKey: CHATKIT_API_DOMAIN_KEY },
+    api: {
+      url: CHATKIT_API_URL,
+      domainKey: CHATKIT_API_DOMAIN_KEY,
+      fetch: authenticatedFetch,
+    },
     theme: {
       colorScheme: "dark",
       color: {

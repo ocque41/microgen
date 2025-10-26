@@ -5,9 +5,10 @@ from __future__ import annotations
 import logging
 import secrets
 from datetime import datetime, timedelta, timezone
+from functools import lru_cache
 
 from authlib.integrations.starlette_client import OAuth, OAuthError
-from fastapi import APIRouter, Depends, HTTPException, Request, status
+from fastapi import APIRouter, Depends, HTTPException, Request, Response, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -21,10 +22,12 @@ from ..schemas import (
     LoginRequest,
     ResetPasswordRequest,
     SignupRequest,
+    StackTokenExchangeRequest,
     TokenResponse,
     UserRead,
 )
 from ..security import create_access_token, hash_password, verify_password
+from ..stack_auth import StackAuthClient, StackAuthError
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/auth", tags=["auth"])
@@ -59,7 +62,16 @@ def _lower_email(email: str) -> str:
 
 def _token_response(user: User) -> TokenResponse:
     token = create_access_token(user_id=user.id)
-    return TokenResponse(access_token=token, user=UserRead.model_validate(user))
+    return TokenResponse(
+        access_token=token,
+        expires_in=settings.jwt_expires_seconds,
+        user=UserRead.model_validate(user),
+    )
+
+
+@lru_cache(maxsize=1)
+def _get_stack_client() -> StackAuthClient:
+    return StackAuthClient.from_settings()
 
 
 @router.post("/signup", response_model=TokenResponse, status_code=status.HTTP_201_CREATED)
@@ -132,11 +144,15 @@ async def forgot_password(
     logger.info("Password reset email queued for user %s", user.id)
 
 
-@router.post("/reset-password", status_code=status.HTTP_204_NO_CONTENT)
+@router.post(
+    "/reset-password",
+    status_code=status.HTTP_204_NO_CONTENT,
+    response_class=Response,
+)
 async def reset_password(
     payload: ResetPasswordRequest,
     session: AsyncSession = Depends(get_session),
-) -> None:
+) -> Response:
     token_stmt = select(PasswordResetToken).where(PasswordResetToken.token == payload.token)
     reset_record = await session.scalar(token_stmt)
     if reset_record is None:
@@ -158,11 +174,53 @@ async def reset_password(
     reset_record.consumed_at = datetime.now(timezone.utc)
     await session.delete(reset_record)
     await session.commit()
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
 @router.get("/me", response_model=UserRead)
 async def me(current_user: User = Depends(get_current_user)) -> UserRead:
     return UserRead.model_validate(current_user)
+
+
+@router.post("/stack/exchange", response_model=TokenResponse)
+async def stack_exchange(
+    payload: StackTokenExchangeRequest,
+    session: AsyncSession = Depends(get_session),
+) -> TokenResponse:
+    try:
+        stack_client = _get_stack_client()
+    except RuntimeError as exc:
+        logger.exception("Stack Auth integration missing configuration")
+        raise HTTPException(  # pragma: no cover - misconfiguration path
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Stack Auth integration is not configured.",
+        ) from exc
+
+    try:
+        stack_session = await stack_client.verify_tokens(
+            access_token=payload.access_token,
+            refresh_token=payload.refresh_token,
+        )
+    except StackAuthError as exc:
+        logger.info("Stack Auth token exchange failed: %s", exc)
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid Stack tokens") from exc
+
+    stack_email = stack_session.user.email.strip().lower()
+    db_user = await session.scalar(select(User).where(User.email == stack_email))
+
+    if db_user is None:
+        db_user = User(email=stack_email)
+        session.add(db_user)
+        await session.commit()
+        await session.refresh(db_user)
+        logger.info("Created user %s from Stack Auth exchange", db_user.id)
+    else:
+        if db_user.email != stack_email:
+            db_user.email = stack_email
+            await session.commit()
+            await session.refresh(db_user)
+
+    return _token_response(db_user)
 
 
 @router.get("/oauth/{provider}")

@@ -128,8 +128,11 @@ Stack Auth powers the hosted authentication screens that now render directly on 
 - `VITE_STACK_PROJECT_ID` – the Stack Auth project identifier copied from the Stack dashboard.
 - `VITE_STACK_PUBLISHABLE_CLIENT_KEY` – the publishable client key for the same project.
 - Optionally `VITE_STACK_APP_URL` if the Stack handler runs on a different origin than your deployed frontend.
+- Optionally `VITE_STACK_JWT_EXCHANGE_URL` when the FastAPI service is hosted on a separate origin; defaults to `/api/auth/stack/exchange` and should point to the JWT exchange route described below.
 
 After wiring the variables, run `npm --prefix frontend run build && npm --prefix frontend run preview`, then visit `/signup` and `/login` to confirm the embedded Stack Auth UI renders and that successful sign-ins redirect to `/chat`.
+
+The chat surface now exchanges the active Stack session for a FastAPI JWT before initializing ChatKit. Ensure the backend implements `POST /api/auth/stack/exchange` and responds with the same envelope as `TokenResponse` (`access_token`, `token_type`, and `user`). The React client caches that JWT, applies it to every `/chatkit` request via `Authorization: Bearer <token>`, and retries once when a 401 indicates the credential expired. Verify the flow locally with `npm --prefix frontend exec vitest run`.
 
 Run `alembic upgrade head` after configuring `DATABASE_URL` so the new tables (users, password reset tokens, micro agents) are available before serving requests.
 
