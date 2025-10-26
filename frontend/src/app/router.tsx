@@ -1,13 +1,10 @@
 /* eslint-disable react-refresh/only-export-components */
 import { Suspense } from "react";
 import { Await, Navigate, Outlet, createBrowserRouter, useLoaderData, useLocation } from "react-router-dom";
-import {
-  StackHandler,
-  StackProvider,
-  StackTheme,
-} from "@stackframe/react";
+import { StackHandler, StackProvider, StackTheme } from "@stackframe/react";
 
-import { ProtectedRoute } from "../components/ProtectedRoute";
+import { BackendAuthProvider } from "../contexts/BackendAuthContext";
+import ProtectedRoute from "../routes/ProtectedRoute";
 import { StackNavigationBridge } from "../components/StackNavigationBridge";
 import { ChatSkeleton } from "../components/skeletons/ChatSkeleton";
 import { DashboardSkeleton } from "../components/skeletons/DashboardSkeleton";
@@ -77,10 +74,12 @@ function HandlerRoutes() {
 function AppLayout() {
   return (
     <StackProvider app={stackClientApp}>
-      <StackTheme theme={stackBrandTheme}>
-        <StackNavigationBridge />
-        <Outlet />
-      </StackTheme>
+      <BackendAuthProvider>
+        <StackTheme theme={stackBrandTheme}>
+          <StackNavigationBridge />
+          <Outlet />
+        </StackTheme>
+      </BackendAuthProvider>
     </StackProvider>
   );
 }

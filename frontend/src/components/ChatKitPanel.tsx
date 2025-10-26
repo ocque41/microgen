@@ -9,6 +9,7 @@ import {
 } from "../lib/config";
 import type { FactAction } from "../hooks/useFacts";
 import type { ColorScheme } from "../hooks/useColorScheme";
+import { useBackendAuth } from "../contexts/BackendAuthContext";
 
 import type { UseChatKitReturn } from "@openai/chatkit-react";
 
@@ -51,9 +52,14 @@ export function ChatKitPanel({
 }: ChatKitPanelProps) {
   const processedFacts = useRef(new Set<string>());
   const [widgetPreview, setWidgetPreview] = useState<DemoWidgetPayload | null>(null);
+  const { authenticatedFetch } = useBackendAuth();
 
   const chatkit = useChatKit({
-    api: { url: CHATKIT_API_URL, domainKey: CHATKIT_API_DOMAIN_KEY },
+    api: {
+      url: CHATKIT_API_URL,
+      domainKey: CHATKIT_API_DOMAIN_KEY,
+      fetch: authenticatedFetch,
+    },
     theme: {
       colorScheme: "dark",
       color: {

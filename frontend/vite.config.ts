@@ -48,9 +48,4 @@ export default defineConfig({
       "microagents.cumulush.com",
     ],
   },
-  test: {
-    environment: "jsdom",
-    setupFiles: "./src/tests/setup.ts",
-    css: true,
-  },
 });
