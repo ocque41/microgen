@@ -41,10 +41,20 @@
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
   }
+
+  html,
+  body {
+    scroll-behavior: auto !important;
+  }
 }
 
 @media (prefers-reduced-motion: no-preference) {
   :root {
+    scroll-behavior: smooth;
+  }
+
+  html,
+  body {
     scroll-behavior: smooth;
   }
 }

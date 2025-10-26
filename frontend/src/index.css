@@ -143,15 +143,9 @@
   position: fixed;
   inset: 0;
   z-index: -30;
-  background-color: var(--surface-background);
-  background-image:
-    radial-gradient(circle at 20% 20%, rgba(64, 71, 210, 0.36), transparent 55%),
-    radial-gradient(circle at 75% 10%, rgba(104, 246, 255, 0.18), transparent 60%),
-    url("/background.png");
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: 100vw auto;
-  opacity: 0.95;
+  background-color: var(--marketing-background-color, #313638);
+  background-image: none;
+  opacity: 1;
   pointer-events: none;
 }
 

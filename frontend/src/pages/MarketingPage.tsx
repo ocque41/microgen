@@ -1,7 +1,8 @@
-import type { FocusEvent } from "react";
+import type { CSSProperties, FocusEvent } from "react";
 import { useEffect, useRef, useState } from "react";
 import { TransitionLink } from "@/components/motion/TransitionLink";
 import { cn } from "@/lib/utils";
+import { marketingTheme } from "@/lib/marketingTheme";
 import { HeroSection } from "@/sections/hero";
 import { StorySections } from "@/sections/story";
 
@@ -64,6 +65,10 @@ const featureTiles = [
     alt: "Procurement dashboard comparing compliant vendors.",
   },
 ];
+
+const marketingThemeStyles = {
+  "--marketing-background-color": marketingTheme.background,
+} as CSSProperties;
 
 function IllustrationMedia({ alt, src, className }: { alt: string; src: string; className?: string }) {
   const [isBroken, setIsBroken] = useState(!src);
@@ -149,7 +154,7 @@ export function MarketingPage() {
   }, [] as Array<(typeof featureTiles)[number][]>);
 
   return (
-    <div className="relative min-h-screen overflow-hidden text-text">
+    <div className="relative min-h-screen overflow-hidden text-text" style={marketingThemeStyles}>
       <div className="mesh-background pointer-events-none" />
       <div className="relative">
         <section className="relative flex min-h-screen flex-col">
