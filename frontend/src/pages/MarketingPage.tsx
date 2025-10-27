@@ -1,5 +1,5 @@
-import type { CSSProperties, FocusEvent } from "react";
-import { useEffect, useRef, useState } from "react";
+import type { CSSProperties } from "react";
+import { useEffect, useState } from "react";
 import { TransitionLink } from "@/components/motion/TransitionLink";
 import { marketingTheme } from "@/lib/marketingTheme";
 import { cn } from "@/lib/utils";
@@ -100,9 +100,6 @@ function IllustrationMedia({ alt, src, className }: { alt: string; src: string; 
 }
 
 export function MarketingPage() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const closeTimeoutRef = useRef<number | null>(null);
-
   useEffect(() => {
     if (typeof document === "undefined") {
       return undefined;
@@ -126,50 +123,6 @@ export function MarketingPage() {
     };
   }, [marketingTheme.background]);
 
-  const clearCloseTimeout = () => {
-    if (closeTimeoutRef.current !== null) {
-      window.clearTimeout(closeTimeoutRef.current);
-      closeTimeoutRef.current = null;
-    }
-  };
-
-  const handleMenuOpen = () => {
-    clearCloseTimeout();
-    setIsMenuOpen(true);
-  };
-
-  const scheduleMenuClose = () => {
-    clearCloseTimeout();
-    closeTimeoutRef.current = window.setTimeout(() => {
-      setIsMenuOpen(false);
-      closeTimeoutRef.current = null;
-    }, 120);
-  };
-
-  const handleMenuCloseImmediate = () => {
-    clearCloseTimeout();
-    setIsMenuOpen(false);
-  };
-
-  const toggleMenu = () => {
-    clearCloseTimeout();
-    setIsMenuOpen((prev) => !prev);
-  };
-  const handleMenuBlur = (event: FocusEvent<HTMLDivElement>) => {
-    if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
-      handleMenuCloseImmediate();
-    }
-  };
-
-  useEffect(() => {
-    return () => {
-      if (closeTimeoutRef.current !== null) {
-        window.clearTimeout(closeTimeoutRef.current);
-        closeTimeoutRef.current = null;
-      }
-    };
-  }, []);
-
   const featureRows = featureTiles.reduce((rows, tile, index) => {
     if (index % 2 === 0) {
       rows.push([tile]);
@@ -184,74 +137,26 @@ export function MarketingPage() {
       <div className="mesh-background pointer-events-none" />
       <div className="relative">
         <section className="relative flex flex-col">
-          <nav className="relative flex flex-col items-center gap-6 border-b border-[color:rgba(244,241,234,0.08)] bg-transparent px-6 pb-6 pt-8 text-[color:var(--text-primary)] lg:flex-row lg:gap-0 lg:px-12 lg:pb-4 lg:pt-10">
-            <div className="flex w-full flex-1 justify-start lg:w-auto">
-              <span className="text-[0.7rem] font-medium uppercase tracking-[0.55em] text-[color:rgba(244,241,234,0.6)]">
-                Microagents
-              </span>
+          <nav className="relative flex flex-col gap-6 border-b border-[color:rgba(244,241,234,0.08)] bg-transparent px-6 pb-6 pt-8 text-[color:var(--text-primary)] lg:flex-row lg:items-center lg:justify-between lg:gap-0 lg:px-12 lg:pb-4 lg:pt-10">
+            <TransitionLink to="/" className="flex items-center gap-3 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--accent)]">
+              <img src="/icon.svg" alt="Microagents" className="h-9 w-9" />
+              <span className="text-sm font-medium uppercase tracking-[0.35em] text-[color:rgba(244,241,234,0.7)]">Microagents</span>
+            </TransitionLink>
+            <div className="flex flex-1 flex-col items-center gap-4 text-[0.8rem] font-medium uppercase tracking-[0.3em] text-[color:rgba(244,241,234,0.72)] md:flex-row md:justify-center md:gap-8">
+              <TransitionLink to="/about" className="transition-colors duration-200 hover:text-[color:var(--text-primary)]">About</TransitionLink>
+              <TransitionLink to="/features" className="transition-colors duration-200 hover:text-[color:var(--text-primary)]">Features</TransitionLink>
+              <TransitionLink to="/learn" className="transition-colors duration-200 hover:text-[color:var(--text-primary)]">Learn</TransitionLink>
+              <TransitionLink to="/business" className="transition-colors duration-200 hover:text-[color:var(--text-primary)]">For Business</TransitionLink>
+              <TransitionLink to="/pricing" className="transition-colors duration-200 hover:text-[color:var(--text-primary)]">Pricing</TransitionLink>
+              <TransitionLink to="/download" className="transition-colors duration-200 hover:text-[color:var(--text-primary)]">Download</TransitionLink>
             </div>
-            <div className="flex w-full flex-1 justify-center lg:w-auto">
-              <div
-                className="relative inline-flex"
-                onMouseEnter={handleMenuOpen}
-                onMouseLeave={scheduleMenuClose}
-                onFocusCapture={handleMenuOpen}
-                onBlurCapture={handleMenuBlur}
+            <div className="flex justify-end">
+              <TransitionLink
+                to="/signup"
+                className="inline-flex items-center justify-center rounded-full bg-[color:var(--accent)] px-5 py-2 text-xs font-semibold uppercase tracking-[0.28em] text-[color:var(--accent-inverse)] transition-colors duration-200 hover:bg-[color:var(--accent-hover)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--accent)]"
               >
-                <button
-                  type="button"
-                  aria-expanded={isMenuOpen}
-                  onClick={toggleMenu}
-                  className="px-1 text-xs font-semibold uppercase tracking-[0.35em] text-[color:var(--text-primary)] transition-colors duration-200 hover:text-[color:var(--text-muted)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--accent)]"
-                >
-                  Menu
-                </button>
-                <div
-                  className={cn(
-                    "pointer-events-none invisible absolute left-1/2 top-full z-10 mt-1 w-[min(500px,96vw)] -translate-x-1/2 translate-y-2 rounded-[10px] border border-[color:rgba(244,241,234,0.12)] bg-[color:rgba(23,23,23,0.92)] px-6 py-7 opacity-0 shadow-[0_55px_140px_-110px_rgba(0,0,0,0.85)] transition-all duration-200",
-                    isMenuOpen && "pointer-events-auto visible translate-y-0 opacity-100"
-                  )}
-                  onClickCapture={handleMenuCloseImmediate}
-                  onMouseEnter={handleMenuOpen}
-                  onMouseLeave={scheduleMenuClose}
-                >
-                  <div className="grid grid-cols-1 gap-6 text-left text-[0.78rem] text-[color:var(--text-primary)] divide-y divide-[color:rgba(244,241,234,0.08)] md:grid-cols-3 md:gap-0 md:divide-x md:divide-y-0">
-                    <div className="space-y-3 md:px-6 md:first:pl-0 md:last:pr-6">
-                      <p className="whitespace-nowrap text-[0.63rem] uppercase tracking-[0.2em] text-[color:var(--text-muted)]">
-                        Business
-                      </p>
-                      <ul className="space-y-2">
-                        <li><TransitionLink to="/overview" className="transition text-[color:var(--text-primary)] hover:text-[color:var(--text-muted)]">Overview</TransitionLink></li>
-                        <li><TransitionLink to="/contact" className="transition text-[color:var(--text-primary)] hover:text-[color:var(--text-muted)]">Contact sales</TransitionLink></li>
-                        <li><TransitionLink to="/merchants" className="transition text-[color:var(--text-primary)] hover:text-[color:var(--text-muted)]">Merchants</TransitionLink></li>
-                      </ul>
-                    </div>
-                    <div className="space-y-3 pt-6 md:px-6 md:pt-0">
-                      <p className="text-[0.63rem] uppercase tracking-[0.2em] text-[color:var(--text-muted)] leading-snug">
-                        AI solutions<wbr /> for
-                      </p>
-                      <ul className="space-y-2">
-                        <li><TransitionLink to="/engineering" className="transition text-[color:var(--text-primary)] hover:text-[color:var(--text-muted)]">Engineering</TransitionLink></li>
-                        <li><TransitionLink to="/marketing" className="transition text-[color:var(--text-primary)] hover:text-[color:var(--text-muted)]">Sales marketing</TransitionLink></li>
-                        <li><TransitionLink to="/finance" className="transition text-[color:var(--text-primary)] hover:text-[color:var(--text-muted)]">Finance</TransitionLink></li>
-                      </ul>
-                    </div>
-                    <div className="space-y-3 pt-6 md:px-6 md:pt-0 md:last:pr-0">
-                      <p className="whitespace-nowrap text-[0.63rem] uppercase tracking-[0.2em] text-[color:var(--text-muted)]">
-                        Plans
-                      </p>
-                      <ul className="space-y-2">
-                        <li><TransitionLink to="/business" className="transition text-[color:var(--text-primary)] hover:text-[color:var(--text-muted)]">Business</TransitionLink></li>
-                        <li><TransitionLink to="/education" className="transition text-[color:var(--text-primary)] hover:text-[color:var(--text-muted)]">Education</TransitionLink></li>
-                        <li><TransitionLink to="/enterprise" className="transition text-[color:var(--text-primary)] hover:text-[color:var(--text-muted)]">Enterprise</TransitionLink></li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="flex w-full flex-1 justify-end lg:w-auto" aria-hidden="true">
-              <span className="hidden text-[0.65rem] uppercase tracking-[0.3em] text-transparent md:block">Menu</span>
+                Get Started
+              </TransitionLink>
             </div>
           </nav>
         </section>

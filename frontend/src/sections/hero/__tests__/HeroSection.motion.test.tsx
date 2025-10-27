@@ -1,50 +1,36 @@
-import { render, screen } from "@testing-library/react";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import type { ComponentPropsWithoutRef } from "react";
+import { describe, expect, it, vi } from "vitest";
 
-import { MemoryRouter } from "react-router-dom";
+import { renderToString } from "react-dom/server";
 
 import { HeroSection } from "../HeroSection";
-import { useMotionSuppressed } from "@/lib/viewTransitions";
 
-vi.mock("@/lib/viewTransitions", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("@/lib/viewTransitions")>();
+vi.mock("@/components/motion/TransitionLink", () => {
   return {
-    ...actual,
-    useMotionSuppressed: vi.fn(),
+    TransitionLink: ({ to, children, href, ...rest }: ComponentPropsWithoutRef<"a"> & { to?: string }) => {
+      const resolvedHref = typeof to === "string" ? to : href;
+      return (
+        <a {...rest} href={resolvedHref}>
+          {children}
+        </a>
+      );
+    },
   };
 });
 
-const mockedUseMotionSuppressed = vi.mocked(useMotionSuppressed);
+describe("HeroSection", () => {
+  it("renders the centered heading and call to action", () => {
+    const markup = renderToString(<HeroSection />);
 
-describe("HeroSection motion fallbacks", () => {
-  beforeEach(() => {
-    mockedUseMotionSuppressed.mockReturnValue(false);
+    expect(markup).toContain("microagents");
+    expect(markup).toContain("Get Started");
+    expect(markup).toContain("href=\"/signup\"");
   });
 
-  it("promotes scroll guidance when motion is available", () => {
-    render(
-      <MemoryRouter>
-        <HeroSection />
-      </MemoryRouter>
-    );
+  it("includes the hero illustration", () => {
+    const markup = renderToString(<HeroSection />);
 
-    expect(screen.getByText(/Scroll to explore the briefing/i)).toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: /play demo/i })).not.toBeInTheDocument();
-  });
-
-  it("enables manual playback controls when motion is suppressed", () => {
-    mockedUseMotionSuppressed.mockReturnValue(true);
-    render(
-      <MemoryRouter>
-        <HeroSection />
-      </MemoryRouter>
-    );
-
-    expect(screen.getByText(/Reduced motion enabled/i)).toBeInTheDocument();
-    const playButton = screen.getByRole("button", { name: /play demo/i });
-    expect(playButton).toBeInTheDocument();
-
-    const video = document.querySelector("video");
-    expect(video).not.toHaveAttribute("autoplay");
+    expect(markup).toContain("Microagents workspace showcasing browser-scale flows.");
+    expect(markup).toContain("<img");
   });
 });
