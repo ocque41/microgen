@@ -137,10 +137,9 @@ export function MarketingPage() {
       <div className="mesh-background pointer-events-none" />
       <div className="relative">
         <section className="relative flex flex-col">
-          <nav className="relative flex flex-col gap-6 border-b border-[color:rgba(244,241,234,0.08)] bg-transparent px-6 pb-6 pt-8 text-[color:var(--text-primary)] lg:flex-row lg:items-center lg:justify-between lg:gap-0 lg:px-12 lg:pb-4 lg:pt-10">
-            <TransitionLink to="/" className="flex items-center gap-3 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--accent)]">
-              <img src="/icon.svg" alt="Microagents" className="h-9 w-9" />
-              <span className="text-sm font-medium uppercase tracking-[0.35em] text-[color:rgba(244,241,234,0.7)]">Microagents</span>
+          <nav className="relative flex flex-col gap-6 border-b border-[color:rgba(244,241,234,0.08)] bg-[#050505] px-6 pb-6 pt-8 text-[color:var(--text-primary)] lg:flex-row lg:items-center lg:justify-between lg:gap-0 lg:px-12 lg:pb-4 lg:pt-10">
+            <TransitionLink to="/" className="flex items-center gap-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--accent)]">
+              <img src="/logo.svg" alt="Microagents" className="h-12 w-auto" />
             </TransitionLink>
             <div className="flex flex-1 flex-col items-center gap-4 text-[0.8rem] font-medium uppercase tracking-[0.3em] text-[color:rgba(244,241,234,0.72)] md:flex-row md:justify-center md:gap-8">
               <TransitionLink to="/about" className="transition-colors duration-200 hover:text-[color:var(--text-primary)]">About</TransitionLink>

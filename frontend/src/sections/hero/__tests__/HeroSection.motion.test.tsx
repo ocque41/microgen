@@ -19,18 +19,18 @@ vi.mock("@/components/motion/TransitionLink", () => {
 });
 
 describe("HeroSection", () => {
-  it("renders the centered heading and call to action", () => {
+  it("renders the hero composition with branding", () => {
     const markup = renderToString(<HeroSection />);
 
     expect(markup).toContain("microagents");
-    expect(markup).toContain("Get Started");
-    expect(markup).toContain("href=\"/signup\"");
+    expect(markup).toContain("/logo.svg");
+    expect(markup).toContain("<svg");
   });
 
-  it("includes the hero illustration", () => {
+  it("includes the hero logotype", () => {
     const markup = renderToString(<HeroSection />);
 
-    expect(markup).toContain("Microagents workspace showcasing browser-scale flows.");
     expect(markup).toContain("<img");
+    expect(markup).toContain("alt=\"Microagents\"");
   });
 });

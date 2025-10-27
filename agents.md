@@ -1,19 +1,32 @@
 # Repository Guidelines
 
 ## Project Structure & Module Organization
-The repository is split between a Vite + React client in `frontend/` and a FastAPI service in `backend/`. Start React work from `frontend/src/main.tsx`; UI modules live under `components/`, shared utilities in `lib/`, and hooks in `hooks/`. Backend routes are wired in `backend/app/main.py`, with supporting agents in `chat.py`, `facts.py`, and `memory_store.py`. Place new examples under `examples/` and avoid editing the existing samples directly.
+- `frontend/`: Vite + React client. Entry at `src/main.tsx`; UI lives in `src/components/`, hooks in `src/hooks/`, shared helpers in `src/lib/`, sections such as the hero in `src/sections/`, and tests beside sources as `*.test.ts(x)`. Static assets and generated builds are under `public/` and `dist/` respectively.
+- `backend/`: FastAPI service rooted at `app/main.py` with supporting agents in `app/chat.py`, `app/facts.py`, and `app/memory_store.py`. HTTP tests belong in `tests/`.
+- `examples/`: Add new usage samples here instead of editing existing ones. Avoid storing secrets in repo files.
 
 ## Build, Test, and Development Commands
-Run the client locally with `cd frontend && npm run dev` (served at http://127.0.0.1:5170). Ship builds via `npm run build` followed by `npm run preview`. Install backend dependencies through `cd backend && uv sync`, then launch the API with `uv run uvicorn app.main:app --reload --port 8000`. Lint front-end code using `npm run lint`; check backend quality with `uv run ruff check app` and keep static typing healthy using `uv run mypy app` (include `dev` extras first).
+- Frontend dev server: `cd frontend && npm run dev` (http://127.0.0.1:5170).
+- Frontend build & preview: `npm run build` then `npm run preview` inside `frontend/`.
+- Backend setup: `cd backend && uv sync` to install dependencies; run the API with `uv run uvicorn app.main:app --reload --port 8000`.
+- Linting: `npm run lint` for the frontend; `uv run ruff check app` and `uv run mypy app` for backend style and typing.
+- Tests: `cd frontend && npx vitest run` for CI output; `cd backend && uv run pytest` once test deps are installed.
 
 ## Coding Style & Naming Conventions
-Use 2-space indentation for TypeScript, keep React components functional, and name files descriptively (for example, `UserAvatar.tsx`). Co-locate component-specific styling. Python modules follow 4-space indentation, snake_case functions, and PascalCase classes. Ruff enforces import sorting and a 100-character line limit—honor auto-fixes before committing. Prefer small, single-purpose modules.
+- TypeScript/React: 2-space indentation, functional components, descriptive filenames (e.g., `UserAvatar.tsx`). Co-locate component-specific styles. ESLint and Prettier run via `npm run lint`.
+- Python: 4-space indentation, snake_case functions, PascalCase classes. Ruff enforces import sorting and a 100-character limit. Respect typing via mypy.
+- Assets: keep SVG/PNG under `frontend/public/`; reference via `/asset-name` paths.
 
 ## Testing Guidelines
-Place front-end tests next to source files as `*.test.ts` or `*.test.tsx`, and run them with `cd frontend && npx vitest run` for CI-style output. Backend HTTP tests belong in `backend/tests/`; execute them via `uv run pytest` once the dev dependency is configured. Stub outbound services (ChatKit, OpenAI) with fixtures or MSW to keep suites deterministic.
+- Snapshot/unit tests live adjacent to sources (`Component.test.tsx`). Use Vitest utilities already configured in `src/test/`.
+- Backend HTTP and agent tests go in `backend/tests/`. Stub outbound APIs (OpenAI, ChatKit) to keep runs deterministic.
+- Name tests after behavior (“should handle missing auth header”) and ensure suites run clean before pushing.
 
 ## Commit & Pull Request Guidelines
-Write concise, imperative commit titles such as `Add widget toolbar` or `Fix fact ingestion`. Reference issues with `fix:` prefixes or trailing `(#123)` when closing tickets. Each PR should explain the problem, summarize the solution, attach test evidence (logs, screenshots, or vitest output), and call out configuration changes like new env vars or Vite host entries. Request cross-stack review whenever a change spans frontend and backend code paths.
+- Commits use short, imperative titles (`Add widget toolbar`, `Fix fact ingestion`). Reference issues with `fix: ...` or append `(#123)` when closing tickets.
+- Pull requests should describe the problem, summarize the solution, list test evidence (logs, vitest output, screenshots), and note config changes (env vars, Vite host updates). Request cross-stack review when changes span frontend and backend.
 
 ## Security & Configuration Tips
-Keep secrets out of Git and export them locally (for example, `OPENAI_API_KEY` and `VITE_CHATKIT_API_DOMAIN_KEY`). Mirror deployment domains in `frontend/vite.config.ts` (`server.allowedHosts`) and the OpenAI domain allowlist before shipping. Validate any user-provided tool payloads in `backend/app/chat.py` before invoking external services.
+- Never commit secrets; set `OPENAI_API_KEY`, `VITE_CHATKIT_API_DOMAIN_KEY`, and similar values locally.
+- Mirror deployment domains in `frontend/vite.config.ts` (`server.allowedHosts`) and the OpenAI domain allowlist before deploys.
+- Validate user-provided tool payloads in `backend/app/chat.py` prior to invoking external services to avoid unsafe executions.
