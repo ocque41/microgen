@@ -136,20 +136,23 @@ export function MarketingPage() {
       return;
     }
 
-    const heroImage = document.getElementById("hero-wordmark-image");
     const navRect = navEl.getBoundingClientRect();
     const viewportHeight = window.innerHeight;
-    const minTop = viewportHeight * 0.64;
-    const maxTop = Math.max(minTop, viewportHeight - navRect.height - 24);
+    const centerAnchor = viewportHeight * 0.6;
+    const availableBottom = viewportHeight - navRect.height - 24;
+    const maxTop = Math.max(centerAnchor, availableBottom);
+    const minTop = Math.min(centerAnchor, maxTop);
 
-    if (!heroImage) {
-      setNavTop(`${Math.round(minTop)}px`);
-      return;
-    }
+    const wordmarkElement = document.querySelector<HTMLElement>("[data-hero-wordmark]");
+    const heroSection = document.querySelector<HTMLElement>("[data-hero-section]");
+    const heroBottoms = [wordmarkElement, heroSection]
+      .map((element) => element?.getBoundingClientRect().bottom)
+      .filter((value): value is number => typeof value === "number" && Number.isFinite(value));
 
-    const heroRect = heroImage.getBoundingClientRect();
-    const desiredTop = heroRect.bottom + 32;
-    const clampedTop = Math.min(maxTop, Math.max(minTop, desiredTop));
+    const heroAnchor = heroBottoms.length > 0 ? Math.max(...heroBottoms) : centerAnchor;
+    const desiredTop = Math.max(centerAnchor, heroAnchor + 48);
+    const clampedTop = Math.max(minTop, Math.min(maxTop, desiredTop));
+
     setNavTop(`${Math.round(clampedTop)}px`);
   }, []);
 
@@ -160,25 +163,47 @@ export function MarketingPage() {
 
     const handleResize = () => window.requestAnimationFrame(updateNavTop);
     window.addEventListener("resize", handleResize);
+    window.addEventListener("orientationchange", handleResize);
 
     updateNavTop();
     const raf = window.requestAnimationFrame(updateNavTop);
     const timer = window.setTimeout(updateNavTop, 220);
 
-    const heroImage = document.getElementById("hero-wordmark-image") as HTMLImageElement | null;
-    const handleImageLoad = () => updateNavTop();
-    if (heroImage) {
-      heroImage.addEventListener("load", handleImageLoad, { once: true });
-      if (heroImage.complete) {
-        handleImageLoad();
+    const heroWordmark = document.querySelector<HTMLImageElement>("[data-hero-wordmark]");
+    const heroSection = document.querySelector<HTMLElement>("[data-hero-section]");
+
+    const handleHeroLoad = () => updateNavTop();
+    if (heroWordmark) {
+      heroWordmark.addEventListener("load", handleHeroLoad, { once: true });
+      if (heroWordmark.complete) {
+        handleHeroLoad();
       }
+    }
+
+    const observers: ResizeObserver[] = [];
+    const supportsResizeObserver = typeof window.ResizeObserver !== "undefined";
+    if (supportsResizeObserver) {
+      const observerCallback = () => updateNavTop();
+      const attach = (element: Element | null | undefined) => {
+        if (!element) {
+          return;
+        }
+        const observer = new window.ResizeObserver(observerCallback);
+        observer.observe(element);
+        observers.push(observer);
+      };
+
+      attach(heroWordmark);
+      attach(heroSection);
     }
 
     return () => {
       window.removeEventListener("resize", handleResize);
+      window.removeEventListener("orientationchange", handleResize);
       window.cancelAnimationFrame(raf);
       window.clearTimeout(timer);
-      heroImage?.removeEventListener("load", handleImageLoad);
+      heroWordmark?.removeEventListener("load", handleHeroLoad);
+      observers.forEach((observer) => observer.disconnect());
     };
   }, [updateNavTop]);
 
@@ -207,14 +232,18 @@ export function MarketingPage() {
             >
               <TransitionLink
                 to="/"
-                className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full bg-[#090909] p-0.5 text-[#050505] transition-transform duration-200 hover:scale-105"
+                className="relative flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full border border-[color:rgba(255,255,255,0.08)] bg-[#080808] text-[#050505] shadow-[0_12px_48px_-28px_rgba(0,0,0,0.9)] transition-transform duration-200 hover:scale-105"
                 aria-label="Microagents home"
               >
+                <span
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-0 rounded-full bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.18),rgba(255,255,255,0)_70%)] opacity-70"
+                />
                 <img
                   src="/icon-white-trans.png"
                   alt="Microagents icon"
-                  className="h-full w-full object-contain"
-                  style={{ transform: "scale(1.68) translateY(2%)" }}
+                  className="relative h-[68%] w-[68%] object-contain"
+                  loading="lazy"
                 />
               </TransitionLink>
               <div className="flex flex-1 items-center justify-center gap-3 font-medium text-[#f9f9f9]">

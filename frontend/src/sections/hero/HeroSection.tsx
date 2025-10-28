@@ -275,7 +275,10 @@ export function HeroSection() {
   }, [scheduleRelax]);
 
   return (
-    <section className="relative isolate flex min-h-[90vh] flex-col items-center justify-center overflow-hidden bg-[#050505] px-6 pb-24 pt-24 text-[color:rgba(244,241,234,0.85)] md:px-12">
+    <section
+      data-hero-section
+      className="relative isolate flex min-h-[90vh] flex-col items-center justify-center overflow-hidden bg-[#050505] px-6 pb-24 pt-24 text-[color:rgba(244,241,234,0.85)] md:px-12"
+    >
       <h1 className="sr-only">microagents</h1>
 
       <div className="flex w-full max-w-6xl flex-col items-center gap-2">
@@ -413,6 +416,7 @@ export function HeroSection() {
         <div className="relative flex w-full justify-center">
           <span className="pointer-events-none absolute inset-0 mx-auto w-[70%] max-w-[1800px] -translate-y-10 rounded-full bg-[radial-gradient(circle,rgba(255,255,255,0.12),rgba(255,255,255,0)_65%)] blur-3xl" aria-hidden="true" />
           <img
+            data-hero-wordmark
             id="hero-wordmark-image"
             src="/white-logo-trans.png"
             alt="Microagents wordmark"
