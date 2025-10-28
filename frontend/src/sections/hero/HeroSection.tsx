@@ -35,12 +35,11 @@ const flowPaths = [
 
 export function HeroSection() {
   return (
-    <section className="relative isolate flex min-h-[90vh] flex-col items-center justify-center overflow-hidden bg-[#050505] px-6 pb-24 pt-28 text-[color:rgba(244,241,234,0.85)] md:px-12">
-      <span className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.05),transparent_60%)]" aria-hidden="true" />
+    <section className="relative isolate flex min-h-[90vh] flex-col items-center justify-start overflow-hidden bg-[#050505] px-6 pb-20 pt-24 text-[color:rgba(244,241,234,0.85)] md:px-12">
       <h1 className="sr-only">microagents</h1>
 
       <svg
-        className="h-auto w-full max-w-5xl"
+        className="h-auto w-full max-w-5xl translate-y-[-40px]"
         viewBox="0 0 1040 560"
         fill="none"
         role="presentation"
@@ -97,7 +96,7 @@ export function HeroSection() {
         ))}
       </svg>
 
-      <img src="/logo.svg" alt="Microagents" className="mt-12 w-full max-w-[340px]" loading="lazy" />
+      <img src="/logo.svg" alt="Microagents" className="mt-[-20px] w-full max-w-[1700px] scale-100" loading="lazy" />
     </section>
   );
 }
