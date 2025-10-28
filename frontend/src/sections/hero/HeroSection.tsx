@@ -1,45 +1,284 @@
-const horizontalGuides = [140, 220, 300, 380, 460];
+import type { PointerEvent as ReactPointerEvent } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-const flowPaths = [
-  {
-    id: "flux-1",
-    d: "M140 220 C 280 170 440 210 560 180 C 720 140 840 220 940 180",
-    duration: "7.2s",
-    begin: "-1.8s",
-  },
-  {
-    id: "flux-2",
-    d: "M100 300 C 260 360 420 280 560 330 C 700 380 820 320 960 360",
-    duration: "6.1s",
-    begin: "-3.4s",
-  },
-  {
-    id: "flux-3",
-    d: "M160 390 C 320 340 460 420 620 360 C 760 320 860 360 940 320",
-    duration: "8.4s",
-    begin: "-2.6s",
-  },
-  {
-    id: "flux-4",
-    d: "M80 150 C 260 190 420 140 620 220 C 760 280 880 240 980 280",
-    duration: "9.6s",
-    begin: "-4.1s",
-  },
-  {
-    id: "flux-5",
-    d: "M120 260 C 220 200 420 260 520 220 C 700 150 840 260 960 210",
-    duration: "5.8s",
-    begin: "-5s",
-  },
-];
+type Point = [number, number];
+
+type FlowDefinition = {
+  id: string;
+  label: string;
+  duration: string;
+  begin: string;
+  amplitude: number;
+  base: {
+    start: Point;
+    c1: Point;
+    c2: Point;
+    end: Point;
+  };
+  shape: {
+    start: number;
+    end: number;
+    c1: number;
+    c2: number;
+    c1X?: number;
+    c2X?: number;
+  };
+};
+
+type FlowInternal = FlowDefinition & {
+  centerX: number;
+  centerY: number;
+  labelWidth: number;
+  labelHeight: number;
+};
+
+const VIEWBOX_WIDTH = 1040;
+const VIEWBOX_HEIGHT = 560;
+
+function buildPathD(flow: FlowInternal, offset: number) {
+  const amplitude = offset * flow.amplitude;
+  const { base, shape } = flow;
+
+  const startY = base.start[1] + amplitude * shape.start;
+  const endY = base.end[1] + amplitude * shape.end;
+  const c1Y = base.c1[1] + amplitude * shape.c1;
+  const c2Y = base.c2[1] + amplitude * shape.c2;
+  const c1X = base.c1[0] + amplitude * (shape.c1X ?? 0);
+  const c2X = base.c2[0] + amplitude * (shape.c2X ?? 0);
+
+  return `M ${base.start[0]} ${startY} C ${c1X} ${c1Y}, ${c2X} ${c2Y}, ${base.end[0]} ${endY}`;
+}
 
 export function HeroSection() {
+  const flows = useMemo<FlowInternal[]>(() => {
+    const definitions: FlowDefinition[] = [
+      {
+        id: "flux-1",
+        label: "Data Intelligence",
+        duration: "7.4s",
+        begin: "-1.6s",
+        amplitude: 1,
+        base: {
+          start: [70, 190],
+          c1: [300, 70],
+          c2: [620, 260],
+          end: [990, 210],
+        },
+        shape: {
+          start: -0.16,
+          end: 0.14,
+          c1: 1.05,
+          c2: -0.9,
+          c1X: 0.1,
+          c2X: -0.08,
+        },
+      },
+      {
+        id: "flux-2",
+        label: "Security & Trust",
+        duration: "6.6s",
+        begin: "-2.4s",
+        amplitude: 1.1,
+        base: {
+          start: [90, 260],
+          c1: [280, 360],
+          c2: [620, 280],
+          end: [980, 340],
+        },
+        shape: {
+          start: 0.2,
+          end: -0.18,
+          c1: -1,
+          c2: 0.9,
+          c1X: -0.06,
+          c2X: 0.04,
+        },
+      },
+      {
+        id: "flux-3",
+        label: "Search & Discovery",
+        duration: "8.2s",
+        begin: "-3.2s",
+        amplitude: 0.95,
+        base: {
+          start: [130, 360],
+          c1: [340, 320],
+          c2: [700, 410],
+          end: [980, 320],
+        },
+        shape: {
+          start: 0.22,
+          end: -0.2,
+          c1: -0.75,
+          c2: 0.68,
+          c1X: 0.02,
+          c2X: -0.04,
+        },
+      },
+      {
+        id: "flux-4",
+        label: "Autonomous Ops",
+        duration: "9.5s",
+        begin: "-4s",
+        amplitude: 1.2,
+        base: {
+          start: [50, 150],
+          c1: [260, 210],
+          c2: [640, 140],
+          end: [980, 220],
+        },
+        shape: {
+          start: -0.22,
+          end: 0.18,
+          c1: 0.85,
+          c2: -0.7,
+          c1X: 0.04,
+          c2X: -0.06,
+        },
+      },
+      {
+        id: "flux-5",
+        label: "Observability",
+        duration: "6.1s",
+        begin: "-5.2s",
+        amplitude: 1,
+        base: {
+          start: [100, 230],
+          c1: [280, 170],
+          c2: [660, 240],
+          end: [980, 200],
+        },
+        shape: {
+          start: -0.12,
+          end: 0.1,
+          c1: 0.9,
+          c2: -0.75,
+          c1X: 0.08,
+          c2X: -0.05,
+        },
+      },
+    ];
+
+    return definitions.map((definition) => {
+      const centerY = (definition.base.start[1] + definition.base.end[1]) / 2;
+      const centerX = (definition.base.start[0] + definition.base.end[0]) / 2;
+      const labelWidth = Math.max(132, definition.label.length * 8 + 40);
+      const labelHeight = 32;
+      return {
+        ...definition,
+        centerX,
+        centerY,
+        labelWidth,
+        labelHeight,
+      } as FlowInternal;
+    });
+  }, []);
+
+  const horizontalGuides = useMemo(() => {
+    const guideSet = new Set<number>();
+    flows.forEach((flow) => {
+      guideSet.add(Math.round(flow.centerY));
+    });
+    return Array.from(guideSet).sort((a, b) => a - b);
+  }, [flows]);
+
+  const [pathOffsets, setPathOffsets] = useState<number[]>(() => flows.map(() => 0));
+  const [isHovered, setIsHovered] = useState(false);
+  const pointerActiveRef = useRef(false);
+  const relaxFrameRef = useRef<number>();
+
+  useEffect(() => {
+    return () => {
+      if (relaxFrameRef.current !== undefined) {
+        cancelAnimationFrame(relaxFrameRef.current);
+      }
+    };
+  }, []);
+
+  const scheduleRelax = useCallback(() => {
+    if (pointerActiveRef.current) return;
+    if (relaxFrameRef.current !== undefined) {
+      cancelAnimationFrame(relaxFrameRef.current);
+    }
+
+    const step = () => {
+      setPathOffsets((prev) => {
+        let shouldContinue = false;
+        const next = prev.map((offset) => {
+          if (Math.abs(offset) < 0.6) {
+            return 0;
+          }
+          shouldContinue = true;
+          return offset * 0.82;
+        });
+
+        if (shouldContinue) {
+          relaxFrameRef.current = requestAnimationFrame(step);
+        }
+
+        return next;
+      });
+    };
+
+    relaxFrameRef.current = requestAnimationFrame(step);
+  }, []);
+
+  const handlePointerMove = useCallback(
+    (event: ReactPointerEvent<HTMLDivElement>) => {
+      pointerActiveRef.current = true;
+
+      const bounds = event.currentTarget.getBoundingClientRect();
+      const pointerX = ((event.clientX - bounds.left) / bounds.width) * VIEWBOX_WIDTH;
+      const pointerY = ((event.clientY - bounds.top) / bounds.height) * VIEWBOX_HEIGHT;
+
+      setPathOffsets((prev) =>
+        prev.map((offset, index) => {
+          const flow = flows[index];
+          const dx = (pointerX - flow.centerX) * 0.62;
+          const dy = pointerY - flow.centerY;
+          const distance = Math.hypot(dx, dy);
+          const influence = Math.max(0, 1 - distance / 320);
+
+          if (influence <= 0) {
+            const eased = offset * 0.78;
+            return Math.abs(eased) < 0.5 ? 0 : eased;
+          }
+
+          const direction = dy >= 0 ? 1 : -1;
+          const target = direction * influence * 120;
+          const next = offset * 0.6 + target * 0.4;
+          return Math.abs(next) < 0.4 ? 0 : next;
+        })
+      );
+    },
+    [flows]
+  );
+
+  const handlePointerEnter = useCallback(() => {
+    pointerActiveRef.current = true;
+    setIsHovered(true);
+    if (relaxFrameRef.current !== undefined) {
+      cancelAnimationFrame(relaxFrameRef.current);
+    }
+  }, []);
+
+  const handlePointerLeave = useCallback(() => {
+    pointerActiveRef.current = false;
+    setIsHovered(false);
+    scheduleRelax();
+  }, [scheduleRelax]);
+
   return (
     <section className="relative isolate flex min-h-[90vh] flex-col items-center justify-center overflow-hidden bg-[#050505] px-6 pb-24 pt-24 text-[color:rgba(244,241,234,0.85)] md:px-12">
       <h1 className="sr-only">microagents</h1>
 
       <div className="flex w-full max-w-6xl flex-col items-center gap-2">
-        <div className="relative w-full max-w-[1200px] sm:max-w-[1600px] lg:max-w-[2200px] xl:max-w-[2600px]">
+        <div
+          className="relative w-full max-w-[1200px] sm:max-w-[1700px] lg:max-w-[2300px] xl:max-w-[2800px]"
+          onPointerEnter={handlePointerEnter}
+          onPointerLeave={handlePointerLeave}
+          onPointerMove={handlePointerMove}
+        >
           <svg
             className="block h-full w-full"
             viewBox="0 0 1040 560"
@@ -54,11 +293,11 @@ export function HeroSection() {
                 <stop offset="100%" stopColor="rgba(255,255,255,0.05)" />
               </linearGradient>
               <radialGradient id="node-glow" cx="50%" cy="50%" r="50%">
-                <stop offset="0%" stopColor="rgba(255,255,255,0.95)" />
+                <stop offset="0%" stopColor="rgba(255,255,255,0.98)" />
                 <stop offset="100%" stopColor="rgba(255,255,255,0.05)" />
               </radialGradient>
               <filter id="path-glow" x="-40%" y="-40%" width="180%" height="180%">
-                <feGaussianBlur in="SourceGraphic" stdDeviation="8" result="blur" />
+                <feGaussianBlur in="SourceGraphic" stdDeviation="7" result="blur" />
                 <feMerge>
                   <feMergeNode in="blur" />
                   <feMergeNode in="SourceGraphic" />
@@ -68,35 +307,100 @@ export function HeroSection() {
 
             {horizontalGuides.map((y) => (
               <line
-                key={y}
-                x1={120}
+                key={`guide-${y}`}
+                x1={80}
                 y1={y}
-                x2={920}
+                x2={960}
                 y2={y}
                 stroke="url(#guide-stroke)"
                 strokeWidth={1}
-                strokeDasharray="4 16"
+                strokeDasharray="6 22"
               />
             ))}
 
-            {flowPaths.map(({ id, d, duration, begin }) => (
-              <g key={id} filter="url(#path-glow)">
-                <path
-                  id={id}
-                  d={d}
-                  stroke="rgba(255,255,255,0.6)"
-                  strokeWidth={1.8}
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  fill="none"
-                />
-                <circle r={6} fill="url(#node-glow)" className="motion-reduce:hidden">
-                  <animateMotion dur={duration} begin={begin} repeatCount="indefinite" keySplines="0.42 0 0.58 1" keyTimes="0;1" calcMode="spline">
-                    <mpath href={`#${id}`} />
-                  </animateMotion>
-                </circle>
-              </g>
-            ))}
+            {flows.map((flow, index) => {
+              const offset = pathOffsets[index] ?? 0;
+              const pathD = buildPathD(flow, offset);
+              const labelWidth = flow.labelWidth;
+              const labelHeight = flow.labelHeight;
+
+              return (
+                <g key={flow.id} filter="url(#path-glow)">
+                  <path
+                    id={flow.id}
+                    d={pathD}
+                    stroke="rgba(255,255,255,0.62)"
+                    strokeWidth={1.8}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    fill="none"
+                  />
+                  <g
+                    style={{
+                      transformBox: "fill-box",
+                      transformOrigin: "center",
+                      transition: "transform 280ms cubic-bezier(.2,.7,.3,1)",
+                      transform: `scale(${isHovered ? 1.22 : 1})`,
+                    }}
+                  >
+                    <circle
+                      r={6}
+                      fill="url(#node-glow)"
+                      style={{
+                        transformBox: "fill-box",
+                        transformOrigin: "center",
+                        transition: "transform 280ms cubic-bezier(.2,.7,.3,1)",
+                        transform: `scale(${isHovered ? 1.35 : 1})`,
+                      }}
+                    />
+                    <g
+                      style={{
+                        pointerEvents: "none",
+                        opacity: isHovered ? 0.95 : 0,
+                        transformOrigin: "left center",
+                        transform: isHovered
+                          ? `translate(18,-${labelHeight + 6}) scale(1)`
+                          : `translate(18,-${labelHeight - 4}) scale(0.84)` ,
+                        transition: "opacity 260ms ease, transform 300ms cubic-bezier(.22,.68,.3,1)",
+                      }}
+                    >
+                      <rect
+                        x={0}
+                        y={-labelHeight}
+                        width={labelWidth}
+                        height={labelHeight}
+                        rx={labelHeight / 2}
+                        fill="rgba(9,9,9,0.82)"
+                        stroke="rgba(255,255,255,0.28)"
+                        strokeWidth={1.2}
+                      />
+                      <text
+                        x={labelWidth / 2}
+                        y={-labelHeight / 2 + 2}
+                        fill="rgba(255,255,255,0.92)"
+                        fontSize={13}
+                        fontFamily="var(--font-sans, 'Inter', sans-serif)"
+                        textAnchor="middle"
+                        dominantBaseline="middle"
+                        letterSpacing="0.12em"
+                      >
+                        {flow.label.toUpperCase()}
+                      </text>
+                    </g>
+                    <animateMotion
+                      dur={flow.duration}
+                      begin={flow.begin}
+                      repeatCount="indefinite"
+                      keySplines="0.42 0 0.58 1"
+                      keyTimes="0;1"
+                      calcMode="spline"
+                    >
+                      <mpath href={`#${flow.id}`} />
+                    </animateMotion>
+                  </g>
+                </g>
+              );
+            })}
           </svg>
         </div>
 
@@ -104,7 +408,7 @@ export function HeroSection() {
           <img
             src="/white-logo-trans.png"
             alt="Microagents wordmark"
-            className="w-full max-w-[2000px] sm:max-w-[2200px] lg:max-w-[2800px] opacity-100 -mt-48 md:-mt-64 lg:-mt-80"
+            className="w-full max-w-[2200px] sm:max-w-[2600px] lg:max-w-[3200px] opacity-100 -mt-52 md:-mt-72 lg:-mt-96"
             loading="lazy"
           />
         </div>
