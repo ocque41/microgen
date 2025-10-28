@@ -139,7 +139,7 @@ export function MarketingPage() {
         <section className="relative isolate flex justify-center" aria-label="Primary navigation">
           <div
             className="pointer-events-none sticky z-40 flex w-full justify-center px-2 sm:px-4"
-            style={{ top: "calc(50vh + 4rem)" }}
+            style={{ top: "clamp(55vh, calc(50vh + 4rem), 68vh)" }}
           >
             <nav
               className="pointer-events-auto flex w-full max-w-[16rem] sm:max-w-[18rem] items-center gap-2 rounded-full border border-[color:rgba(255,255,255,0.08)] bg-[rgba(24,24,24,0.78)] px-3 py-2 text-xs shadow-[0_25px_70px_-60px_rgba(0,0,0,0.9)] backdrop-blur-md"
@@ -147,10 +147,14 @@ export function MarketingPage() {
             >
               <TransitionLink
                 to="/"
-                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#090909] p-1 text-[#050505] transition-transform duration-200 hover:scale-105"
+                className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full bg-[#090909] p-0.5 text-[#050505] transition-transform duration-200 hover:scale-105"
                 aria-label="Microagents home"
               >
-                <img src="/icon-white-trans.png" alt="Microagents icon" className="h-full w-full object-contain" />
+                <img
+                  src="/icon-white-trans.png"
+                  alt="Microagents icon"
+                  className="h-full w-full scale-[1.32] transform object-contain"
+                />
               </TransitionLink>
               <div className="flex flex-1 items-center justify-center gap-3 font-medium text-[#f9f9f9]">
                 <TransitionLink to="/pricing" className="text-[#f9f9f9] transition-colors duration-200 hover:text-white">
