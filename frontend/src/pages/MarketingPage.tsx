@@ -124,7 +124,12 @@ export function MarketingPage() {
   }, [marketingTheme.background]);
 
   const navContainerRef = useRef<HTMLDivElement>(null);
-  const [navTop, setNavTop] = useState<string>("50vh");
+  const [navPosition, setNavPosition] = useState<CSSProperties>(() => {
+    if (typeof window !== "undefined" && window.matchMedia("(max-width: 640px)").matches) {
+      return { bottom: "24px" };
+    }
+    return { top: "50vh" };
+  });
 
   const updateNavTop = useCallback(() => {
     if (typeof window === "undefined") {
@@ -138,6 +143,14 @@ export function MarketingPage() {
 
     const navRect = navEl.getBoundingClientRect();
     const viewportHeight = window.innerHeight;
+
+    const isMobileViewport = window.matchMedia("(max-width: 640px)").matches;
+    if (isMobileViewport) {
+      const bottomPadding = Math.max(16, viewportHeight * 0.04);
+      setNavPosition({ bottom: `${Math.round(bottomPadding)}px` });
+      return;
+    }
+
     const preferredCenter = viewportHeight * 0.5;
     const minCenterBound = viewportHeight * 0.44;
     const maxCenterBound = viewportHeight * 0.56;
@@ -155,7 +168,7 @@ export function MarketingPage() {
     const desiredTop = Math.max(preferredCenter, heroAnchor + 24);
     const clampedTop = Math.max(minTop, Math.min(maxTop, desiredTop));
 
-    setNavTop(`${Math.round(clampedTop)}px`);
+    setNavPosition({ top: `${Math.round(clampedTop)}px` });
   }, []);
 
   useEffect(() => {
@@ -226,7 +239,7 @@ export function MarketingPage() {
           <div
             ref={navContainerRef}
             className="pointer-events-none fixed left-0 right-0 z-[9999] flex w-full justify-center px-2 sm:px-4"
-            style={{ top: navTop }}
+            style={navPosition}
           >
             <nav
               className="pointer-events-auto relative z-[10000] flex w-full max-w-[20rem] sm:max-w-[22rem] items-center gap-1.5 rounded-full border border-[color:rgba(255,255,255,0.08)] bg-[#090909] px-3 py-1.5 text-xs shadow-[0_25px_70px_-60px_rgba(0,0,0,0.9)]"
@@ -234,17 +247,13 @@ export function MarketingPage() {
             >
               <TransitionLink
                 to="/"
-                className="relative flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full border border-[color:rgba(255,255,255,0.08)] bg-[#090909] text-[#050505] shadow-[0_12px_48px_-28px_rgba(0,0,0,0.9)] transition-transform duration-200 hover:scale-105"
+                className="relative flex h-10 w-10 shrink-0 items-center justify-center transition-transform duration-200 hover:scale-105 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3a7ca5]"
                 aria-label="Microagents home"
               >
-                <span
-                  aria-hidden="true"
-                  className="pointer-events-none absolute inset-0 rounded-full bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.18),rgba(255,255,255,0)_70%)] opacity-70"
-                />
                 <img
                   src="/icon-white-trans.png"
                   alt="Microagents icon"
-                  className="relative h-full w-full object-contain"
+                  className="h-9 w-9 object-contain"
                   loading="lazy"
                 />
               </TransitionLink>

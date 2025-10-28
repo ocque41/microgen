@@ -191,6 +191,11 @@ export function HeroSection() {
   const [pathOffsets, setPathOffsets] = useState<number[]>(() => flows.map(() => 0));
   const pointerActiveRef = useRef(false);
   const relaxFrameRef = useRef<number>();
+  const ambientFrameRef = useRef<number>();
+  const ambientStartRef = useRef<number>();
+  const ambientRestartTimeoutRef = useRef<number>();
+  const ambientEnabledRef = useRef(false);
+  const coarseDeviceRef = useRef(false);
 
   useEffect(() => {
     return () => {
@@ -227,6 +232,71 @@ export function HeroSection() {
 
     relaxFrameRef.current = requestAnimationFrame(step);
   }, []);
+
+  const stopAmbient = useCallback(() => {
+    if (ambientFrameRef.current !== undefined) {
+      cancelAnimationFrame(ambientFrameRef.current);
+      ambientFrameRef.current = undefined;
+    }
+    if (typeof window !== "undefined" && ambientRestartTimeoutRef.current !== undefined) {
+      window.clearTimeout(ambientRestartTimeoutRef.current);
+      ambientRestartTimeoutRef.current = undefined;
+    }
+    ambientEnabledRef.current = false;
+    ambientStartRef.current = undefined;
+  }, []);
+
+  const runAmbientStep = useCallback(
+    (time: number) => {
+      if (!ambientEnabledRef.current || pointerActiveRef.current) {
+        ambientFrameRef.current = undefined;
+        return;
+      }
+
+      if (ambientStartRef.current === undefined) {
+        ambientStartRef.current = time;
+      }
+
+      const elapsed = (time - ambientStartRef.current) / 1000;
+
+      setPathOffsets(() =>
+        flows.map((flow, index) => {
+          const frequency = 0.32 + index * 0.045;
+          const amplitude = flow.interactiveGain * 0.085;
+          const phase = index * 0.9;
+          return Math.sin(elapsed * frequency + phase) * amplitude;
+        })
+      );
+
+      ambientFrameRef.current = requestAnimationFrame(runAmbientStep);
+    },
+    [flows]
+  );
+
+  const startAmbient = useCallback(() => {
+    if (typeof window === "undefined" || !coarseDeviceRef.current) {
+      return;
+    }
+    if (ambientEnabledRef.current) {
+      return;
+    }
+    ambientEnabledRef.current = true;
+    ambientFrameRef.current = window.requestAnimationFrame(runAmbientStep);
+  }, [runAmbientStep]);
+
+  const scheduleAmbientResume = useCallback(() => {
+    if (typeof window === "undefined" || !coarseDeviceRef.current) {
+      return;
+    }
+    if (ambientRestartTimeoutRef.current !== undefined) {
+      window.clearTimeout(ambientRestartTimeoutRef.current);
+    }
+    ambientRestartTimeoutRef.current = window.setTimeout(() => {
+      if (!pointerActiveRef.current) {
+        startAmbient();
+      }
+    }, 240);
+  }, [startAmbient]);
 
   const applyPointerInfluence = useCallback(
     (clientX: number, clientY: number, element: HTMLDivElement) => {
@@ -266,27 +336,84 @@ export function HeroSection() {
 
   const handlePointerMove = useCallback(
     (event: ReactPointerEvent<HTMLDivElement>) => {
+      stopAmbient();
       pointerActiveRef.current = true;
       applyPointerInfluence(event.clientX, event.clientY, event.currentTarget);
     },
-    [applyPointerInfluence]
+    [applyPointerInfluence, stopAmbient]
   );
 
   const handlePointerEnter = useCallback(
     (event: ReactPointerEvent<HTMLDivElement>) => {
+      stopAmbient();
       pointerActiveRef.current = true;
       if (relaxFrameRef.current !== undefined) {
         cancelAnimationFrame(relaxFrameRef.current);
       }
       applyPointerInfluence(event.clientX, event.clientY, event.currentTarget);
     },
-    [applyPointerInfluence]
+    [applyPointerInfluence, stopAmbient]
   );
 
   const handlePointerLeave = useCallback(() => {
     pointerActiveRef.current = false;
     scheduleRelax();
-  }, [scheduleRelax]);
+    scheduleAmbientResume();
+  }, [scheduleRelax, scheduleAmbientResume]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return undefined;
+    }
+
+    const coarseQuery = window.matchMedia("(pointer: coarse)");
+    const hoverQuery = window.matchMedia("(hover: none)");
+
+    const evaluate = () => {
+      const touchPoints = typeof navigator !== "undefined" ? navigator.maxTouchPoints || 0 : 0;
+      const isCoarse = coarseQuery.matches || hoverQuery.matches || touchPoints > 0;
+      coarseDeviceRef.current = isCoarse;
+
+      if (!isCoarse) {
+        stopAmbient();
+        if (!pointerActiveRef.current) {
+          setPathOffsets(() => flows.map(() => 0));
+        }
+        return;
+      }
+
+      if (!pointerActiveRef.current) {
+        startAmbient();
+      }
+    };
+
+    evaluate();
+
+    const addListener = (query: MediaQueryList) => {
+      if (typeof query.addEventListener === "function") {
+        query.addEventListener("change", evaluate);
+      } else {
+        query.addListener(evaluate);
+      }
+    };
+
+    const removeListener = (query: MediaQueryList) => {
+      if (typeof query.removeEventListener === "function") {
+        query.removeEventListener("change", evaluate);
+      } else {
+        query.removeListener(evaluate);
+      }
+    };
+
+    addListener(coarseQuery);
+    addListener(hoverQuery);
+
+    return () => {
+      removeListener(coarseQuery);
+      removeListener(hoverQuery);
+      stopAmbient();
+    };
+  }, [flows, startAmbient, stopAmbient]);
 
   return (
     <section
@@ -435,13 +562,13 @@ export function HeroSection() {
         </div>
 
         <div className="relative flex w-full justify-center">
-          <span className="pointer-events-none absolute inset-0 mx-auto w-[70%] max-w-[1800px] -translate-y-[18%] rounded-full bg-[radial-gradient(circle,rgba(58,124,165,0.32),rgba(58,124,165,0)_75%)] blur-[180px]" aria-hidden="true" />
+          <span className="pointer-events-none absolute inset-0 mx-auto aspect-[11/3] w-[64%] max-w-[1280px] -translate-y-[9%] rounded-full bg-[radial-gradient(circle_at_center,rgba(58,124,165,0.58) 0%,rgba(58,124,165,0.26) 38%,rgba(58,124,165,0)_78%)] blur-[110px]" aria-hidden="true" />
           <img
             data-hero-wordmark
             id="hero-wordmark-image"
             src="/white-logo-trans.png"
             alt="Microagents wordmark"
-            className="w-full max-w-[2200px] sm:max-w-[2600px] lg:max-w-[3200px] opacity-100 -mt-52 md:-mt-72 lg:-mt-96"
+            className="w-full max-w-[2200px] sm:max-w-[2600px] lg:max-w-[3200px] opacity-100 mt-12 sm:mt-6 md:-mt-72 lg:-mt-96"
             loading="lazy"
           />
         </div>
