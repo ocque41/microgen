@@ -124,7 +124,7 @@ export function MarketingPage() {
   }, [marketingTheme.background]);
 
   const navContainerRef = useRef<HTMLDivElement>(null);
-  const [navTop, setNavTop] = useState<string>("52vh");
+  const [navTop, setNavTop] = useState<string>("48vh");
 
   const updateNavTop = useCallback(() => {
     if (typeof window === "undefined") {
@@ -138,7 +138,7 @@ export function MarketingPage() {
 
     const navRect = navEl.getBoundingClientRect();
     const viewportHeight = window.innerHeight;
-    const centerAnchor = viewportHeight * 0.52;
+    const centerAnchor = viewportHeight * 0.48;
     const availableBottom = viewportHeight - navRect.height - 24;
     const maxTop = Math.max(centerAnchor, availableBottom);
     const minTop = Math.min(centerAnchor, maxTop);
@@ -150,7 +150,7 @@ export function MarketingPage() {
       .filter((value): value is number => typeof value === "number" && Number.isFinite(value));
 
     const heroAnchor = heroBottoms.length > 0 ? Math.max(...heroBottoms) : centerAnchor;
-    const desiredTop = Math.max(centerAnchor, heroAnchor + 32);
+    const desiredTop = Math.max(centerAnchor, heroAnchor + 20);
     const clampedTop = Math.max(minTop, Math.min(maxTop, desiredTop));
 
     setNavTop(`${Math.round(clampedTop)}px`);
