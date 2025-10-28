@@ -35,6 +35,8 @@ type FlowInternal = FlowDefinition & {
 
 const VIEWBOX_WIDTH = 1040;
 const VIEWBOX_HEIGHT = 560;
+const HORIZONTAL_EXTENSION = 220;
+const AMBIENT_AMPLITUDE_FACTOR = 0.13;
 
 function buildPathD(flow: FlowInternal, offset: number) {
   const amplitude = offset * flow.amplitude;
@@ -166,12 +168,21 @@ export function HeroSection() {
     ];
 
     return definitions.map((definition) => {
-      const centerY = (definition.base.start[1] + definition.base.end[1]) / 2;
-      const centerX = (definition.base.start[0] + definition.base.end[0]) / 2;
+      const originalBase = definition.base;
+      const extendedBase = {
+        start: [originalBase.start[0] - HORIZONTAL_EXTENSION, originalBase.start[1]] as Point,
+        c1: [originalBase.c1[0] - HORIZONTAL_EXTENSION, originalBase.c1[1]] as Point,
+        c2: [originalBase.c2[0] + HORIZONTAL_EXTENSION, originalBase.c2[1]] as Point,
+        end: [originalBase.end[0] + HORIZONTAL_EXTENSION, originalBase.end[1]] as Point,
+      };
+
+      const centerY = (originalBase.start[1] + originalBase.end[1]) / 2;
+      const centerX = (originalBase.start[0] + originalBase.end[0]) / 2;
       const labelWidth = Math.max(132, definition.label.length * 8 + 40);
       const labelHeight = 32;
       return {
         ...definition,
+        base: extendedBase,
         centerX,
         centerY,
         labelWidth,
@@ -262,7 +273,7 @@ export function HeroSection() {
       setPathOffsets(() =>
         flows.map((flow, index) => {
           const frequency = 0.32 + index * 0.045;
-          const amplitude = flow.interactiveGain * 0.085;
+          const amplitude = flow.interactiveGain * AMBIENT_AMPLITUDE_FACTOR;
           const phase = index * 0.9;
           return Math.sin(elapsed * frequency + phase) * amplitude;
         })
@@ -459,9 +470,9 @@ export function HeroSection() {
             {horizontalGuides.map((y) => (
               <line
                 key={`guide-${y}`}
-                x1={80}
+                x1={80 - HORIZONTAL_EXTENSION}
                 y1={y}
-                x2={960}
+                x2={960 + HORIZONTAL_EXTENSION}
                 y2={y}
                 stroke="url(#guide-stroke)"
                 strokeWidth={1}
@@ -475,20 +486,23 @@ export function HeroSection() {
               const labelWidth = flow.labelWidth;
               const labelHeight = flow.labelHeight;
               const energyFactor = Math.min(1, Math.abs(offset) / (flow.interactiveGain * 0.5 + 60));
-              const labelOpacity = Math.pow(energyFactor, 0.78);
+              const ambientBase = ambientEnabledRef.current ? 0.32 : 0;
+              const labelOpacity = ambientBase + (1 - ambientBase) * Math.pow(energyFactor, 0.78);
               const nodeScale = 1 + labelOpacity * 0.55;
               const haloScale = 1 + labelOpacity * 0.65;
               const labelScale = 0.7 + labelOpacity * 0.42;
               const translateBase = labelHeight - 2;
               const translateActive = labelHeight + 16;
               const translateY = translateBase + (translateActive - translateBase) * labelOpacity;
+              const strokeAlpha = 0.5 + labelOpacity * 0.4;
+              const strokeColor = `rgba(255,255,255,${strokeAlpha})`;
 
               return (
                 <g key={flow.id} filter="url(#path-glow)">
                   <path
                     id={flow.id}
                     d={pathD}
-                    stroke="rgba(255,255,255,0.62)"
+                    stroke={strokeColor}
                     strokeWidth={1.8}
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -562,13 +576,13 @@ export function HeroSection() {
         </div>
 
         <div className="relative flex w-full justify-center">
-          <span className="pointer-events-none absolute inset-0 mx-auto aspect-[11/3] w-[64%] max-w-[1280px] -translate-y-[9%] rounded-full bg-[radial-gradient(circle_at_center,rgba(58,124,165,0.58) 0%,rgba(58,124,165,0.26) 38%,rgba(58,124,165,0)_78%)] blur-[110px]" aria-hidden="true" />
+          <span className="pointer-events-none absolute inset-0 mx-auto aspect-[11/3] w-[110%] max-w-[1600px] -translate-y-[9%] rounded-full bg-[radial-gradient(circle_at_center,rgba(58,124,165,0.58) 0%,rgba(58,124,165,0.26) 38%,rgba(58,124,165,0)_78%)] blur-[120px] sm:w-[64%] sm:max-w-[1280px]" aria-hidden="true" />
           <img
             data-hero-wordmark
             id="hero-wordmark-image"
             src="/white-logo-trans.png"
             alt="Microagents wordmark"
-            className="w-full max-w-[2200px] sm:max-w-[2600px] lg:max-w-[3200px] opacity-100 mt-12 sm:mt-6 md:-mt-72 lg:-mt-96"
+            className="w-[180%] max-w-none -mt-16 opacity-100 sm:w-full sm:max-w-[2600px] sm:mt-4 md:-mt-72 lg:-mt-96"
             loading="lazy"
           />
         </div>
