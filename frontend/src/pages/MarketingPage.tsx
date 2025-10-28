@@ -124,7 +124,7 @@ export function MarketingPage() {
   }, [marketingTheme.background]);
 
   const navContainerRef = useRef<HTMLDivElement>(null);
-  const [navTop, setNavTop] = useState<string>("68vh");
+  const [navTop, setNavTop] = useState<string>("56vh");
 
   const updateNavTop = useCallback(() => {
     if (typeof window === "undefined") {
@@ -138,7 +138,7 @@ export function MarketingPage() {
 
     const navRect = navEl.getBoundingClientRect();
     const viewportHeight = window.innerHeight;
-    const centerAnchor = viewportHeight * 0.68;
+    const centerAnchor = viewportHeight * 0.56;
     const availableBottom = viewportHeight - navRect.height - 24;
     const maxTop = Math.max(centerAnchor, availableBottom);
     const minTop = Math.min(centerAnchor, maxTop);
@@ -150,7 +150,7 @@ export function MarketingPage() {
       .filter((value): value is number => typeof value === "number" && Number.isFinite(value));
 
     const heroAnchor = heroBottoms.length > 0 ? Math.max(...heroBottoms) : centerAnchor;
-    const desiredTop = Math.max(centerAnchor, heroAnchor + 56);
+    const desiredTop = Math.max(centerAnchor, heroAnchor + 40);
     const clampedTop = Math.max(minTop, Math.min(maxTop, desiredTop));
 
     setNavTop(`${Math.round(clampedTop)}px`);
@@ -223,11 +223,11 @@ export function MarketingPage() {
         <section className="relative isolate flex justify-center" aria-label="Primary navigation">
           <div
             ref={navContainerRef}
-            className="pointer-events-none fixed left-0 right-0 z-40 flex w-full justify-center px-2 sm:px-4"
+            className="pointer-events-none fixed left-0 right-0 z-[220] flex w-full justify-center px-2 sm:px-4"
             style={{ top: navTop }}
           >
             <nav
-              className="pointer-events-auto flex w-full max-w-[16rem] sm:max-w-[18rem] items-center gap-2 rounded-full border border-[color:rgba(255,255,255,0.08)] bg-[#090909] px-3 py-2 text-xs shadow-[0_25px_70px_-60px_rgba(0,0,0,0.9)]"
+              className="pointer-events-auto relative z-[221] flex w-full max-w-[16rem] sm:max-w-[18rem] items-center gap-2 rounded-full border border-[color:rgba(255,255,255,0.08)] bg-[#090909] px-3 py-2 text-xs shadow-[0_25px_70px_-60px_rgba(0,0,0,0.9)]"
               aria-label="Main navigation"
             >
               <TransitionLink

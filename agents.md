@@ -30,3 +30,23 @@
 - Never commit secrets; set `OPENAI_API_KEY`, `VITE_CHATKIT_API_DOMAIN_KEY`, and similar values locally.
 - Mirror deployment domains in `frontend/vite.config.ts` (`server.allowedHosts`) and the OpenAI domain allowlist before deploys.
 - Validate user-provided tool payloads in `backend/app/chat.py` prior to invoking external services to avoid unsafe executions.
+
+## Home page palette
+
+| Token | Hex | Notes |
+| ----- | --- | ----- |
+| `Canvas` | `#090909` | Primary marketing background and mesh base. |
+| `Surface` | `#242423` | Hero glass shells, core cards. |
+| `Surface muted` | `#333533` | Secondary cards, placeholders. |
+| `Surface glow` | `#3a7ca5` | Accent washes, hero glow, mesh highlights. |
+| `Copy` | `#d9dcd6` | Headlines, navigation, iconography. |
+| `Copy secondary` | `#c5c9c2` | Body copy, supporting UI text. |
+| `Accent` | `#0091ad` | Primary CTAs, interactive links. |
+| `Accent strong` | `color-mix(in srgb, #0091ad 78%, #22aecd 22%)` | Hover intensification, active states. |
+| `Accent soft` | `color-mix(in srgb, #0091ad 20%, transparent)` | Pills, tinted fills. |
+| `Border` | `#001427` | Card outlines, layout dividers. |
+| `Border strong` | `color-mix(in srgb, #001427 65%, #ffffff 15%)` | High-contrast separators. |
+| `Critical` | `#eb6424` | Error states, destructive confirmations. |
+| `Positive` | `#9ceaef` | Success messaging. |
+| `Warning` | `#fa9500` | Pending attention banners. |
+| `Info` | `#1b9aaa` | Informational tags, secondary metrics. |
