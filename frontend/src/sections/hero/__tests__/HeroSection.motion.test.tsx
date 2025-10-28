@@ -23,7 +23,7 @@ describe("HeroSection", () => {
     const markup = renderToString(<HeroSection />);
 
     expect(markup).toContain("microagents");
-    expect(markup).toContain("/logo.svg");
+    expect(markup).toContain("/white-logo.png");
     expect(markup).toContain("<svg");
   });
 
@@ -31,6 +31,6 @@ describe("HeroSection", () => {
     const markup = renderToString(<HeroSection />);
 
     expect(markup).toContain("<img");
-    expect(markup).toContain("alt=\"Microagents\"");
+    expect(markup).toContain("alt=\"Microagents wordmark\"");
   });
 });

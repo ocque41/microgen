@@ -35,68 +35,80 @@ const flowPaths = [
 
 export function HeroSection() {
   return (
-    <section className="relative isolate flex min-h-[90vh] flex-col items-center justify-start overflow-hidden bg-[#050505] px-6 pb-20 pt-24 text-[color:rgba(244,241,234,0.85)] md:px-12">
+    <section className="relative isolate flex min-h-[90vh] flex-col items-center justify-center overflow-hidden bg-[#050505] px-6 pb-24 pt-24 text-[color:rgba(244,241,234,0.85)] md:px-12">
       <h1 className="sr-only">microagents</h1>
 
-      <svg
-        className="h-auto w-full max-w-5xl translate-y-[-40px]"
-        viewBox="0 0 1040 560"
-        fill="none"
-        role="presentation"
-        aria-hidden="true"
-      >
-        <defs>
-          <linearGradient id="guide-stroke" x1="0" x2="0" y1="0" y2="1">
-            <stop offset="0%" stopColor="rgba(255,255,255,0.25)" />
-            <stop offset="100%" stopColor="rgba(255,255,255,0.05)" />
-          </linearGradient>
-          <radialGradient id="node-glow" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="rgba(255,255,255,0.95)" />
-            <stop offset="100%" stopColor="rgba(255,255,255,0.05)" />
-          </radialGradient>
-          <filter id="path-glow" x="-40%" y="-40%" width="180%" height="180%">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="8" result="blur" />
-            <feMerge>
-              <feMergeNode in="blur" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
-        </defs>
+      <div className="flex w-full max-w-6xl flex-col items-center gap-16">
+        <div className="relative w-full max-w-5xl">
+          <svg
+            className="block h-full w-full"
+            viewBox="0 0 1040 560"
+            fill="none"
+            preserveAspectRatio="xMidYMid meet"
+            role="presentation"
+            aria-hidden="true"
+          >
+            <defs>
+              <linearGradient id="guide-stroke" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0%" stopColor="rgba(255,255,255,0.25)" />
+                <stop offset="100%" stopColor="rgba(255,255,255,0.05)" />
+              </linearGradient>
+              <radialGradient id="node-glow" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stopColor="rgba(255,255,255,0.95)" />
+                <stop offset="100%" stopColor="rgba(255,255,255,0.05)" />
+              </radialGradient>
+              <filter id="path-glow" x="-40%" y="-40%" width="180%" height="180%">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="8" result="blur" />
+                <feMerge>
+                  <feMergeNode in="blur" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+            </defs>
 
-        {horizontalGuides.map((y) => (
-          <line
-            key={y}
-            x1={120}
-            y1={y}
-            x2={920}
-            y2={y}
-            stroke="url(#guide-stroke)"
-            strokeWidth={1}
-            strokeDasharray="4 16"
+            {horizontalGuides.map((y) => (
+              <line
+                key={y}
+                x1={120}
+                y1={y}
+                x2={920}
+                y2={y}
+                stroke="url(#guide-stroke)"
+                strokeWidth={1}
+                strokeDasharray="4 16"
+              />
+            ))}
+
+            {flowPaths.map(({ id, d, duration, begin }) => (
+              <g key={id} filter="url(#path-glow)">
+                <path
+                  id={id}
+                  d={d}
+                  stroke="rgba(255,255,255,0.6)"
+                  strokeWidth={1.8}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  fill="none"
+                />
+                <circle r={6} fill="url(#node-glow)" className="motion-reduce:hidden">
+                  <animateMotion dur={duration} begin={begin} repeatCount="indefinite" keySplines="0.42 0 0.58 1" keyTimes="0;1" calcMode="spline">
+                    <mpath href={`#${id}`} />
+                  </animateMotion>
+                </circle>
+              </g>
+            ))}
+          </svg>
+        </div>
+
+        <div className="relative flex w-full justify-center">
+          <img
+            src="/white-logo.png"
+            alt="Microagents wordmark"
+            className="w-full max-w-[720px] opacity-90 md:max-w-[880px] xl:max-w-[1040px]"
+            loading="lazy"
           />
-        ))}
-
-        {flowPaths.map(({ id, d, duration, begin }) => (
-          <g key={id} filter="url(#path-glow)">
-            <path
-              id={id}
-              d={d}
-              stroke="rgba(255,255,255,0.6)"
-              strokeWidth={1.8}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              fill="none"
-            />
-            <circle r={6} fill="url(#node-glow)" className="motion-reduce:hidden">
-              <animateMotion dur={duration} begin={begin} repeatCount="indefinite" keySplines="0.42 0 0.58 1" keyTimes="0;1" calcMode="spline">
-                <mpath href={`#${id}`} />
-              </animateMotion>
-            </circle>
-          </g>
-        ))}
-      </svg>
-
-      <img src="/logo.svg" alt="Microagents" className="mt-[-20px] w-full max-w-[1700px] scale-100" loading="lazy" />
+        </div>
+      </div>
     </section>
   );
 }
