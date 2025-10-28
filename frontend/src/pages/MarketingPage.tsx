@@ -258,7 +258,7 @@ export function MarketingPage() {
               </div>
               <TransitionLink
                 to="/signup"
-                className="inline-flex items-center justify-center rounded-full bg-white px-4 py-1.5 font-semibold text-[#050505] transition-transform duration-200 hover:scale-105"
+                className="inline-flex items-center justify-center rounded-full bg-[#3a7ca5] px-4 py-1.5 font-semibold text-white transition-transform duration-200 hover:scale-105"
               >
                 Get Started
               </TransitionLink>

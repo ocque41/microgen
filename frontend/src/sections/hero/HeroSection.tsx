@@ -56,7 +56,7 @@ export function HeroSection() {
       {
         id: "flux-1",
         label: "Data Intelligence",
-        duration: "7.4s",
+        duration: "12.8s",
         begin: "-1.6s",
         amplitude: 1.25,
         interactiveGain: 210,
@@ -78,7 +78,7 @@ export function HeroSection() {
       {
         id: "flux-2",
         label: "Security & Trust",
-        duration: "6.6s",
+        duration: "11.6s",
         begin: "-2.4s",
         amplitude: 1.35,
         interactiveGain: 240,
@@ -100,7 +100,7 @@ export function HeroSection() {
       {
         id: "flux-3",
         label: "Search & Discovery",
-        duration: "8.2s",
+        duration: "14.2s",
         begin: "-3.2s",
         amplitude: 1.2,
         interactiveGain: 200,
@@ -122,7 +122,7 @@ export function HeroSection() {
       {
         id: "flux-4",
         label: "Autonomous Ops",
-        duration: "9.5s",
+        duration: "16.5s",
         begin: "-4s",
         amplitude: 1.45,
         interactiveGain: 260,
@@ -144,7 +144,7 @@ export function HeroSection() {
       {
         id: "flux-5",
         label: "Observability",
-        duration: "6.1s",
+        duration: "10.8s",
         begin: "-5.2s",
         amplitude: 1.5,
         interactiveGain: 280,
@@ -211,11 +211,11 @@ export function HeroSection() {
       setPathOffsets((prev) => {
         let shouldContinue = false;
         const next = prev.map((offset) => {
-          if (Math.abs(offset) < 0.6) {
+          if (Math.abs(offset) < 0.25) {
             return 0;
           }
           shouldContinue = true;
-          return offset * 0.82;
+          return offset * 0.9;
         });
 
         if (shouldContinue) {
@@ -240,20 +240,23 @@ export function HeroSection() {
       setPathOffsets((prev) =>
         prev.map((offset, index) => {
           const flow = flows[index];
-          const dx = (pointerX - flow.centerX) * 0.62;
+          const dx = (pointerX - flow.centerX) * 0.48;
           const dy = pointerY - flow.centerY;
           const distance = Math.hypot(dx, dy);
-          const influence = Math.max(0, 1 - distance / 260);
+          const depthFactor = flow.centerY / VIEWBOX_HEIGHT;
+          const radius = 220 + depthFactor * 220;
+          const influence = Math.max(0, 1 - distance / radius);
 
-          if (influence <= 0) {
-            const eased = offset * 0.78;
-            return Math.abs(eased) < 0.5 ? 0 : eased;
+          if (influence <= 0.002) {
+            const eased = offset * 0.86;
+            return Math.abs(eased) < 0.18 ? 0 : eased;
           }
 
           const direction = dy >= 0 ? 1 : -1;
-          const target = direction * influence * flow.interactiveGain;
-          const next = offset * 0.6 + target * 0.4;
-          return Math.abs(next) < 0.4 ? 0 : next;
+          const strength = flow.interactiveGain * 0.55;
+          const target = direction * influence * strength;
+          const next = offset * 0.78 + target * 0.22;
+          return Math.abs(next) < 0.18 ? 0 : next;
         })
       );
     },
@@ -414,7 +417,7 @@ export function HeroSection() {
         </div>
 
         <div className="relative flex w-full justify-center">
-          <span className="pointer-events-none absolute inset-0 mx-auto w-[70%] max-w-[1800px] -translate-y-10 rounded-full bg-[radial-gradient(circle,rgba(255,255,255,0.12),rgba(255,255,255,0)_65%)] blur-3xl" aria-hidden="true" />
+          <span className="pointer-events-none absolute inset-0 mx-auto w-[70%] max-w-[1800px] -translate-y-[18%] rounded-full bg-[radial-gradient(circle,rgba(58,124,165,0.32),rgba(58,124,165,0)_75%)] blur-[180px]" aria-hidden="true" />
           <img
             data-hero-wordmark
             id="hero-wordmark-image"
