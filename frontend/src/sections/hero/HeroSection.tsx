@@ -9,6 +9,7 @@ type FlowDefinition = {
   duration: string;
   begin: string;
   amplitude: number;
+  interactiveGain: number;
   base: {
     start: Point;
     c1: Point;
@@ -57,7 +58,8 @@ export function HeroSection() {
         label: "Data Intelligence",
         duration: "7.4s",
         begin: "-1.6s",
-        amplitude: 1,
+        amplitude: 1.25,
+        interactiveGain: 210,
         base: {
           start: [70, 190],
           c1: [300, 70],
@@ -78,7 +80,8 @@ export function HeroSection() {
         label: "Security & Trust",
         duration: "6.6s",
         begin: "-2.4s",
-        amplitude: 1.1,
+        amplitude: 1.35,
+        interactiveGain: 240,
         base: {
           start: [90, 260],
           c1: [280, 360],
@@ -99,7 +102,8 @@ export function HeroSection() {
         label: "Search & Discovery",
         duration: "8.2s",
         begin: "-3.2s",
-        amplitude: 0.95,
+        amplitude: 1.2,
+        interactiveGain: 200,
         base: {
           start: [130, 360],
           c1: [340, 320],
@@ -120,7 +124,8 @@ export function HeroSection() {
         label: "Autonomous Ops",
         duration: "9.5s",
         begin: "-4s",
-        amplitude: 1.2,
+        amplitude: 1.45,
+        interactiveGain: 260,
         base: {
           start: [50, 150],
           c1: [260, 210],
@@ -141,7 +146,8 @@ export function HeroSection() {
         label: "Observability",
         duration: "6.1s",
         begin: "-5.2s",
-        amplitude: 1,
+        amplitude: 1.5,
+        interactiveGain: 280,
         base: {
           start: [100, 230],
           c1: [280, 170],
@@ -237,7 +243,7 @@ export function HeroSection() {
           const dx = (pointerX - flow.centerX) * 0.62;
           const dy = pointerY - flow.centerY;
           const distance = Math.hypot(dx, dy);
-          const influence = Math.max(0, 1 - distance / 320);
+          const influence = Math.max(0, 1 - distance / 260);
 
           if (influence <= 0) {
             const eased = offset * 0.78;
@@ -245,7 +251,7 @@ export function HeroSection() {
           }
 
           const direction = dy >= 0 ? 1 : -1;
-          const target = direction * influence * 120;
+          const target = direction * influence * flow.interactiveGain;
           const next = offset * 0.6 + target * 0.4;
           return Math.abs(next) < 0.4 ? 0 : next;
         })
@@ -405,6 +411,7 @@ export function HeroSection() {
         </div>
 
         <div className="relative flex w-full justify-center">
+          <span className="pointer-events-none absolute inset-0 mx-auto w-[70%] max-w-[1800px] -translate-y-10 rounded-full bg-[radial-gradient(circle,rgba(255,255,255,0.12),rgba(255,255,255,0)_65%)] blur-3xl" aria-hidden="true" />
           <img
             src="/white-logo-trans.png"
             alt="Microagents wordmark"
