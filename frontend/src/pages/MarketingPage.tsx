@@ -229,7 +229,7 @@ export function MarketingPage() {
             style={{ top: navTop }}
           >
             <nav
-              className="pointer-events-auto relative z-[10000] flex w-full max-w-[16rem] sm:max-w-[18rem] items-center gap-2 rounded-full border border-[color:rgba(255,255,255,0.08)] bg-[#090909] px-3 py-2 text-xs shadow-[0_25px_70px_-60px_rgba(0,0,0,0.9)]"
+              className="pointer-events-auto relative z-[10000] flex w-full max-w-[20rem] sm:max-w-[22rem] items-center gap-1.5 rounded-full border border-[color:rgba(255,255,255,0.08)] bg-[#090909] px-3 py-1.5 text-xs shadow-[0_25px_70px_-60px_rgba(0,0,0,0.9)]"
               aria-label="Main navigation"
             >
               <TransitionLink
@@ -248,17 +248,17 @@ export function MarketingPage() {
                   loading="lazy"
                 />
               </TransitionLink>
-              <div className="flex flex-1 items-center justify-center gap-3 font-medium text-[#f9f9f9]">
-                <TransitionLink to="/pricing" className="text-[#f9f9f9] transition-colors duration-200 hover:text-white">
+              <div className="flex flex-1 items-center justify-center gap-2 font-medium text-[#f9f9f9]">
+                <TransitionLink to="/pricing" className="text-[#f9f9f9] transition-colors duration-200 hover:text-white whitespace-nowrap">
                   Models
                 </TransitionLink>
-                <TransitionLink to="/login" className="text-[#f9f9f9] transition-colors duration-200 hover:text-white">
+                <TransitionLink to="/login" className="text-[#f9f9f9] transition-colors duration-200 hover:text-white whitespace-nowrap">
                   Login
                 </TransitionLink>
               </div>
               <TransitionLink
                 to="/signup"
-                className="inline-flex items-center justify-center rounded-full bg-[#3a7ca5] px-4 py-1.5 font-semibold text-white transition-transform duration-200 hover:scale-105"
+                className="inline-flex items-center justify-center rounded-full bg-[#3a7ca5] px-4 py-1.5 font-semibold text-white transition-transform duration-200 hover:scale-105 whitespace-nowrap"
               >
                 Get Started
               </TransitionLink>

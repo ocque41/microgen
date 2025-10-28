@@ -241,16 +241,16 @@ export function HeroSection() {
       setPathOffsets((prev) =>
         prev.map((offset, index) => {
           const flow = flows[index];
-          const dx = (pointerX - flow.centerX) * 0.36;
+          const dx = (pointerX - flow.centerX) * 0.28;
           const dy = pointerY - flow.centerY;
           const distance = Math.hypot(dx, dy);
           const depthFactor = flow.centerY / VIEWBOX_HEIGHT;
-          const radius = 260 + depthFactor * 260;
+          const radius = 320 + depthFactor * 360;
           const influence = Math.max(0, 1 - distance / radius);
 
-          if (influence <= 0.0015) {
-            const eased = offset * 0.94;
-            return Math.abs(eased) < 0.1 ? 0 : eased;
+          if (influence <= 0.0008) {
+            const eased = offset * 0.95;
+            return Math.abs(eased) < 0.08 ? 0 : eased;
           }
 
           const direction = dy >= 0 ? 1 : -1;
