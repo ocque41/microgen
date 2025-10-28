@@ -124,7 +124,7 @@ export function MarketingPage() {
   }, [marketingTheme.background]);
 
   const navContainerRef = useRef<HTMLDivElement>(null);
-  const [navTop, setNavTop] = useState<string>("48vh");
+  const [navTop, setNavTop] = useState<string>("50vh");
 
   const updateNavTop = useCallback(() => {
     if (typeof window === "undefined") {
@@ -138,10 +138,12 @@ export function MarketingPage() {
 
     const navRect = navEl.getBoundingClientRect();
     const viewportHeight = window.innerHeight;
-    const centerAnchor = viewportHeight * 0.48;
+    const preferredCenter = viewportHeight * 0.5;
+    const minCenterBound = viewportHeight * 0.44;
+    const maxCenterBound = viewportHeight * 0.56;
     const availableBottom = viewportHeight - navRect.height - 24;
-    const maxTop = Math.max(centerAnchor, availableBottom);
-    const minTop = Math.min(centerAnchor, maxTop);
+    const maxTop = Math.max(maxCenterBound, availableBottom);
+    const minTop = Math.min(minCenterBound, maxTop);
 
     const wordmarkElement = document.querySelector<HTMLElement>("[data-hero-wordmark]");
     const heroSection = document.querySelector<HTMLElement>("[data-hero-section]");
@@ -149,8 +151,8 @@ export function MarketingPage() {
       .map((element) => element?.getBoundingClientRect().bottom)
       .filter((value): value is number => typeof value === "number" && Number.isFinite(value));
 
-    const heroAnchor = heroBottoms.length > 0 ? Math.max(...heroBottoms) : centerAnchor;
-    const desiredTop = Math.max(centerAnchor, heroAnchor + 20);
+    const heroAnchor = heroBottoms.length > 0 ? Math.max(...heroBottoms) : preferredCenter;
+    const desiredTop = Math.max(preferredCenter, heroAnchor + 24);
     const clampedTop = Math.max(minTop, Math.min(maxTop, desiredTop));
 
     setNavTop(`${Math.round(clampedTop)}px`);
