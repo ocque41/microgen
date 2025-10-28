@@ -104,7 +104,7 @@ export function HeroSection() {
           <img
             src="/white-logo.png"
             alt="Microagents wordmark"
-            className="w-full max-w-[720px] opacity-90 md:max-w-[880px] xl:max-w-[1040px]"
+            className="w-full max-w-[1400px] opacity-95"
             loading="lazy"
           />
         </div>
