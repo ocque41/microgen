@@ -56,10 +56,10 @@ export function HeroSection() {
       {
         id: "flux-1",
         label: "Data Intelligence",
-        duration: "12.8s",
+        duration: "18.2s",
         begin: "-1.6s",
-        amplitude: 1.25,
-        interactiveGain: 210,
+        amplitude: 1.85,
+        interactiveGain: 180,
         base: {
           start: [70, 190],
           c1: [300, 70],
@@ -78,10 +78,10 @@ export function HeroSection() {
       {
         id: "flux-2",
         label: "Security & Trust",
-        duration: "11.6s",
+        duration: "17.4s",
         begin: "-2.4s",
-        amplitude: 1.35,
-        interactiveGain: 240,
+        amplitude: 1.95,
+        interactiveGain: 190,
         base: {
           start: [90, 260],
           c1: [280, 360],
@@ -100,10 +100,10 @@ export function HeroSection() {
       {
         id: "flux-3",
         label: "Search & Discovery",
-        duration: "14.2s",
+        duration: "20.4s",
         begin: "-3.2s",
-        amplitude: 1.2,
-        interactiveGain: 200,
+        amplitude: 1.7,
+        interactiveGain: 170,
         base: {
           start: [130, 360],
           c1: [340, 320],
@@ -122,10 +122,10 @@ export function HeroSection() {
       {
         id: "flux-4",
         label: "Autonomous Ops",
-        duration: "16.5s",
+        duration: "22.6s",
         begin: "-4s",
-        amplitude: 1.45,
-        interactiveGain: 260,
+        amplitude: 2,
+        interactiveGain: 210,
         base: {
           start: [50, 150],
           c1: [260, 210],
@@ -144,10 +144,10 @@ export function HeroSection() {
       {
         id: "flux-5",
         label: "Observability",
-        duration: "10.8s",
+        duration: "16.8s",
         begin: "-5.2s",
-        amplitude: 1.5,
-        interactiveGain: 280,
+        amplitude: 2.05,
+        interactiveGain: 215,
         base: {
           start: [100, 230],
           c1: [280, 170],
@@ -189,7 +189,6 @@ export function HeroSection() {
   }, [flows]);
 
   const [pathOffsets, setPathOffsets] = useState<number[]>(() => flows.map(() => 0));
-  const [isHovered, setIsHovered] = useState(false);
   const pointerActiveRef = useRef(false);
   const relaxFrameRef = useRef<number>();
 
@@ -211,11 +210,11 @@ export function HeroSection() {
       setPathOffsets((prev) => {
         let shouldContinue = false;
         const next = prev.map((offset) => {
-          if (Math.abs(offset) < 0.25) {
+          if (Math.abs(offset) < 0.12) {
             return 0;
           }
           shouldContinue = true;
-          return offset * 0.9;
+          return offset * 0.96;
         });
 
         if (shouldContinue) {
@@ -229,51 +228,63 @@ export function HeroSection() {
     relaxFrameRef.current = requestAnimationFrame(step);
   }, []);
 
-  const handlePointerMove = useCallback(
-    (event: ReactPointerEvent<HTMLDivElement>) => {
-      pointerActiveRef.current = true;
+  const applyPointerInfluence = useCallback(
+    (clientX: number, clientY: number, element: HTMLDivElement) => {
+      const bounds = element.getBoundingClientRect();
+      if (bounds.width === 0 || bounds.height === 0) {
+        return;
+      }
 
-      const bounds = event.currentTarget.getBoundingClientRect();
-      const pointerX = ((event.clientX - bounds.left) / bounds.width) * VIEWBOX_WIDTH;
-      const pointerY = ((event.clientY - bounds.top) / bounds.height) * VIEWBOX_HEIGHT;
+      const pointerX = ((clientX - bounds.left) / bounds.width) * VIEWBOX_WIDTH;
+      const pointerY = ((clientY - bounds.top) / bounds.height) * VIEWBOX_HEIGHT;
 
       setPathOffsets((prev) =>
         prev.map((offset, index) => {
           const flow = flows[index];
-          const dx = (pointerX - flow.centerX) * 0.48;
+          const dx = (pointerX - flow.centerX) * 0.36;
           const dy = pointerY - flow.centerY;
           const distance = Math.hypot(dx, dy);
           const depthFactor = flow.centerY / VIEWBOX_HEIGHT;
-          const radius = 220 + depthFactor * 220;
+          const radius = 260 + depthFactor * 260;
           const influence = Math.max(0, 1 - distance / radius);
 
-          if (influence <= 0.002) {
-            const eased = offset * 0.86;
-            return Math.abs(eased) < 0.18 ? 0 : eased;
+          if (influence <= 0.0015) {
+            const eased = offset * 0.94;
+            return Math.abs(eased) < 0.1 ? 0 : eased;
           }
 
           const direction = dy >= 0 ? 1 : -1;
-          const strength = flow.interactiveGain * 0.55;
+          const strength = flow.interactiveGain * (0.32 + depthFactor * 0.28);
           const target = direction * influence * strength;
-          const next = offset * 0.78 + target * 0.22;
-          return Math.abs(next) < 0.18 ? 0 : next;
+          const next = offset * 0.9 + target * 0.1;
+          return Math.abs(next) < 0.1 ? 0 : next;
         })
       );
     },
     [flows]
   );
 
-  const handlePointerEnter = useCallback(() => {
-    pointerActiveRef.current = true;
-    setIsHovered(true);
-    if (relaxFrameRef.current !== undefined) {
-      cancelAnimationFrame(relaxFrameRef.current);
-    }
-  }, []);
+  const handlePointerMove = useCallback(
+    (event: ReactPointerEvent<HTMLDivElement>) => {
+      pointerActiveRef.current = true;
+      applyPointerInfluence(event.clientX, event.clientY, event.currentTarget);
+    },
+    [applyPointerInfluence]
+  );
+
+  const handlePointerEnter = useCallback(
+    (event: ReactPointerEvent<HTMLDivElement>) => {
+      pointerActiveRef.current = true;
+      if (relaxFrameRef.current !== undefined) {
+        cancelAnimationFrame(relaxFrameRef.current);
+      }
+      applyPointerInfluence(event.clientX, event.clientY, event.currentTarget);
+    },
+    [applyPointerInfluence]
+  );
 
   const handlePointerLeave = useCallback(() => {
     pointerActiveRef.current = false;
-    setIsHovered(false);
     scheduleRelax();
   }, [scheduleRelax]);
 
@@ -298,6 +309,7 @@ export function HeroSection() {
             preserveAspectRatio="xMidYMid meet"
             role="presentation"
             aria-hidden="true"
+            style={{ overflow: "visible" }}
           >
             <defs>
               <linearGradient id="guide-stroke" x1="0" x2="0" y1="0" y2="1">
@@ -335,6 +347,14 @@ export function HeroSection() {
               const pathD = buildPathD(flow, offset);
               const labelWidth = flow.labelWidth;
               const labelHeight = flow.labelHeight;
+              const energyFactor = Math.min(1, Math.abs(offset) / (flow.interactiveGain * 0.5 + 60));
+              const labelOpacity = Math.pow(energyFactor, 0.78);
+              const nodeScale = 1 + labelOpacity * 0.55;
+              const haloScale = 1 + labelOpacity * 0.65;
+              const labelScale = 0.7 + labelOpacity * 0.42;
+              const translateBase = labelHeight - 2;
+              const translateActive = labelHeight + 16;
+              const translateY = translateBase + (translateActive - translateBase) * labelOpacity;
 
               return (
                 <g key={flow.id} filter="url(#path-glow)">
@@ -351,8 +371,8 @@ export function HeroSection() {
                     style={{
                       transformBox: "fill-box",
                       transformOrigin: "center",
-                      transition: "transform 280ms cubic-bezier(.2,.7,.3,1)",
-                      transform: `scale(${isHovered ? 1.22 : 1})`,
+                      transition: "transform 620ms cubic-bezier(.21,.79,.26,1)",
+                      transform: `scale(${nodeScale})`,
                     }}
                   >
                     <circle
@@ -361,19 +381,17 @@ export function HeroSection() {
                       style={{
                         transformBox: "fill-box",
                         transformOrigin: "center",
-                        transition: "transform 280ms cubic-bezier(.2,.7,.3,1)",
-                        transform: `scale(${isHovered ? 1.35 : 1})`,
+                        transition: "transform 620ms cubic-bezier(.21,.79,.26,1)",
+                        transform: `scale(${haloScale})`,
                       }}
                     />
                     <g
                       style={{
                         pointerEvents: "none",
-                        opacity: isHovered ? 0.95 : 0,
+                        opacity: labelOpacity,
                         transformOrigin: "left center",
-                        transform: isHovered
-                          ? `translate(18,-${labelHeight + 6}) scale(1)`
-                          : `translate(18,-${labelHeight - 4}) scale(0.84)` ,
-                        transition: "opacity 260ms ease, transform 300ms cubic-bezier(.22,.68,.3,1)",
+                        transform: `translate(24,-${translateY}) scale(${labelScale})`,
+                        transition: "opacity 560ms cubic-bezier(.25,.7,.28,1), transform 620ms cubic-bezier(.25,.78,.26,1)",
                       }}
                     >
                       <rect
