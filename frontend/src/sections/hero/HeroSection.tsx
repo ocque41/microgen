@@ -38,8 +38,8 @@ export function HeroSection() {
     <section className="relative isolate flex min-h-[90vh] flex-col items-center justify-center overflow-hidden bg-[#050505] px-6 pb-24 pt-24 text-[color:rgba(244,241,234,0.85)] md:px-12">
       <h1 className="sr-only">microagents</h1>
 
-      <div className="flex w-full max-w-6xl flex-col items-center gap-3">
-        <div className="relative w-full max-w-5xl">
+      <div className="flex w-full max-w-6xl flex-col items-center gap-2">
+        <div className="relative w-full max-w-[1200px] sm:max-w-[1600px] lg:max-w-[2200px] xl:max-w-[2600px]">
           <svg
             className="block h-full w-full"
             viewBox="0 0 1040 560"
@@ -104,7 +104,7 @@ export function HeroSection() {
           <img
             src="/white-logo-trans.png"
             alt="Microagents wordmark"
-            className="w-full max-w-[1500px] opacity-100 -mt-32 md:-mt-44 lg:-mt-60"
+            className="w-full max-w-[2000px] sm:max-w-[2200px] lg:max-w-[2800px] opacity-100 -mt-48 md:-mt-64 lg:-mt-80"
             loading="lazy"
           />
         </div>
