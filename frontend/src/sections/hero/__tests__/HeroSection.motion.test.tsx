@@ -23,7 +23,7 @@ describe("HeroSection", () => {
     const markup = renderToString(<HeroSection />);
 
     expect(markup).toContain("microagents");
-    expect(markup).toContain("/white-logo.png");
+    expect(markup).toContain("/white-logo-trans.png");
     expect(markup).toContain("<svg");
   });
 

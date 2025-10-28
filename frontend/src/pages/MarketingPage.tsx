@@ -136,29 +136,7 @@ export function MarketingPage() {
     <div className="relative min-h-screen overflow-x-hidden text-text" style={marketingThemeStyles}>
       <div className="mesh-background pointer-events-none" />
       <div className="relative">
-        <section className="relative flex flex-col">
-          <nav className="relative flex flex-col gap-6 border-b border-[color:rgba(244,241,234,0.08)] bg-[#050505] px-6 pb-6 pt-8 text-[color:var(--text-primary)] lg:flex-row lg:items-center lg:justify-between lg:gap-0 lg:px-12 lg:pb-4 lg:pt-10">
-            <TransitionLink to="/" className="flex items-center gap-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--accent)]">
-              <img src="/logo.svg" alt="Microagents" className="h-12 w-auto" />
-            </TransitionLink>
-            <div className="flex flex-1 flex-col items-center gap-4 text-[0.8rem] font-medium uppercase tracking-[0.3em] text-[color:rgba(244,241,234,0.72)] md:flex-row md:justify-center md:gap-8">
-              <TransitionLink to="/about" className="transition-colors duration-200 hover:text-[color:var(--text-primary)]">About</TransitionLink>
-              <TransitionLink to="/features" className="transition-colors duration-200 hover:text-[color:var(--text-primary)]">Features</TransitionLink>
-              <TransitionLink to="/learn" className="transition-colors duration-200 hover:text-[color:var(--text-primary)]">Learn</TransitionLink>
-              <TransitionLink to="/business" className="transition-colors duration-200 hover:text-[color:var(--text-primary)]">For Business</TransitionLink>
-              <TransitionLink to="/pricing" className="transition-colors duration-200 hover:text-[color:var(--text-primary)]">Pricing</TransitionLink>
-              <TransitionLink to="/download" className="transition-colors duration-200 hover:text-[color:var(--text-primary)]">Download</TransitionLink>
-            </div>
-            <div className="flex justify-end">
-              <TransitionLink
-                to="/signup"
-                className="inline-flex items-center justify-center rounded-full bg-[color:var(--accent)] px-5 py-2 text-xs font-semibold uppercase tracking-[0.28em] text-[color:var(--accent-inverse)] transition-colors duration-200 hover:bg-[color:var(--accent-hover)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--accent)]"
-              >
-                Get Started
-              </TransitionLink>
-            </div>
-          </nav>
-        </section>
+        <section className="relative flex flex-col" aria-label="Navigation placeholder" />
         <HeroSection />
         <StorySections />
 
