@@ -413,6 +413,7 @@ export function HeroSection() {
         <div className="relative flex w-full justify-center">
           <span className="pointer-events-none absolute inset-0 mx-auto w-[70%] max-w-[1800px] -translate-y-10 rounded-full bg-[radial-gradient(circle,rgba(255,255,255,0.12),rgba(255,255,255,0)_65%)] blur-3xl" aria-hidden="true" />
           <img
+            id="hero-wordmark-image"
             src="/white-logo-trans.png"
             alt="Microagents wordmark"
             className="w-full max-w-[2200px] sm:max-w-[2600px] lg:max-w-[3200px] opacity-100 -mt-52 md:-mt-72 lg:-mt-96"

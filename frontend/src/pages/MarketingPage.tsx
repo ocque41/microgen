@@ -1,5 +1,5 @@
 import type { CSSProperties } from "react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { TransitionLink } from "@/components/motion/TransitionLink";
 import { marketingTheme } from "@/lib/marketingTheme";
 import { cn } from "@/lib/utils";
@@ -123,6 +123,65 @@ export function MarketingPage() {
     };
   }, [marketingTheme.background]);
 
+  const navContainerRef = useRef<HTMLDivElement>(null);
+  const [navTop, setNavTop] = useState<string>("70vh");
+
+  const updateNavTop = useCallback(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const navEl = navContainerRef.current;
+    if (!navEl) {
+      return;
+    }
+
+    const heroImage = document.getElementById("hero-wordmark-image");
+    const navRect = navEl.getBoundingClientRect();
+    const viewportHeight = window.innerHeight;
+    const minTop = viewportHeight * 0.64;
+    const maxTop = Math.max(minTop, viewportHeight - navRect.height - 24);
+
+    if (!heroImage) {
+      setNavTop(`${Math.round(minTop)}px`);
+      return;
+    }
+
+    const heroRect = heroImage.getBoundingClientRect();
+    const desiredTop = heroRect.bottom + 32;
+    const clampedTop = Math.min(maxTop, Math.max(minTop, desiredTop));
+    setNavTop(`${Math.round(clampedTop)}px`);
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return undefined;
+    }
+
+    const handleResize = () => window.requestAnimationFrame(updateNavTop);
+    window.addEventListener("resize", handleResize);
+
+    updateNavTop();
+    const raf = window.requestAnimationFrame(updateNavTop);
+    const timer = window.setTimeout(updateNavTop, 220);
+
+    const heroImage = document.getElementById("hero-wordmark-image") as HTMLImageElement | null;
+    const handleImageLoad = () => updateNavTop();
+    if (heroImage) {
+      heroImage.addEventListener("load", handleImageLoad, { once: true });
+      if (heroImage.complete) {
+        handleImageLoad();
+      }
+    }
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      window.cancelAnimationFrame(raf);
+      window.clearTimeout(timer);
+      heroImage?.removeEventListener("load", handleImageLoad);
+    };
+  }, [updateNavTop]);
+
   const featureRows = featureTiles.reduce((rows, tile, index) => {
     if (index % 2 === 0) {
       rows.push([tile]);
@@ -138,8 +197,9 @@ export function MarketingPage() {
       <div className="relative">
         <section className="relative isolate flex justify-center" aria-label="Primary navigation">
           <div
+            ref={navContainerRef}
             className="pointer-events-none sticky z-40 flex w-full justify-center px-2 sm:px-4"
-            style={{ top: "clamp(55vh, calc(50vh + 4rem), 68vh)" }}
+            style={{ top: navTop }}
           >
             <nav
               className="pointer-events-auto flex w-full max-w-[16rem] sm:max-w-[18rem] items-center gap-2 rounded-full border border-[color:rgba(255,255,255,0.08)] bg-[rgba(24,24,24,0.78)] px-3 py-2 text-xs shadow-[0_25px_70px_-60px_rgba(0,0,0,0.9)] backdrop-blur-md"
@@ -153,7 +213,8 @@ export function MarketingPage() {
                 <img
                   src="/icon-white-trans.png"
                   alt="Microagents icon"
-                  className="h-full w-full scale-[1.32] transform object-contain"
+                  className="h-full w-full object-contain"
+                  style={{ transform: "scale(1.68) translateY(2%)" }}
                 />
               </TransitionLink>
               <div className="flex flex-1 items-center justify-center gap-3 font-medium text-[#f9f9f9]">
