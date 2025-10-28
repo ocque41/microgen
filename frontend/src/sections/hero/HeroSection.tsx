@@ -277,7 +277,7 @@ export function HeroSection() {
   return (
     <section
       data-hero-section
-      className="relative isolate flex min-h-[90vh] flex-col items-center justify-center overflow-hidden bg-[#050505] px-6 pb-24 pt-24 text-[color:rgba(244,241,234,0.85)] md:px-12"
+      className="relative isolate flex min-h-[90vh] flex-col items-center justify-center overflow-hidden bg-[#090909] px-6 pb-24 pt-24 text-[color:rgba(244,241,234,0.85)] md:px-12"
     >
       <h1 className="sr-only">microagents</h1>
 

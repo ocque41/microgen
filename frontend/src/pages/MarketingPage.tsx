@@ -124,7 +124,7 @@ export function MarketingPage() {
   }, [marketingTheme.background]);
 
   const navContainerRef = useRef<HTMLDivElement>(null);
-  const [navTop, setNavTop] = useState<string>("70vh");
+  const [navTop, setNavTop] = useState<string>("68vh");
 
   const updateNavTop = useCallback(() => {
     if (typeof window === "undefined") {
@@ -138,7 +138,7 @@ export function MarketingPage() {
 
     const navRect = navEl.getBoundingClientRect();
     const viewportHeight = window.innerHeight;
-    const centerAnchor = viewportHeight * 0.6;
+    const centerAnchor = viewportHeight * 0.68;
     const availableBottom = viewportHeight - navRect.height - 24;
     const maxTop = Math.max(centerAnchor, availableBottom);
     const minTop = Math.min(centerAnchor, maxTop);
@@ -150,7 +150,7 @@ export function MarketingPage() {
       .filter((value): value is number => typeof value === "number" && Number.isFinite(value));
 
     const heroAnchor = heroBottoms.length > 0 ? Math.max(...heroBottoms) : centerAnchor;
-    const desiredTop = Math.max(centerAnchor, heroAnchor + 48);
+    const desiredTop = Math.max(centerAnchor, heroAnchor + 56);
     const clampedTop = Math.max(minTop, Math.min(maxTop, desiredTop));
 
     setNavTop(`${Math.round(clampedTop)}px`);
@@ -223,16 +223,16 @@ export function MarketingPage() {
         <section className="relative isolate flex justify-center" aria-label="Primary navigation">
           <div
             ref={navContainerRef}
-            className="pointer-events-none sticky z-40 flex w-full justify-center px-2 sm:px-4"
+            className="pointer-events-none fixed left-0 right-0 z-40 flex w-full justify-center px-2 sm:px-4"
             style={{ top: navTop }}
           >
             <nav
-              className="pointer-events-auto flex w-full max-w-[16rem] sm:max-w-[18rem] items-center gap-2 rounded-full border border-[color:rgba(255,255,255,0.08)] bg-[rgba(24,24,24,0.78)] px-3 py-2 text-xs shadow-[0_25px_70px_-60px_rgba(0,0,0,0.9)] backdrop-blur-md"
+              className="pointer-events-auto flex w-full max-w-[16rem] sm:max-w-[18rem] items-center gap-2 rounded-full border border-[color:rgba(255,255,255,0.08)] bg-[#090909] px-3 py-2 text-xs shadow-[0_25px_70px_-60px_rgba(0,0,0,0.9)]"
               aria-label="Main navigation"
             >
               <TransitionLink
                 to="/"
-                className="relative flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full border border-[color:rgba(255,255,255,0.08)] bg-[#080808] text-[#050505] shadow-[0_12px_48px_-28px_rgba(0,0,0,0.9)] transition-transform duration-200 hover:scale-105"
+                className="relative flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full border border-[color:rgba(255,255,255,0.08)] bg-[#090909] text-[#050505] shadow-[0_12px_48px_-28px_rgba(0,0,0,0.9)] transition-transform duration-200 hover:scale-105"
                 aria-label="Microagents home"
               >
                 <span
@@ -242,7 +242,7 @@ export function MarketingPage() {
                 <img
                   src="/icon-white-trans.png"
                   alt="Microagents icon"
-                  className="relative h-[68%] w-[68%] object-contain"
+                  className="relative h-[90%] w-[90%] object-contain"
                   loading="lazy"
                 />
               </TransitionLink>
@@ -278,7 +278,7 @@ export function MarketingPage() {
               {steps.map((step, index) => (
                 <article
                   key={step.title}
-                  className="space-y-8 rounded-[5px] border border-[color:rgba(244,241,234,0.1)] bg-[color:rgba(23,23,23,0.78)] p-8 shadow-[0_50px_140px_-110px_rgba(0,0,0,0.85)]"
+                  className="space-y-8 rounded-[5px] border border-[color:rgba(244,241,234,0.1)] bg-[#090909] p-8 shadow-[0_50px_140px_-110px_rgba(0,0,0,0.85)]"
                 >
                   <div className="space-y-4 text-left">
                     <span className="inline-flex rounded-[5px] bg-[color:rgba(244,241,234,0.08)] px-4 py-1 text-xs font-semibold uppercase tracking-[0.25em] text-[color:rgba(244,241,234,0.75)]">
@@ -289,7 +289,7 @@ export function MarketingPage() {
                       {step.body}
                     </p>
                   </div>
-                  <div className="overflow-hidden rounded-[5px] border border-[color:rgba(244,241,234,0.08)] bg-[color:rgba(23,23,23,0.65)]">
+                  <div className="overflow-hidden rounded-[5px] border border-[color:rgba(244,241,234,0.08)] bg-[#090909]">
                     <IllustrationMedia alt={step.alt} src={step.image} className="h-64 w-full object-cover md:h-80" />
                   </div>
                 </article>
@@ -299,7 +299,7 @@ export function MarketingPage() {
         </section>
 
         <section className="flex min-h-screen items-center px-6 py-20 lg:px-12">
-          <div className="mx-auto w-full max-w-6xl overflow-hidden rounded-[5px] border border-[color:rgba(244,241,234,0.08)] bg-[color:rgba(23,23,23,0.78)] p-12 shadow-[0_60px_160px_-110px_rgba(0,0,0,0.9)]">
+          <div className="mx-auto w-full max-w-6xl overflow-hidden rounded-[5px] border border-[color:rgba(244,241,234,0.08)] bg-[#090909] p-12 shadow-[0_60px_160px_-110px_rgba(0,0,0,0.9)]">
             <div className="mx-auto flex max-w-4xl flex-col gap-12 text-left">
               <div className="space-y-4">
                 <h2 className="text-3xl font-semibold">Craft pricing with your micro agent</h2>
@@ -308,21 +308,21 @@ export function MarketingPage() {
                 </p>
               </div>
               <div className="grid gap-6 text-left md:grid-cols-3">
-                <div className="rounded-[5px] border border-[color:rgba(244,241,234,0.1)] bg-[color:rgba(23,23,23,0.65)] p-6">
+                <div className="rounded-[5px] border border-[color:rgba(244,241,234,0.1)] bg-[#090909] p-6">
                   <p className="text-xs uppercase tracking-[0.25em] text-[color:rgba(244,241,234,0.45)]">Outline</p>
                   <h3 className="mt-4 text-xl font-semibold">Map your operations</h3>
                   <p className="mt-3 text-sm" style={{ color: "color-mix(in srgb, var(--text-primary) 70%, transparent)" }}>
                     Share channels, volume expectations, and the accountability rules your assistants must uphold.
                   </p>
                 </div>
-                <div className="rounded-[5px] border border-[color:rgba(244,241,234,0.1)] bg-[color:rgba(23,23,23,0.65)] p-6">
+                <div className="rounded-[5px] border border-[color:rgba(244,241,234,0.1)] bg-[#090909] p-6">
                   <p className="text-xs uppercase tracking-[0.25em] text-[color:rgba(244,241,234,0.45)]">Co-create</p>
                   <h3 className="mt-4 text-xl font-semibold">Tune safeguards live</h3>
                   <p className="mt-3 text-sm" style={{ color: "color-mix(in srgb, var(--text-primary) 70%, transparent)" }}>
                     Adjust policy guardrails, review cadences, and retention settings as the agent drafts your bundle.
                   </p>
                 </div>
-                <div className="rounded-[5px] border border-[color:rgba(244,241,234,0.1)] bg-[color:rgba(23,23,23,0.65)] p-6">
+                <div className="rounded-[5px] border border-[color:rgba(244,241,234,0.1)] bg-[#090909] p-6">
                   <p className="text-xs uppercase tracking-[0.25em] text-[color:rgba(244,241,234,0.45)]">Confirm</p>
                   <h3 className="mt-4 text-xl font-semibold">Approve your build</h3>
                   <p className="mt-3 text-sm" style={{ color: "color-mix(in srgb, var(--text-primary) 70%, transparent)" }}>
@@ -359,9 +359,9 @@ export function MarketingPage() {
               {row.map((tile) => (
                 <article
                   key={tile.title}
-                  className="flex h-full flex-col justify-between gap-8 rounded-[5px] border border-[color:rgba(244,241,234,0.1)] bg-[color:rgba(23,23,23,0.78)] p-9 text-left shadow-[0_70px_180px_-110px_rgba(0,0,0,0.9)]"
+                  className="flex h-full flex-col justify-between gap-8 rounded-[5px] border border-[color:rgba(244,241,234,0.1)] bg-[#090909] p-9 text-left shadow-[0_70px_180px_-110px_rgba(0,0,0,0.9)]"
                 >
-                  <div className="overflow-hidden rounded-[5px] border border-[color:rgba(244,241,234,0.08)] bg-[color:rgba(23,23,23,0.65)]">
+                  <div className="overflow-hidden rounded-[5px] border border-[color:rgba(244,241,234,0.08)] bg-[#090909]">
                     <IllustrationMedia alt={tile.alt} src={tile.image} className="h-[340px] w-full object-cover" />
                   </div>
                   <div className="space-y-3">
