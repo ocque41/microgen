@@ -137,23 +137,26 @@ export function MarketingPage() {
       <div className="mesh-background pointer-events-none" />
       <div className="relative">
         <section className="relative isolate flex justify-center" aria-label="Primary navigation">
-          <div className="pointer-events-none sticky top-[68vh] sm:top-[66vh] lg:top-[63vh] z-40 flex w-full justify-center px-2 sm:px-4">
+          <div
+            className="pointer-events-none sticky z-40 flex w-full justify-center px-2 sm:px-4"
+            style={{ top: "calc(50vh + 4rem)" }}
+          >
             <nav
-              className="pointer-events-auto flex w-full max-w-[15rem] sm:max-w-[17rem] items-center gap-2 rounded-full border border-[color:rgba(255,255,255,0.08)] bg-[rgba(24,24,24,0.78)] px-3 py-2 text-xs shadow-[0_25px_70px_-60px_rgba(0,0,0,0.9)] backdrop-blur-md"
+              className="pointer-events-auto flex w-full max-w-[16rem] sm:max-w-[18rem] items-center gap-2 rounded-full border border-[color:rgba(255,255,255,0.08)] bg-[rgba(24,24,24,0.78)] px-3 py-2 text-xs shadow-[0_25px_70px_-60px_rgba(0,0,0,0.9)] backdrop-blur-md"
               aria-label="Main navigation"
             >
               <TransitionLink
                 to="/"
-                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#090909] p-1 text-[#050505] transition-transform duration-200 hover:scale-105"
+                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#090909] p-1 text-[#050505] transition-transform duration-200 hover:scale-105"
                 aria-label="Microagents home"
               >
-                <img src="/icon-white-trans.png" alt="Microagents icon" className="h-6 w-auto" />
+                <img src="/icon-white-trans.png" alt="Microagents icon" className="h-full w-full object-contain" />
               </TransitionLink>
               <div className="flex flex-1 items-center justify-center gap-3 font-medium text-[#f9f9f9]">
-                <TransitionLink to="/pricing" className="transition-colors duration-200 hover:text-white">
+                <TransitionLink to="/pricing" className="text-[#f9f9f9] transition-colors duration-200 hover:text-white">
                   Models
                 </TransitionLink>
-                <TransitionLink to="/login" className="transition-colors duration-200 hover:text-white">
+                <TransitionLink to="/login" className="text-[#f9f9f9] transition-colors duration-200 hover:text-white">
                   Login
                 </TransitionLink>
               </div>
