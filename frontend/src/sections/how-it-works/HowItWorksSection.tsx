@@ -61,10 +61,9 @@ const steps: Step[] = [
 export function HowItWorksSection() {
   return (
     <section aria-label="How Microagents works" className="relative mt-24 md:mt-32 xl:mt-40" data-how-it-works>
-      <div className="mx-auto flex max-w-6xl flex-col gap-6 px-6 text-left sm:px-10 lg:px-16 xl:px-20">
-        <p className="text-xs font-semibold uppercase tracking-[0.5em] text-[color:rgba(244,241,234,0.5)]">How it works</p>
+      <div className="flex flex-col gap-4 px-6 pb-12 text-left sm:px-10 lg:px-16 xl:px-20">
         <h2 className="text-3xl font-semibold text-[color:rgba(249,249,249,0.94)] sm:text-4xl md:text-5xl">
-          Ship microagents through a three-stage accountability loop
+          How it works
         </h2>
       </div>
       {steps.map((step, index) => {
