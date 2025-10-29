@@ -58,15 +58,15 @@ export function HeroSection() {
       {
         id: "flux-1",
         label: "Data Intelligence",
-        duration: "18.2s",
-        begin: "-1.6s",
+        duration: "12.2s",
+        begin: "-1.4s",
         amplitude: 2.25,
         interactiveGain: 180,
         base: {
-          start: [70, 150],
-          c1: [300, 30],
-          c2: [620, 220],
-          end: [990, 170],
+          start: [70, 130],
+          c1: [300, 10],
+          c2: [620, 190],
+          end: [990, 150],
         },
         shape: {
           start: -0.16,
@@ -80,15 +80,15 @@ export function HeroSection() {
       {
         id: "flux-2",
         label: "Security & Trust",
-        duration: "17.4s",
-        begin: "-2.4s",
+        duration: "12.8s",
+        begin: "-2s",
         amplitude: 2.35,
         interactiveGain: 190,
         base: {
-          start: [90, 230],
-          c1: [280, 330],
-          c2: [620, 260],
-          end: [980, 300],
+          start: [90, 290],
+          c1: [280, 380],
+          c2: [620, 320],
+          end: [980, 350],
         },
         shape: {
           start: 0.2,
@@ -102,15 +102,15 @@ export function HeroSection() {
       {
         id: "flux-3",
         label: "Search & Discovery",
-        duration: "20.4s",
-        begin: "-3.2s",
+        duration: "13.6s",
+        begin: "-2.4s",
         amplitude: 2.2,
         interactiveGain: 170,
         base: {
-          start: [130, 320],
-          c1: [340, 300],
-          c2: [700, 390],
-          end: [980, 290],
+          start: [130, 380],
+          c1: [340, 360],
+          c2: [700, 440],
+          end: [980, 380],
         },
         shape: {
           start: 0.22,
@@ -124,15 +124,15 @@ export function HeroSection() {
       {
         id: "flux-4",
         label: "Autonomous Ops",
-        duration: "22.6s",
-        begin: "-4s",
+        duration: "14.4s",
+        begin: "-1.8s",
         amplitude: 2.4,
         interactiveGain: 210,
         base: {
-          start: [50, 100],
-          c1: [260, 170],
-          c2: [640, 120],
-          end: [980, 180],
+          start: [50, 60],
+          c1: [260, 130],
+          c2: [640, 90],
+          end: [980, 140],
         },
         shape: {
           start: -0.22,
@@ -146,15 +146,15 @@ export function HeroSection() {
       {
         id: "flux-5",
         label: "Observability",
-        duration: "16.8s",
-        begin: "-5.2s",
+        duration: "11.6s",
+        begin: "-1.6s",
         amplitude: 2.45,
         interactiveGain: 215,
         base: {
-          start: [100, 190],
-          c1: [280, 140],
-          c2: [660, 200],
-          end: [980, 170],
+          start: [100, 210],
+          c1: [280, 160],
+          c2: [660, 240],
+          end: [980, 210],
         },
         shape: {
           start: -0.12,
@@ -189,6 +189,36 @@ export function HeroSection() {
         labelHeight,
       } as FlowInternal;
     });
+  }, []);
+
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return undefined;
+    }
+
+    const query = window.matchMedia("(max-width: 768px)");
+
+    const update = () => {
+      setIsMobile(query.matches);
+    };
+
+    update();
+
+    if (typeof query.addEventListener === "function") {
+      query.addEventListener("change", update);
+    } else {
+      query.addListener(update);
+    }
+
+    return () => {
+      if (typeof query.removeEventListener === "function") {
+        query.removeEventListener("change", update);
+      } else {
+        query.removeListener(update);
+      }
+    };
   }, []);
 
   const horizontalGuides = useMemo(() => {
@@ -322,14 +352,14 @@ export function HeroSection() {
       setPathOffsets((prev) =>
         prev.map((offset, index) => {
           const flow = flows[index];
-          const dx = (pointerX - flow.centerX) * 0.28;
+          const dx = (pointerX - flow.centerX) * 0.22;
           const dy = pointerY - flow.centerY;
           const distance = Math.hypot(dx, dy);
           const depthFactor = flow.centerY / VIEWBOX_HEIGHT;
-          const radius = 320 + depthFactor * 360;
+          const radius = 420 + depthFactor * 420;
           const influence = Math.max(0, 1 - distance / radius);
 
-          if (influence <= 0.0008) {
+          if (influence <= 0.0004) {
             const eased = offset * 0.95;
             return Math.abs(eased) < 0.08 ? 0 : eased;
           }
@@ -483,16 +513,20 @@ export function HeroSection() {
             {flows.map((flow, index) => {
               const offset = pathOffsets[index] ?? 0;
               const pathD = buildPathD(flow, offset);
-              const labelWidth = flow.labelWidth;
-              const labelHeight = flow.labelHeight;
+              const baseLabelWidth = flow.labelWidth;
+              const baseLabelHeight = flow.labelHeight;
+              const labelWidth = isMobile ? baseLabelWidth * 1.18 : baseLabelWidth;
+              const labelHeight = isMobile ? baseLabelHeight * 1.3 : baseLabelHeight;
               const energyFactor = Math.min(1, Math.abs(offset) / (flow.interactiveGain * 0.5 + 60));
-              const ambientBase = ambientEnabledRef.current ? 0.32 : 0;
+              const ambientBase = ambientEnabledRef.current ? (isMobile ? 0.45 : 0.32) : 0;
               const labelOpacity = ambientBase + (1 - ambientBase) * Math.pow(energyFactor, 0.78);
               const nodeScale = 1 + labelOpacity * 0.55;
               const haloScale = 1 + labelOpacity * 0.65;
-              const labelScale = 0.7 + labelOpacity * 0.42;
+              const labelScaleBase = isMobile ? 0.85 : 0.7;
+              const labelScaleRange = isMobile ? 0.5 : 0.42;
+              const labelScale = labelScaleBase + labelOpacity * labelScaleRange;
               const translateBase = labelHeight - 2;
-              const translateActive = labelHeight + 16;
+              const translateActive = labelHeight + (isMobile ? 22 : 16);
               const translateY = translateBase + (translateActive - translateBase) * labelOpacity;
               const strokeAlpha = 0.5 + labelOpacity * 0.4;
               const strokeColor = `rgba(255,255,255,${strokeAlpha})`;
@@ -543,13 +577,13 @@ export function HeroSection() {
                         rx={labelHeight / 2}
                         fill="rgba(9,9,9,0.82)"
                         stroke="rgba(255,255,255,0.28)"
-                        strokeWidth={1.2}
+                        strokeWidth={isMobile ? 1.4 : 1.2}
                       />
                       <text
                         x={labelWidth / 2}
                         y={-labelHeight / 2 + 2}
                         fill="rgba(255,255,255,0.92)"
-                        fontSize={13}
+                        fontSize={isMobile ? 15 : 13}
                         fontFamily="var(--font-sans, 'Inter', sans-serif)"
                         textAnchor="middle"
                         dominantBaseline="middle"
