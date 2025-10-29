@@ -616,7 +616,7 @@ export function HeroSection() {
             id="hero-wordmark-image"
             src="/white-logo-trans.png"
             alt="Microagents wordmark"
-            className="w-[720%] max-w-none mt-2 opacity-100 sm:w-[320%] sm:mt-6 md:w-[180%] md:max-w-[2600px] md:mt-10 lg:mt-12"
+            className="w-[720%] max-w-none mt-0 opacity-100 sm:w-[320%] sm:mt-4 md:w-[180%] md:max-w-[2600px] md:mt-8 lg:mt-10"
             loading="lazy"
           />
         </div>
