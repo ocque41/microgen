@@ -2,12 +2,15 @@ import type { ReactNode } from "react";
 
 const BORDER_COLOR = "rgba(244, 241, 234, 0.16)";
 const TEXT_SOFT = "color-mix(in srgb, var(--text-primary) 68%, transparent)";
+const TITLE_SPACING_STYLE = { letterSpacing: "-1.5px", lineHeight: "10px" } as const;
+const TEXT_SPACING_STYLE = { letterSpacing: "-0.5px", lineHeight: "18px" } as const;
 
 type Step = {
   id: string;
   title: string;
   highlight: string;
   description: ReactNode;
+  imageSrc: string;
 };
 
 const steps: Step[] = [
@@ -15,6 +18,7 @@ const steps: Step[] = [
     id: "brief",
     title: "Clarify the brief",
     highlight: "Capture the workflow, guardrails, and success metrics so everyone sees the same definition of done.",
+    imageSrc: "/gradient2.png",
     description: (
       <>
         <p>
@@ -30,6 +34,7 @@ const steps: Step[] = [
     id: "approve",
     title: "Approve the agent",
     highlight: "Run shadow sessions in a guided sandbox before production traffic ever hits the API.",
+    imageSrc: "/background.png",
     description: (
       <>
         <p>
@@ -45,6 +50,7 @@ const steps: Step[] = [
     id: "run",
     title: "Run with confidence",
     highlight: "Launch the automation with real-time accountability dashboards and human-ready escalation trails.",
+    imageSrc: "/background.png",
     description: (
       <>
         <p>
@@ -62,7 +68,10 @@ export function HowItWorksSection() {
   return (
     <section aria-label="How Microagents works" className="relative mt-24 md:mt-32 xl:mt-40" data-how-it-works>
       <div className="flex flex-col gap-4 px-6 pb-12 text-left sm:px-10 lg:px-16 xl:px-20">
-        <h2 className="text-3xl font-semibold text-[color:rgba(249,249,249,0.94)] sm:text-4xl md:text-5xl">
+        <h2
+          className="text-3xl font-semibold text-[color:rgba(249,249,249,0.94)] sm:text-4xl md:text-5xl"
+          style={TITLE_SPACING_STYLE}
+        >
           How it works
         </h2>
       </div>
@@ -92,15 +101,21 @@ export function HowItWorksSection() {
                     id={`how-it-works-${step.id}`}
                   >
                     <span className="text-base font-semibold uppercase tracking-[0.4em] text-[color:rgba(244,241,234,0.45)]">—</span>
-                    <span>{step.title}</span>
+                    <span style={TITLE_SPACING_STYLE}>{step.title}</span>
                   </div>
                 </header>
 
                 <div className="flex flex-1 flex-col gap-8 justify-end">
-                  <p className="text-lg font-medium leading-relaxed text-[color:rgba(249,249,249,0.88)] sm:text-xl">
+                  <p
+                    className="text-lg font-medium leading-relaxed text-[color:rgba(249,249,249,0.88)] sm:text-xl"
+                    style={TEXT_SPACING_STYLE}
+                  >
                     {step.highlight}
                   </p>
-                  <div className="space-y-5 text-base leading-relaxed sm:text-lg" style={{ color: TEXT_SOFT }}>
+                  <div
+                    className="space-y-5 text-base leading-relaxed sm:text-lg"
+                    style={{ ...TEXT_SPACING_STYLE, color: TEXT_SOFT }}
+                  >
                     {step.description}
                   </div>
                 </div>
@@ -128,7 +143,7 @@ export function HowItWorksSection() {
               style={{ borderColor: BORDER_COLOR }}
             >
               <img
-                src="/background.png"
+                src={step.imageSrc}
                 alt="Atmospheric gradient background"
                 className="absolute inset-0 h-full w-full object-cover object-center"
                 loading="lazy"
