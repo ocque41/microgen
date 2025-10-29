@@ -5,28 +5,7 @@ import { marketingTheme } from "@/lib/marketingTheme";
 import { cn } from "@/lib/utils";
 import heroImage from "@/assets/hero.png";
 import { HeroSection } from "@/sections/hero";
-import { StorySections } from "@/sections/story";
-
-const steps = [
-  {
-    title: "Clarify the brief",
-    body: "Capture the workflow, guardrails, and success metrics in a shared template so teams stay aligned.",
-    image: heroImage,
-    alt: "Briefing workspace capturing workflow expectations.",
-  },
-  {
-    title: "Approve the agent",
-    body: "Share a guided review sandbox with transcript capture before production traffic ever hits the API.",
-    image: heroImage,
-    alt: "Approval sandbox view for responsible agent sign-off.",
-  },
-  {
-    title: "Run with confidence",
-    body: "Monitor accountability dashboards with retention-ready logs, safety events, and escalation summaries.",
-    image: heroImage,
-    alt: "Operational dashboard highlighting accountable agent metrics.",
-  },
-];
+import { HowItWorksSection } from "@/sections/how-it-works";
 
 const featureTiles = [
   {
@@ -275,39 +254,7 @@ export function MarketingPage() {
           </div>
         </section>
         <HeroSection />
-        <StorySections />
-
-        <section className="px-6 py-24 lg:px-12">
-          <div className="mx-auto w-full max-w-6xl space-y-16">
-            <div className="mx-auto max-w-3xl space-y-4 text-center">
-              <h2 className="text-2xl font-semibold">How Microagents works</h2>
-              <p className="text-sm" style={{ color: "color-mix(in srgb, var(--text-primary) 70%, transparent)" }}>
-                Every launch follows three accountable phases so operations, compliance, and product teams stay in lockstep.
-              </p>
-            </div>
-            <div className="space-y-12">
-              {steps.map((step, index) => (
-                <article
-                  key={step.title}
-                  className="space-y-8 rounded-[5px] border border-[color:rgba(244,241,234,0.1)] bg-[#090909] p-8 shadow-[0_50px_140px_-110px_rgba(0,0,0,0.85)]"
-                >
-                  <div className="space-y-4 text-left">
-                    <span className="inline-flex rounded-[5px] bg-[color:rgba(244,241,234,0.08)] px-4 py-1 text-xs font-semibold uppercase tracking-[0.25em] text-[color:rgba(244,241,234,0.75)]">
-                      Step {index + 1}
-                    </span>
-                    <h3 className="text-3xl font-semibold">{step.title}</h3>
-                    <p className="text-sm" style={{ color: "color-mix(in srgb, var(--text-primary) 75%, transparent)" }}>
-                      {step.body}
-                    </p>
-                  </div>
-                  <div className="overflow-hidden rounded-[5px] border border-[color:rgba(244,241,234,0.08)] bg-[#090909]">
-                    <IllustrationMedia alt={step.alt} src={step.image} className="h-64 w-full object-cover md:h-80" />
-                  </div>
-                </article>
-              ))}
-            </div>
-          </div>
-        </section>
+        <HowItWorksSection />
 
         <section className="flex min-h-screen items-center px-6 py-20 lg:px-12">
           <div className="mx-auto w-full max-w-6xl overflow-hidden rounded-[5px] border border-[color:rgba(244,241,234,0.08)] bg-[#090909] p-12 shadow-[0_60px_160px_-110px_rgba(0,0,0,0.9)]">
