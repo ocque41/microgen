@@ -34,7 +34,7 @@ const steps: Step[] = [
     id: "approve",
     title: "Approve the agent",
     highlight: "Run shadow sessions in a guided sandbox before production traffic ever hits the API.",
-    imageSrc: "frontend/public/background.png",
+    imageSrc: "/background.png",
     description: (
       <>
         <p>
@@ -145,7 +145,7 @@ export function HowItWorksSection() {
               <img
                 src={step.imageSrc}
                 alt="Atmospheric gradient background"
-                className="absolute inset-0 h-full w-full object-cover object-center"
+                className={`absolute inset-0 h-full w-full object-cover object-center transition-transform duration-500 ease-out ${index === 0 ? "scale-125 md:scale-110" : "scale-100"}`}
                 loading="lazy"
               />
               <div
