@@ -46,12 +46,12 @@ const AMBIENT_AMPLITUDE_FACTOR = 0.13;
  */
 export const HOW_IT_WORKS_STEP2_BG = "/background.png";
 
-/** Giant logo sizing to sit BEHIND the animation inside the same SVG */
-const LOGO_SCALE = 3.6; // very big
-const LOGO_W = VIEWBOX_WIDTH * LOGO_SCALE;   // 3744
-const LOGO_H = VIEWBOX_HEIGHT * LOGO_SCALE;  // 2016
-const LOGO_X = (VIEWBOX_WIDTH - LOGO_W) / 2; // -1352
-const LOGO_Y = (VIEWBOX_HEIGHT - LOGO_H) / 2; // -728
+/** Giant logo geometry (very large, centered) to sit BEHIND the path animation inside the same SVG */
+const LOGO_SCALE = 4.2; // very big
+const LOGO_W = VIEWBOX_WIDTH * LOGO_SCALE; // 4368
+const LOGO_H = VIEWBOX_HEIGHT * LOGO_SCALE; // 2352
+const LOGO_X = (VIEWBOX_WIDTH - LOGO_W) / 2;
+const LOGO_Y = (VIEWBOX_HEIGHT - LOGO_H) / 2;
 
 function buildPathD(flow: FlowInternal, offset: number) {
   const amplitude = offset * flow.amplitude;
@@ -209,21 +209,16 @@ export function HeroSection() {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    if (typeof window === "undefined") {
-      return undefined;
-    }
+    if (typeof window === "undefined") return;
 
     const query = window.matchMedia("(max-width: 768px)");
-
-    const update = () => {
-      setIsMobile(query.matches);
-    };
-
+    const update = () => setIsMobile(query.matches);
     update();
 
     if (typeof query.addEventListener === "function") {
       query.addEventListener("change", update);
     } else {
+      // @ts-ignore deprecated fallback
       query.addListener(update);
     }
 
@@ -231,6 +226,7 @@ export function HeroSection() {
       if (typeof query.removeEventListener === "function") {
         query.removeEventListener("change", update);
       } else {
+        // @ts-ignore deprecated fallback
         query.removeListener(update);
       }
     };
@@ -238,9 +234,7 @@ export function HeroSection() {
 
   const horizontalGuides = useMemo(() => {
     const guideSet = new Set<number>();
-    flows.forEach((flow) => {
-      guideSet.add(Math.round(flow.centerY));
-    });
+    flows.forEach((flow) => guideSet.add(Math.round(flow.centerY)));
     return Array.from(guideSet).sort((a, b) => a - b);
   }, [flows]);
 
@@ -255,33 +249,23 @@ export function HeroSection() {
 
   useEffect(() => {
     return () => {
-      if (relaxFrameRef.current !== undefined) {
-        cancelAnimationFrame(relaxFrameRef.current);
-      }
+      if (relaxFrameRef.current !== undefined) cancelAnimationFrame(relaxFrameRef.current);
     };
   }, []);
 
   const scheduleRelax = useCallback(() => {
     if (pointerActiveRef.current) return;
-    if (relaxFrameRef.current !== undefined) {
-      cancelAnimationFrame(relaxFrameRef.current);
-    }
+    if (relaxFrameRef.current !== undefined) cancelAnimationFrame(relaxFrameRef.current);
 
     const step = () => {
       setPathOffsets((prev) => {
         let shouldContinue = false;
         const next = prev.map((offset) => {
-          if (Math.abs(offset) < 0.12) {
-            return 0;
-          }
+          if (Math.abs(offset) < 0.12) return 0;
           shouldContinue = true;
           return offset * 0.96;
         });
-
-        if (shouldContinue) {
-          relaxFrameRef.current = requestAnimationFrame(step);
-        }
-
+        if (shouldContinue) relaxFrameRef.current = requestAnimationFrame(step);
         return next;
       });
     };
@@ -308,11 +292,7 @@ export function HeroSection() {
         ambientFrameRef.current = undefined;
         return;
       }
-
-      if (ambientStartRef.current === undefined) {
-        ambientStartRef.current = time;
-      }
-
+      if (ambientStartRef.current === undefined) ambientStartRef.current = time;
       const elapsed = (time - ambientStartRef.current) / 1000;
 
       setPathOffsets(() =>
@@ -330,36 +310,24 @@ export function HeroSection() {
   );
 
   const startAmbient = useCallback(() => {
-    if (typeof window === "undefined" || !coarseDeviceRef.current) {
-      return;
-    }
-    if (ambientEnabledRef.current) {
-      return;
-    }
+    if (typeof window === "undefined" || !coarseDeviceRef.current) return;
+    if (ambientEnabledRef.current) return;
     ambientEnabledRef.current = true;
     ambientFrameRef.current = window.requestAnimationFrame(runAmbientStep);
   }, [runAmbientStep]);
 
   const scheduleAmbientResume = useCallback(() => {
-    if (typeof window === "undefined" || !coarseDeviceRef.current) {
-      return;
-    }
-    if (ambientRestartTimeoutRef.current !== undefined) {
-      window.clearTimeout(ambientRestartTimeoutRef.current);
-    }
+    if (typeof window === "undefined" || !coarseDeviceRef.current) return;
+    if (ambientRestartTimeoutRef.current !== undefined) window.clearTimeout(ambientRestartTimeoutRef.current);
     ambientRestartTimeoutRef.current = window.setTimeout(() => {
-      if (!pointerActiveRef.current) {
-        startAmbient();
-      }
+      if (!pointerActiveRef.current) startAmbient();
     }, 240);
   }, [startAmbient]);
 
   const applyPointerInfluence = useCallback(
     (clientX: number, clientY: number, element: HTMLDivElement) => {
       const bounds = element.getBoundingClientRect();
-      if (bounds.width === 0 || bounds.height === 0) {
-        return;
-      }
+      if (bounds.width === 0 || bounds.height === 0) return;
 
       const pointerX = ((clientX - bounds.left) / bounds.width) * VIEWBOX_WIDTH;
       const pointerY = ((clientY - bounds.top) / bounds.height) * VIEWBOX_HEIGHT;
@@ -403,9 +371,7 @@ export function HeroSection() {
     (event: ReactPointerEvent<HTMLDivElement>) => {
       stopAmbient();
       pointerActiveRef.current = true;
-      if (relaxFrameRef.current !== undefined) {
-        cancelAnimationFrame(relaxFrameRef.current);
-      }
+      if (relaxFrameRef.current !== undefined) cancelAnimationFrame(relaxFrameRef.current);
       applyPointerInfluence(event.clientX, event.clientY, event.currentTarget);
     },
     [applyPointerInfluence, stopAmbient]
@@ -418,9 +384,7 @@ export function HeroSection() {
   }, [scheduleRelax, scheduleAmbientResume]);
 
   useEffect(() => {
-    if (typeof window === "undefined") {
-      return undefined;
-    }
+    if (typeof window === "undefined") return;
 
     const coarseQuery = window.matchMedia("(pointer: coarse)");
     const hoverQuery = window.matchMedia("(hover: none)");
@@ -432,15 +396,10 @@ export function HeroSection() {
 
       if (!isCoarse) {
         stopAmbient();
-        if (!pointerActiveRef.current) {
-          setPathOffsets(() => flows.map(() => 0));
-        }
+        if (!pointerActiveRef.current) setPathOffsets(() => flows.map(() => 0));
         return;
       }
-
-      if (!pointerActiveRef.current) {
-        startAmbient();
-      }
+      if (!pointerActiveRef.current) startAmbient();
     };
 
     evaluate();
@@ -449,6 +408,7 @@ export function HeroSection() {
       if (typeof query.addEventListener === "function") {
         query.addEventListener("change", evaluate);
       } else {
+        // @ts-ignore
         query.addListener(evaluate);
       }
     };
@@ -457,6 +417,7 @@ export function HeroSection() {
       if (typeof query.removeEventListener === "function") {
         query.removeEventListener("change", evaluate);
       } else {
+        // @ts-ignore
         query.removeListener(evaluate);
       }
     };
@@ -478,7 +439,8 @@ export function HeroSection() {
     >
       <h1 className="sr-only">microagents</h1>
 
-      {/* Full-width container; logo is now inside the SVG behind the animation */}
+      {/* Full-width container; logo is merged inside the SVG behind the animation.
+          The separate logo element and its glow have been REMOVED by design. */}
       <div className="flex w-full max-w-none flex-col items-center gap-0">
         <div
           className="relative w-full max-w-[1200px] sm:max-w-[1700px] lg:max-w-[2300px] xl:max-w-[2800px] mb-0"
@@ -496,7 +458,7 @@ export function HeroSection() {
             style={{ overflow: "visible" }}
           >
             <defs>
-              {/* Guides / flows */}
+              {/* Guide + node visuals */}
               <linearGradient id="guide-stroke" x1="0" x2="0" y1="0" y2="1">
                 <stop offset="0%" stopColor="rgba(255,255,255,0.25)" />
                 <stop offset="100%" stopColor="rgba(255,255,255,0.05)" />
@@ -506,7 +468,7 @@ export function HeroSection() {
                 <stop offset="100%" stopColor="rgba(255,255,255,0.05)" />
               </radialGradient>
 
-              {/* Soft path glow (unchanged for lines) */}
+              {/* Soft path glow */}
               <filter id="path-glow" x="-40%" y="-40%" width="180%" height="180%">
                 <feGaussianBlur in="SourceGraphic" stdDeviation="7" result="blur" />
                 <feMerge>
@@ -515,23 +477,55 @@ export function HeroSection() {
                 </feMerge>
               </filter>
 
-              {/* Logo organic blend: subtle displacement + soft-light; no external glow */}
-              <filter id="logo-organic" x="-20%" y="-20%" width="140%" height="140%">
-                <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="blur1" />
-                <feTurbulence type="fractalNoise" baseFrequency="0.008" numOctaves="2" seed="7" result="noise" />
-                <feDisplacementMap in="blur1" in2="noise" scale="16" xChannelSelector="R" yChannelSelector="G" result="displaced" />
-                <feColorMatrix in="displaced" type="matrix"
+              {/* === Shader-style integration for the GIANT logo (ALT-C/Panoply vibes) ===
+                  - Displacement via animated fractal noise
+                  - Mild bloom
+                  - Soft-light/screen blend look
+                  - Radial mask to feather edges
+               */}
+              <filter id="logo-shader" x="-30%" y="-30%" width="160%" height="160%">
+                <feTurbulence
+                  type="fractalNoise"
+                  baseFrequency="0.006"
+                  numOctaves="2"
+                  seed="12"
+                  result="noise"
+                >
+                  <animate attributeName="baseFrequency" dur="18s" values="0.006;0.012;0.006" repeatCount="indefinite" />
+                </feTurbulence>
+                <feDisplacementMap
+                  in="SourceGraphic"
+                  in2="noise"
+                  scale="18"
+                  xChannelSelector="R"
+                  yChannelSelector="G"
+                  result="displaced"
+                >
+                  <animate attributeName="scale" dur="10s" values="12;22;12" repeatCount="indefinite" />
+                </feDisplacementMap>
+                <feGaussianBlur in="displaced" stdDeviation="2.2" result="softened" />
+                {/* lift highlights slightly */}
+                <feColorMatrix
+                  in="softened"
+                  type="matrix"
                   values="
                     1 0 0 0 0
                     0 1 0 0 0
                     0 0 1 0 0
-                    0 0 0 0.65 0" result="dimmed" />
-                <feBlend in="dimmed" in2="SourceGraphic" mode="screen" />
+                    0 0 0 0.60 0"
+                  result="dimmed"
+                />
+                <feBlend in="dimmed" in2="SourceGraphic" mode="screen" result="screened" />
+                <feGaussianBlur in="screened" stdDeviation="0.8" result="bloom" />
+                <feMerge>
+                  <feMergeNode in="bloom" />
+                  <feMergeNode in="screened" />
+                </feMerge>
               </filter>
 
-              {/* Radial mask to feather the giant logo edges */}
+              {/* Radial vignette mask: solid center, feathered edges to avoid hard silhouette */}
               <radialGradient id="logo-fade" cx="50%" cy="50%" r="50%">
-                <stop offset="55%" stopColor="white" />
+                <stop offset="48%" stopColor="white" />
                 <stop offset="100%" stopColor="black" />
               </radialGradient>
               <mask id="logo-mask" maskUnits="userSpaceOnUse" x={LOGO_X} y={LOGO_Y} width={LOGO_W} height={LOGO_H}>
@@ -539,13 +533,16 @@ export function HeroSection() {
               </mask>
             </defs>
 
-            {/* === MERGED: GIANT LOGO BEHIND THE ANIMATION === */}
+            {/* === MERGED: GIANT LOGO BEHIND THE ANIMATION ===
+                No separate DOM logo, no external glow. This sits inside the SVG,
+                blends with 'screen' feel, and stays contained in the hero. */}
             <g
               id="bg-logo"
+              pointerEvents="none"
               mask="url(#logo-mask)"
-              filter="url(#logo-organic)"
-              opacity="0.55"
-              style={{ mixBlendMode: "soft-light" as any }}
+              filter="url(#logo-shader)"
+              opacity="0.42"
+              style={{ mixBlendMode: "screen" as any }}
             >
               <image
                 x={LOGO_X}
@@ -558,7 +555,7 @@ export function HeroSection() {
               />
             </g>
 
-            {/* Horizontal guide lines */}
+            {/* Guide lines (subtle) */}
             {horizontalGuides.map((y) => (
               <line
                 key={`guide-${y}`}
@@ -572,7 +569,7 @@ export function HeroSection() {
               />
             ))}
 
-            {/* Animated flows (drawn AFTER the logo so they sit on top) */}
+            {/* Animated flows ABOVE the logo */}
             {flows.map((flow, index) => {
               const offset = pathOffsets[index] ?? 0;
               const pathD = buildPathD(flow, offset);
@@ -591,7 +588,7 @@ export function HeroSection() {
               const translateBase = labelHeight - 2;
               const translateActive = labelHeight + (isMobile ? 22 : 16);
               const translateY = translateBase + (translateActive - translateBase) * labelOpacity;
-              const strokeAlpha = 0.5 + labelOpacity * 0.4;
+              const strokeAlpha = 0.52 + labelOpacity * 0.36;
               const strokeColor = `rgba(255,255,255,${strokeAlpha})`;
 
               return (
