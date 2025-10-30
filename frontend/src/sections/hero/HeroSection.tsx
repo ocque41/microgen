@@ -47,7 +47,7 @@ const AMBIENT_AMPLITUDE_FACTOR = 0.13;
 export const HOW_IT_WORKS_STEP2_BG = "/background.png";
 
 /** Giant logo geometry (very large, centered) to sit BEHIND the path animation inside the same SVG */
-const LOGO_SCALE = 4.2; // very big
+const LOGO_SCALE = 2; // very big
 const LOGO_W = VIEWBOX_WIDTH * LOGO_SCALE; // 4368
 const LOGO_H = VIEWBOX_HEIGHT * LOGO_SCALE; // 2352
 const LOGO_X = (VIEWBOX_WIDTH - LOGO_W) / 2;
