@@ -610,7 +610,7 @@ export function HeroSection() {
         </div>
 
         <div className="relative flex w-full justify-center">
-          <span className="pointer-events-none absolute inset-0 mx-auto aspect-[11/3] w-[110%] max-w-[1600px] -translate-y-[9%] rounded-full bg-[radial-gradient(circle_at_center,rgba(58,124,165,0.58) 0%,rgba(58,124,165,0.26) 38%,rgba(58,124,165,0)_78%)] blur-[120px] sm:w-[64%] sm:max-w-[1280px]" aria-hidden="true" />
+          <span className="pointer-events-none absolute inset-0 mx-auto aspect-[11/3] w-[110%] max-w-[1600px] -translate-y-[0%] rounded-full bg-[radial-gradient(circle_at_center,rgba(58,124,165,0.58) 0%,rgba(58,124,165,0.26) 38%,rgba(58,124,165,0)_78%)] blur-[120px] sm:w-[64%] sm:max-w-[1280px]" aria-hidden="true" />
           <img
             data-hero-wordmark
             id="hero-wordmark-image"
