@@ -266,7 +266,10 @@ export function MarketingPage() {
                 </p>
               </div>
               <article className="space-y-6 rounded-[5px] border border-[color:rgba(244,241,234,0.1)] bg-[#090909] p-8">
-                <h3 className="text-2xl font-semibold">How the co-pilot personalizes your plan</h3>
+                <h3 className="text-2xl font-semibold">How the pilot personalizes your plan</h3>
+                <div className="overflow-hidden rounded-[5px] border border-[color:rgba(244,241,234,0.08)]">
+                  <img src="/gradient2.png" alt="Gradient accent for pricing flow" className="h-48 w-full object-cover" />
+                </div>
                 <ul className="space-y-4 text-sm" style={{ color: "color-mix(in srgb, var(--text-primary) 70%, transparent)" }}>
                   <li>
                     <span className="block text-xs font-semibold uppercase tracking-[0.25em] text-[color:rgba(244,241,234,0.45)]">
@@ -288,17 +291,19 @@ export function MarketingPage() {
                   </li>
                 </ul>
                 <p className="text-sm" style={{ color: "color-mix(in srgb, var(--text-primary) 70%, transparent)" }}>
-                  Your price evolves with your build—no static tiers, just a plan your agent and team endorse.
+                  Your static tier will be per agent, plan your agent and team endorse.
                 </p>
+                {/* Plan Step 1 update: added visual and reinstated goal framing */}
               </article>
               <div className="flex justify-center">
                 <TransitionLink
                   to="/signup"
                   className="inline-flex items-center justify-center rounded-full bg-[color:var(--accent)] px-8 py-3 text-sm font-semibold text-[color:var(--accent-inverse)] transition hover:bg-[color:var(--accent-hover)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--accent)]"
                 >
-                  Start the conversation
+                  Get Started
                 </TransitionLink>
               </div>
+              {/* Plan Step 2 complete: refreshed CTA copy */}
             </div>
           </div>
         </section>
