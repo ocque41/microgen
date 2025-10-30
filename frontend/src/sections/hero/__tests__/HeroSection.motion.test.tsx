@@ -31,6 +31,6 @@ describe("HeroSection", () => {
     const markup = renderToString(<HeroSection />);
 
     expect(markup).toContain("<img");
-    expect(markup).toContain("alt=\"Microagents wordmark\"");
+    expect(markup).toContain("alt=\"Microagents logo\"");
   });
 });

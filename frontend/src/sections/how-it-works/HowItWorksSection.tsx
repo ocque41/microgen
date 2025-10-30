@@ -11,6 +11,7 @@ type Step = {
   highlight: string;
   description: ReactNode;
   imageSrc: string;
+  imageAlt: string;
 };
 
 const steps: Step[] = [
@@ -19,6 +20,7 @@ const steps: Step[] = [
     title: "Clarify the brief",
     highlight: "Capture the workflow, guardrails, and success metrics so everyone sees the same definition of done.",
     imageSrc: "/gradient2.png",
+    imageAlt: "Kickoff canvas overview with highlighted guardrails",
     description: (
       <>
         <p>
@@ -34,7 +36,8 @@ const steps: Step[] = [
     id: "approve",
     title: "Approve the agent",
     highlight: "Run shadow sessions in a guided sandbox before production traffic ever hits the API.",
-    imageSrc: "/background.png",
+    imageSrc: "/hero.png",
+    imageAlt: "Guided sandbox approval interface snapshot",
     description: (
       <>
         <p>
@@ -51,6 +54,7 @@ const steps: Step[] = [
     title: "Run with confidence",
     highlight: "Launch the automation with real-time accountability dashboards and human-ready escalation trails.",
     imageSrc: "/gradient1.jpg",
+    imageAlt: "Operational dashboard displaying microagent activity",
     description: (
       <>
         <p>
@@ -144,8 +148,8 @@ export function HowItWorksSection() {
             >
               <img
                 src={step.imageSrc}
-                alt="Atmospheric gradient background"
-                className={`absolute inset-0 h-full w-full object-cover object-center transition-transform duration-500 ease-out ${index === 0 ? "scale-125 md:scale-110" : "scale-100"}`}
+                alt={step.imageAlt}
+                className={`absolute inset-0 h-full w-full object-cover object-center transition-transform duration-500 ease-out ${index === 0 ? "scale-[1.55] sm:scale-[1.35] md:scale-[1.2]" : index === 1 ? "scale-[1.12]" : "scale-100"}`}
                 loading="lazy"
               />
               <div

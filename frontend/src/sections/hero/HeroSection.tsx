@@ -231,10 +231,10 @@ export function HeroSection() {
 
   const [pathOffsets, setPathOffsets] = useState<number[]>(() => flows.map(() => 0));
   const pointerActiveRef = useRef(false);
-  const relaxFrameRef = useRef<number>();
-  const ambientFrameRef = useRef<number>();
-  const ambientStartRef = useRef<number>();
-  const ambientRestartTimeoutRef = useRef<number>();
+  const relaxFrameRef = useRef<number | undefined>(undefined);
+  const ambientFrameRef = useRef<number | undefined>(undefined);
+  const ambientStartRef = useRef<number | undefined>(undefined);
+  const ambientRestartTimeoutRef = useRef<number | undefined>(undefined);
   const ambientEnabledRef = useRef(false);
   const coarseDeviceRef = useRef(false);
 
@@ -616,7 +616,7 @@ export function HeroSection() {
             id="hero-wordmark-image"
             src="/white-logo-trans.png"
             alt="Microagents wordmark"
-            className="w-[720%] max-w-none -mt-32 opacity-100 sm:w-[320%] sm:-mt-20 md:w-[180%] md:max-w-[2600px] md:-mt-14 lg:-mt-12 xl:-mt-10"
+            className="w-[720%] max-w-none -mt-40 opacity-100 sm:w-[320%] sm:-mt-28 md:w-[180%] md:max-w-[2600px] md:-mt-20 lg:-mt-18 xl:-mt-16"
             loading="lazy"
           />
         </div>
