@@ -610,13 +610,13 @@ export function HeroSection() {
         </div>
 
         <div className="relative flex w-full justify-center">
-          <span className="pointer-events-none absolute inset-0 mx-auto aspect-[11/3] w-[110%] max-w-[1600px] -translate-y-[0%] rounded-full bg-[radial-gradient(circle_at_center,rgba(58,124,165,0.58) 0%,rgba(58,124,165,0.26) 38%,rgba(58,124,165,0)_78%)] blur-[120px] sm:w-[64%] sm:max-w-[1280px]" aria-hidden="true" />
+          <span className="pointer-events-none absolute inset-0 mx-auto aspect-[11/3] w-[110%] max-w-[1600px] -translate-y-[10%] rounded-full bg-[radial-gradient(circle_at_center,rgba(58,124,165,0.58) 0%,rgba(58,124,165,0.26) 38%,rgba(58,124,165,0)_78%)] blur-[120px] sm:w-[64%] sm:max-w-[1280px]" aria-hidden="true" />
           <img
             data-hero-wordmark
             id="hero-wordmark-image"
             src="/white-logo-trans.png"
-            alt="Microagents wordmark"
-            className="mt-30 w-[140vw] max-w-[1000px] opacity-100 sm:w-[240%] sm:max-w-none sm:-mt-60 md:w-[180%] md:max-w-[2600px] md:-mt-220 lg:-mt-200 xl:-mt-150"
+            alt="Microagents logo"
+            className="mt-0 w-[140vw] max-w-[1000px] opacity-100 sm:w-[240%] sm:max-w-none sm:-mt-80 md:w-[180%] md:max-w-[2600px] md:-mt-260 lg:-mt-240 xl:-mt-180"
             loading="lazy"
           />
         </div>
