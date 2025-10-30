@@ -28,8 +28,8 @@ dist/
 coverage/
 .vercel
 
+# Plan Step 1: keep the shared How It Works background asset versioned while leaving other heavy media optional.
 # Generated marketing media (restored locally via scripts/restore-hero-media.mjs)
-frontend/public/background.png
 frontend/public/hero.png
 frontend/public/hero-demo.webm
 frontend/src/assets/hero-demo-poster.jpg
