@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 
 import { publicAsset } from "../../lib/publicAsset";
-import { HOW_IT_WORKS_STEP2_BG } from "../hero/HeroSection";
+import { HOW_IT_WORKS_STEP2_BG } from "../../lib/marketingAssets";
 
 const BORDER_COLOR = "rgba(244, 241, 234, 0.16)";
 const TEXT_SOFT = "color-mix(in srgb, var(--text-primary) 68%, transparent)";
@@ -46,6 +46,7 @@ const steps: Step[] = [
     title: "Approve the agent",
     highlight: "Run shadow sessions in a guided sandbox before production traffic ever hits the API.",
     imageSrc: HOW_IT_WORKS_STEP2_BG,
+    // Plan Step 2: reuse the centralized step 2 asset so /public/background.png is located correctly.
     imageAlt: "Guided sandbox approval interface snapshot",
     description: (
       <>

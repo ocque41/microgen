@@ -2,7 +2,7 @@
 import type { PointerEvent as ReactPointerEvent } from "react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-import { publicAsset } from "../../lib/publicAsset";
+import { HOW_IT_WORKS_STEP2_BG } from "../../lib/marketingAssets";
 
 type Point = [number, number];
 
@@ -40,13 +40,6 @@ const VIEWBOX_WIDTH = 1040;
 const VIEWBOX_HEIGHT = 560;
 const HORIZONTAL_EXTENSION = 220;
 const AMBIENT_AMPLITUDE_FACTOR = 0.13;
-
-/**
- * How-it-works step 2 image:
- * Use the helper so `/public/background.png` resolves when the app is served
- * from a sub-path in production (e.g. `/app/`).
- */
-export const HOW_IT_WORKS_STEP2_BG = publicAsset("background.png");
 
 /** Giant logo geometry (very large, centered) to sit BEHIND the path animation inside the same SVG */
 const LOGO_SCALE = 1; // very big
@@ -672,7 +665,7 @@ export function HeroSection() {
           </svg>
         </div>
 
-        {/* Hidden preloader to ensure the background asset is available from /public */}
+        {/* Plan Step 3: keep preloading the shared step 2 background so /public/background.png stays available */}
         <img src={HOW_IT_WORKS_STEP2_BG} alt="" className="hidden" aria-hidden="true" />
       </div>
     </section>
