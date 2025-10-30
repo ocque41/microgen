@@ -40,14 +40,9 @@ const VIEWBOX_WIDTH = 1040;
 const VIEWBOX_HEIGHT = 560;
 const HORIZONTAL_EXTENSION = 220;
 const AMBIENT_AMPLITUDE_FACTOR = 0.13;
-const FLOW_SCALE = 0.85; // scale for the animated paths/labels only
-
-/** Giant logo geometry (very large, centered) to sit BEHIND the path animation inside the same SVG */
-const LOGO_SCALE = 1; // very big
-const LOGO_W = VIEWBOX_WIDTH * LOGO_SCALE; // 4368
-const LOGO_H = VIEWBOX_HEIGHT * LOGO_SCALE; // 2352
-const LOGO_X = (VIEWBOX_WIDTH - LOGO_W) / 2;
-const LOGO_Y = (VIEWBOX_HEIGHT - LOGO_H) / 2;
+const BASE_FLOW_SCALE = 0.85; // default scale for animated paths/labels
+const BASE_LOGO_SCALE = 1; // default logo scale when not magnified
+const MOBILE_MAGNIFICATION = 5; // how much larger the hero elements should appear on small screens
 
 function buildPathD(flow: FlowInternal, offset: number) {
   const amplitude = offset * flow.amplitude;
@@ -203,6 +198,13 @@ export function HeroSection() {
   }, []);
 
   const [isMobile, setIsMobile] = useState(false);
+
+  const flowScale = isMobile ? BASE_FLOW_SCALE * MOBILE_MAGNIFICATION : BASE_FLOW_SCALE;
+  const logoScale = isMobile ? BASE_LOGO_SCALE * MOBILE_MAGNIFICATION : BASE_LOGO_SCALE;
+  const logoWidth = VIEWBOX_WIDTH * logoScale;
+  const logoHeight = VIEWBOX_HEIGHT * logoScale;
+  const logoX = (VIEWBOX_WIDTH - logoWidth) / 2;
+  const logoY = (VIEWBOX_HEIGHT - logoHeight) / 2;
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -524,8 +526,8 @@ export function HeroSection() {
                 <stop offset="48%" stopColor="white" />
                 <stop offset="100%" stopColor="black" />
               </radialGradient>
-              <mask id="logo-mask" maskUnits="userSpaceOnUse" x={LOGO_X} y={LOGO_Y} width={LOGO_W} height={LOGO_H}>
-                <rect x={LOGO_X} y={LOGO_Y} width={LOGO_W} height={LOGO_H} fill="url(#logo-fade)" />
+              <mask id="logo-mask" maskUnits="userSpaceOnUse" x={logoX} y={logoY} width={logoWidth} height={logoHeight}>
+                <rect x={logoX} y={logoY} width={logoWidth} height={logoHeight} fill="url(#logo-fade)" />
               </mask>
             </defs>
 
@@ -541,10 +543,10 @@ export function HeroSection() {
               style={{ mixBlendMode: "screen" as any }}
             >
               <image
-                x={LOGO_X}
-                y={LOGO_Y}
-                width={LOGO_W}
-                height={LOGO_H}
+                x={logoX}
+                y={logoY}
+                width={logoWidth}
+                height={logoHeight}
                 href="/white-logo-trans.png"
                 xlinkHref="/white-logo-trans.png"
                 preserveAspectRatio="xMidYMid meet"
@@ -567,7 +569,7 @@ export function HeroSection() {
 
             {/* Animated flows ABOVE the logo */}
             <g
-              transform={`translate(${VIEWBOX_WIDTH / 2},${VIEWBOX_HEIGHT / 2}) scale(${FLOW_SCALE}) translate(-${VIEWBOX_WIDTH / 2},-${VIEWBOX_HEIGHT / 2})`}
+              transform={`translate(${VIEWBOX_WIDTH / 2},${VIEWBOX_HEIGHT / 2}) scale(${flowScale}) translate(-${VIEWBOX_WIDTH / 2},-${VIEWBOX_HEIGHT / 2})`}
             >
             {flows.map((flow, index) => {
               const offset = pathOffsets[index] ?? 0;
