@@ -34,7 +34,7 @@ const steps: Step[] = [
     id: "approve",
     title: "Approve the agent",
     highlight: "Run shadow sessions in a guided sandbox before production traffic ever hits the API.",
-    imageSrc: "/background.png",
+    imageSrc: "frontend/public/background.png",
     description: (
       <>
         <p>
@@ -50,7 +50,7 @@ const steps: Step[] = [
     id: "run",
     title: "Run with confidence",
     highlight: "Launch the automation with real-time accountability dashboards and human-ready escalation trails.",
-    imageSrc: "/background.png",
+    imageSrc: "frontend/public/gradient1.jpg",
     description: (
       <>
         <p>
