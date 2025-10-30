@@ -471,7 +471,7 @@ export function HeroSection() {
           onPointerMove={handlePointerMove}
         >
           <svg
-            className="block h-full w-full"
+            className="block h-full w-full origin-center scale-[1.12] sm:scale-100"
             viewBox="0 0 1040 560"
             fill="none"
             preserveAspectRatio="xMidYMid meet"
@@ -616,7 +616,7 @@ export function HeroSection() {
             id="hero-wordmark-image"
             src="/white-logo-trans.png"
             alt="Microagents wordmark"
-            className="w-[720%] max-w-none -mt-64 opacity-100 sm:w-[320%] sm:-mt-52 md:w-[180%] md:max-w-[2600px] md:-mt-36 lg:-mt-32 xl:-mt-28"
+            className="w-full max-w-[88vw] -mt-64 opacity-100 sm:w-[240%] sm:max-w-none sm:-mt-52 md:w-[180%] md:max-w-[2600px] md:-mt-44 lg:-mt-40 xl:-mt-36"
             loading="lazy"
           />
         </div>
