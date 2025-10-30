@@ -11,11 +11,16 @@
   --line-height-snug: 1.2;
   --line-height-normal: 1.5;
   --line-height-relaxed: 1.7;
+  --brand-title-letter-spacing: -2.5px;
+  --brand-title-line-height: calc(1em + 9px);
+  --brand-text-letter-spacing: -1px;
+  --brand-text-line-height: calc(1em + 15px);
 }
 
 body {
   font-size: var(--font-size-md);
-  line-height: var(--line-height-normal);
+  letter-spacing: var(--brand-text-letter-spacing);
+  line-height: var(--brand-text-line-height);
 }
 
 h1,
@@ -26,33 +31,35 @@ h5,
 h6 {
   font-family: var(--font-sans);
   font-weight: 600;
-  letter-spacing: -0.01em;
+  letter-spacing: var(--brand-title-letter-spacing);
+  line-height: var(--brand-title-line-height);
 }
 
 h1 {
   font-size: var(--font-size-3xl);
-  line-height: var(--line-height-tight);
+  line-height: var(--brand-title-line-height);
 }
 
 h2 {
   font-size: var(--font-size-2xl);
-  line-height: var(--line-height-snug);
+  line-height: var(--brand-title-line-height);
 }
 
 h3 {
   font-size: var(--font-size-xl);
-  line-height: var(--line-height-snug);
+  line-height: var(--brand-title-line-height);
 }
 
 h4 {
   font-size: var(--font-size-lg);
-  line-height: var(--line-height-normal);
+  line-height: var(--brand-title-line-height);
 }
 
 p,
 li {
   font-size: var(--font-size-md);
-  line-height: var(--line-height-normal);
+  letter-spacing: var(--brand-text-letter-spacing);
+  line-height: var(--brand-text-line-height);
   color: inherit;
 }
 
@@ -67,7 +74,8 @@ strong {
 
 .lead {
   font-size: var(--font-size-lg);
-  line-height: var(--line-height-relaxed);
+  letter-spacing: var(--brand-text-letter-spacing);
+  line-height: var(--brand-text-line-height);
 }
 
 .caption {
