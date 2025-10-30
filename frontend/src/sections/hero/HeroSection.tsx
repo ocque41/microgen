@@ -192,7 +192,6 @@ export function HeroSection() {
   }, []);
 
   const [isMobile, setIsMobile] = useState(false);
-  const [logoVisible, setLogoVisible] = useState(false);
 
   useEffect(() => {
     if (typeof window === "undefined") {
@@ -220,11 +219,6 @@ export function HeroSection() {
         query.removeListener(update);
       }
     };
-  }, []);
-
-  useEffect(() => {
-    const timeout = setTimeout(() => setLogoVisible(true), 40);
-    return () => clearTimeout(timeout);
   }, []);
 
   const horizontalGuides = useMemo(() => {
@@ -469,23 +463,21 @@ export function HeroSection() {
     >
       <h1 className="sr-only">microagents</h1>
 
-      <div
-        className="flex w-full max-w-6xl flex-col items-center gap-2"
-      >
+      <div className="flex w-full max-w-6xl flex-col items-center gap-2">
         <div
-          className="relative w-full flex flex-col items-center max-w-[1200px] sm:max-w-[1700px] lg:max-w-[2300px] xl:max-w-[2800px]"
+          className="relative w-full max-w-[1200px] sm:max-w-[1700px] lg:max-w-[2300px] xl:max-w-[2800px]"
           onPointerEnter={handlePointerEnter}
           onPointerLeave={handlePointerLeave}
           onPointerMove={handlePointerMove}
         >
           <svg
-            className="block h-full w-full origin-center scale-[1.12] sm:scale-100"
+            className="block h-full w-full"
             viewBox="0 0 1040 560"
             fill="none"
             preserveAspectRatio="xMidYMid meet"
             role="presentation"
             aria-hidden="true"
-            style={{ display: 'block' }}
+            style={{ overflow: "visible" }}
           >
             <defs>
               <linearGradient id="guide-stroke" x1="0" x2="0" y1="0" y2="1">
@@ -615,17 +607,17 @@ export function HeroSection() {
               );
             })}
           </svg>
+        </div>
 
-          <span className="pointer-events-none absolute inset-0 mx-auto aspect-[11/3] w-[110%] max-w-[1600px] -translate-y-[10%] rounded-full bg-[radial-gradient(circle_at_center,rgba(58,124,165,0.58)_0%,rgba(58,124,165,0.26)_38%,rgba(58,124,165,0)_78%)] blur-[120px] z-0 sm:w-[64%] sm:max-w-[1280px]" aria-hidden="true" />
-
+        <div className="relative flex w-full justify-center">
+          <span className="pointer-events-none absolute inset-0 mx-auto aspect-[11/3] w-[110%] max-w-[1600px] -translate-y-[9%] rounded-full bg-[radial-gradient(circle_at_center,rgba(58,124,165,0.58) 0%,rgba(58,124,165,0.26) 38%,rgba(58,124,165,0)_78%)] blur-[120px] sm:w-[64%] sm:max-w-[1280px]" aria-hidden="true" />
           <img
             data-hero-wordmark
             id="hero-wordmark-image"
             src="/white-logo-trans.png"
             alt="Microagents logo"
-            className={`z-10 relative w-[140vw] max-w-[1000px] opacity-100 sm:w-[240%] sm:max-w-none md:w-[180%] md:max-w-[2600px] transition-opacity duration-1000 ease-out ${logoVisible ? 'opacity-100' : 'opacity-0'} mt-2 sm:mt-5`}
+            className="w-[720%] max-w-none -mt-36 opacity-100 sm:w-[320%] sm:-mt-24 md:w-[200%] md:max-w-[2600px] md:-mt-20 lg:-mt-18 xl:-mt-16"
             loading="lazy"
-            style={{ transitionDelay: '280ms' }}
           />
         </div>
       </div>
