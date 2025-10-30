@@ -40,9 +40,9 @@ const HORIZONTAL_EXTENSION = 220;
 const AMBIENT_AMPLITUDE_FACTOR = 0.13;
 
 /**
- * For the "How it works" section (step 2) image reference, use this constant.
- * Files inside `frontend/public` are served from `/`, so `frontend/public/background.png`
- * must be referenced as `/background.png`.
+ * How-it-works step 2 image:
+ * Anything under `frontend/public` is served from `/`.
+ * So `frontend/public/background.png` => `/background.png`
  */
 export const HOW_IT_WORKS_STEP2_BG = "/background.png";
 
@@ -471,10 +471,11 @@ export function HeroSection() {
     >
       <h1 className="sr-only">microagents</h1>
 
-      <div className="flex w-full max-w-6xl flex-col items-center gap-0">
+      {/* Remove outer max-width so animation + logo can scale as requested */}
+      <div className="flex w-full max-w-none flex-col items-center gap-0">
         {/* Animation */}
         <div
-          className="relative w-full max-w-[1200px] sm:max-w-[1700px] lg:max-w-[2300px] xl:max-w-[2800px]"
+          className="relative w-full max-w-[1200px] sm:max-w-[1700px] lg:max-w-[2300px] xl:max-w-[2800px] mb-0"
           onPointerEnter={handlePointerEnter}
           onPointerLeave={handlePointerLeave}
           onPointerMove={handlePointerMove}
@@ -575,7 +576,8 @@ export function HeroSection() {
                         opacity: labelOpacity,
                         transformOrigin: "left center",
                         transform: `translate(24,-${translateY}) scale(${labelScale})`,
-                        transition: "opacity 560ms cubic-bezier(.25,.7,.28,1), transform 620ms cubic-bezier(.25,.78,.26,1)",
+                        transition:
+                          "opacity 560ms cubic-bezier(.25,.7,.28,1), transform 620ms cubic-bezier(.25,.78,.26,1)",
                       }}
                     >
                       <rect
@@ -618,11 +620,11 @@ export function HeroSection() {
           </svg>
         </div>
 
-        {/* Logo directly below the animation with minimal padding, fully responsive */}
-        <div className="relative mt-3 flex w-full justify-center sm:mt-4 md:mt-5">
-          {/* Soft glow behind the logo */}
+        {/* Logo directly below the animation with minimal padding — enforced layout */}
+        <div className="relative mt-1 flex w-full justify-center overflow-hidden isolate">
+          {/* Soft, cooled-down glow that stays within this container and won't affect other sections */}
           <span
-            className="pointer-events-none absolute inset-0 mx-auto aspect-[11/3] w-[110%] max-w-[1600px] -translate-y-[6%] rounded-full bg-[radial-gradient(circle_at_center,rgba(58,124,165,0.58)_0%,rgba(58,124,165,0.26)_38%,rgba(58,124,165,0)_78%)] blur-[120px] sm:w-[72%] sm:max-w-[1280px]"
+            className="pointer-events-none absolute inset-0 z-0 mx-auto aspect-[11/3] w-[60%] max-w-[1100px] bg-[radial-gradient(circle_at_center,rgba(58,124,165,0.18)_0%,rgba(58,124,165,0.08)_38%,rgba(58,124,165,0)_78%)] blur-[70px] sm:w-[56%] md:w-[52%] lg:w-[48%]"
             aria-hidden="true"
           />
           <img
@@ -630,7 +632,8 @@ export function HeroSection() {
             id="hero-wordmark-image"
             src="/white-logo-trans.png"
             alt="Microagents logo"
-            className="relative z-[1] block h-auto w-[clamp(160px,60vw,1100px)] sm:w-[clamp(200px,54vw,1200px)] md:w-[clamp(240px,48vw,1300px)] lg:w-[clamp(280px,44vw,1400px)] xl:w-[clamp(320px,40vw,1500px)]"
+            /* 3× bigger, still responsive; sits directly under animation */
+            className="relative z-10 block h-auto w-[clamp(480px,70vw,2400px)]"
             loading="lazy"
             style={{ objectFit: "contain" }}
           />
