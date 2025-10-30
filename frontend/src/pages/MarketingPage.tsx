@@ -259,22 +259,22 @@ export function MarketingPage() {
         <section className="flex min-h-screen items-center px-6 py-20 lg:px-12">
           <div className="mx-auto w-full max-w-6xl overflow-hidden rounded-[5px] border border-[color:rgba(244,241,234,0.08)] bg-[#090909] p-12 shadow-[0_60px_160px_-110px_rgba(0,0,0,0.9)]">
             <div className="mx-auto flex max-w-3xl flex-col gap-12 text-left">
-              <div className="space-y-3">
-                <h2 className="text-2xl font-semibold sm:text-3xl">Pricing crafted as you build</h2>
-                <p className="text-sm sm:text-base" style={{ color: "color-mix(in srgb, var(--text-primary) 70%, transparent)" }}>
+              <div className="space-y-4">
+                <h2 className="text-3xl font-semibold sm:text-4xl md:text-5xl">Pricing crafted as you build</h2>
+                <p className="text-base sm:text-lg" style={{ color: "color-mix(in srgb, var(--text-primary) 70%, transparent)" }}>
                   Every engagement begins with a live conversation inside your microagent workspace. Share priorities with a pricing co-pilot that listens, models usage, and assembles a commercial path while you shape the agent itself.
                 </p>
               </div>
-              <article className="space-y-5 rounded-[5px] border border-[color:rgba(244,241,234,0.1)] bg-[#090909] p-8">
-                <h3 className="text-xl font-semibold sm:text-2xl">How the pilot personalizes your plan</h3>
+              <article className="space-y-6 rounded-[5px] border border-[color:rgba(244,241,234,0.1)] bg-[#090909] p-8">
+                <h3 className="text-2xl font-semibold sm:text-3xl md:text-4xl">How the pilot personalizes your plan</h3>
                 <div className="overflow-hidden rounded-[5px] border border-[color:rgba(244,241,234,0.08)]">
                   <img
                     src="/gradient2.png"
                     alt="Gradient accent for pricing flow"
-                    className="h-[360px] w-full object-cover object-center transition-transform duration-500 ease-out"
+                    className="h-[420px] w-full object-cover object-center transition-transform duration-500 ease-out"
                   />
                 </div>
-                <ul className="space-y-3 text-sm sm:text-base" style={{ color: "color-mix(in srgb, var(--text-primary) 70%, transparent)" }}>
+                <ul className="space-y-3 text-base sm:text-lg" style={{ color: "color-mix(in srgb, var(--text-primary) 70%, transparent)" }}>
                   <li>
                     <span className="block text-xs font-semibold uppercase tracking-[0.25em] text-[color:rgba(244,241,234,0.45)]">
                       Frame your goals
@@ -282,10 +282,10 @@ export function MarketingPage() {
                     Surface workloads, compliance mandates, and stakeholder expectations as the agent maps capacity.
                   </li>
                 </ul>
-                <p className="text-sm sm:text-base" style={{ color: "color-mix(in srgb, var(--text-primary) 70%, transparent)" }}>
+                <p className="text-base sm:text-lg" style={{ color: "color-mix(in srgb, var(--text-primary) 70%, transparent)" }}>
                   Your static tier will be per agent, plan your agent and team endorse.
                 </p>
-                {/* Plan Step 1 refinement: scaled typography and media to match How It Works rhythm */}
+                {/* Plan Step 1 refinement: matched typography scale with How It Works section */}
               </article>
               <div className="flex justify-center">
                 <TransitionLink
