@@ -42,7 +42,8 @@ const HORIZONTAL_EXTENSION = 220;
 const AMBIENT_AMPLITUDE_FACTOR = 0.13;
 const BASE_FLOW_SCALE = 0.85; // default scale for animated paths/labels
 const BASE_LOGO_SCALE = 1; // default logo scale when not magnified
-const MOBILE_MAGNIFICATION = 5; // how much larger the hero elements should appear on small screens
+const MOBILE_MAGNIFICATION = 2.8; // upper bound when enlarging the hero on small screens
+const MOBILE_MIN_FACTOR = 0.6; // prevents the hero from exploding on ultra narrow widths
 
 function buildPathD(flow: FlowInternal, offset: number) {
   const amplitude = offset * flow.amplitude;
@@ -198,9 +199,15 @@ export function HeroSection() {
   }, []);
 
   const [isMobile, setIsMobile] = useState(false);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const [containerWidth, setContainerWidth] = useState<number | null>(null);
 
-  const flowScale = isMobile ? BASE_FLOW_SCALE * MOBILE_MAGNIFICATION : BASE_FLOW_SCALE;
-  const logoScale = isMobile ? BASE_LOGO_SCALE * MOBILE_MAGNIFICATION : BASE_LOGO_SCALE;
+  const widthForScale = containerWidth ?? (typeof window !== "undefined" ? window.innerWidth : VIEWBOX_WIDTH);
+  const constrainedWidthFactor = Math.min(Math.max(widthForScale / 480, MOBILE_MIN_FACTOR), 1);
+  const heroMagnification = isMobile ? 1 + (MOBILE_MAGNIFICATION - 1) * constrainedWidthFactor : 1;
+
+  const flowScale = BASE_FLOW_SCALE * heroMagnification;
+  const logoScale = BASE_LOGO_SCALE * heroMagnification;
   const logoWidth = VIEWBOX_WIDTH * logoScale;
   const logoHeight = VIEWBOX_HEIGHT * logoScale;
   const logoX = (VIEWBOX_WIDTH - logoWidth) / 2;
@@ -227,6 +234,37 @@ export function HeroSection() {
         // @ts-ignore deprecated fallback
         query.removeListener(update);
       }
+    };
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const element = containerRef.current;
+    if (!element) return;
+
+    const updateWidth = () => setContainerWidth(element.offsetWidth);
+    updateWidth();
+
+    if (typeof ResizeObserver !== "undefined") {
+      const observer = new ResizeObserver((entries) => {
+        const [entry] = entries;
+        if (entry) setContainerWidth(entry.contentRect.width);
+      });
+      observer.observe(element);
+      window.addEventListener("orientationchange", updateWidth, { passive: true });
+
+      return () => {
+        observer.disconnect();
+        window.removeEventListener("orientationchange", updateWidth);
+      };
+    }
+
+    window.addEventListener("resize", updateWidth, { passive: true });
+    window.addEventListener("orientationchange", updateWidth, { passive: true });
+
+    return () => {
+      window.removeEventListener("resize", updateWidth);
+      window.removeEventListener("orientationchange", updateWidth);
     };
   }, []);
 
@@ -439,7 +477,7 @@ export function HeroSection() {
 
       {/* Full-width container; logo is merged inside the SVG behind the animation.
           The separate logo element and its glow have been REMOVED by design. */}
-      <div className="flex w-full max-w-none flex-col items-center gap-0">
+      <div ref={containerRef} className="flex w-full max-w-none flex-col items-center gap-0">
         <div
           className="relative w-full max-w-[700px] sm:max-w-[900px] lg:max-w-[1000px] xl:max-w-[1500px] mb-0"
           onPointerEnter={handlePointerEnter}
