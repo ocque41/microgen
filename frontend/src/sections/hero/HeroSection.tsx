@@ -40,6 +40,7 @@ const VIEWBOX_WIDTH = 1040;
 const VIEWBOX_HEIGHT = 560;
 const HORIZONTAL_EXTENSION = 220;
 const AMBIENT_AMPLITUDE_FACTOR = 0.13;
+const FLOW_SCALE = 0.85; // scale for the animated paths/labels only
 
 /** Giant logo geometry (very large, centered) to sit BEHIND the path animation inside the same SVG */
 const LOGO_SCALE = 1; // very big
@@ -565,6 +566,9 @@ export function HeroSection() {
             ))}
 
             {/* Animated flows ABOVE the logo */}
+            <g
+              transform={`translate(${VIEWBOX_WIDTH / 2},${VIEWBOX_HEIGHT / 2}) scale(${FLOW_SCALE}) translate(-${VIEWBOX_WIDTH / 2},-${VIEWBOX_HEIGHT / 2})`}
+            >
             {flows.map((flow, index) => {
               const offset = pathOffsets[index] ?? 0;
               const pathD = buildPathD(flow, offset);
@@ -662,6 +666,7 @@ export function HeroSection() {
                 </g>
               );
             })}
+            </g>
           </svg>
         </div>
 
