@@ -1,5 +1,8 @@
 import type { ReactNode } from "react";
 
+import { publicAsset } from "../../lib/publicAsset";
+import { HOW_IT_WORKS_STEP2_BG } from "../hero/HeroSection";
+
 const BORDER_COLOR = "rgba(244, 241, 234, 0.16)";
 const TEXT_SOFT = "color-mix(in srgb, var(--text-primary) 68%, transparent)";
 const TITLE_SPACING_STYLE = {
@@ -25,7 +28,7 @@ const steps: Step[] = [
     id: "brief",
     title: "Clarify the brief",
     highlight: "Capture the workflow, guardrails, and success metrics so everyone sees the same definition of done.",
-    imageSrc: "/gradient2.png",
+    imageSrc: publicAsset("gradient2.png"),
     imageAlt: "Kickoff canvas overview with highlighted guardrails",
     description: (
       <>
@@ -42,7 +45,7 @@ const steps: Step[] = [
     id: "approve",
     title: "Approve the agent",
     highlight: "Run shadow sessions in a guided sandbox before production traffic ever hits the API.",
-    imageSrc: "/hero.png",
+    imageSrc: HOW_IT_WORKS_STEP2_BG,
     imageAlt: "Guided sandbox approval interface snapshot",
     description: (
       <>
@@ -59,7 +62,7 @@ const steps: Step[] = [
     id: "run",
     title: "Run with confidence",
     highlight: "Launch the automation with real-time accountability dashboards and human-ready escalation trails.",
-    imageSrc: "/gradient1.jpg",
+    imageSrc: publicAsset("gradient1.jpg"),
     imageAlt: "Operational dashboard displaying microagent activity",
     description: (
       <>

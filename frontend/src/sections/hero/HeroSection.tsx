@@ -2,6 +2,8 @@
 import type { PointerEvent as ReactPointerEvent } from "react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
+import { publicAsset } from "../../lib/publicAsset";
+
 type Point = [number, number];
 
 type FlowDefinition = {
@@ -41,10 +43,10 @@ const AMBIENT_AMPLITUDE_FACTOR = 0.13;
 
 /**
  * How-it-works step 2 image:
- * Anything under `frontend/public` is served from `/`.
- * So `frontend/public/background.png` => `/background.png`
+ * Use the helper so `/public/background.png` resolves when the app is served
+ * from a sub-path in production (e.g. `/app/`).
  */
-export const HOW_IT_WORKS_STEP2_BG = "/background.png";
+export const HOW_IT_WORKS_STEP2_BG = publicAsset("background.png");
 
 /** Giant logo geometry (very large, centered) to sit BEHIND the path animation inside the same SVG */
 const LOGO_SCALE = 1; // very big
