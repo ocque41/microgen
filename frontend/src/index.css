@@ -7,6 +7,8 @@
     color-scheme: dark;
     --radius: var(--radius-lg);
 
+    --letter-spacing-base: 0.4px;
+
     --background: 0 0% 4%;
     --foreground: 90 8% 85%;
     --muted: 120 2% 20%;
@@ -63,7 +65,19 @@
     @apply m-0 min-h-screen font-sans transition-colors;
     background: var(--surface-background);
     color: var(--text-primary);
+    letter-spacing: var(--letter-spacing-base);
     -webkit-font-smoothing: antialiased;
+  }
+
+  p,
+  span,
+  li,
+  a,
+  button,
+  input,
+  textarea,
+  label {
+    letter-spacing: var(--letter-spacing-base);
   }
 
   a {

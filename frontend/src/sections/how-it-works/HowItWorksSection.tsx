@@ -2,8 +2,14 @@ import type { ReactNode } from "react";
 
 const BORDER_COLOR = "rgba(244, 241, 234, 0.16)";
 const TEXT_SOFT = "color-mix(in srgb, var(--text-primary) 68%, transparent)";
-const TITLE_SPACING_STYLE = { letterSpacing: "-1.5px", lineHeight: "10px" } as const;
-const TEXT_SPACING_STYLE = { letterSpacing: "-0.5px", lineHeight: "18px" } as const;
+const TITLE_SPACING_STYLE = {
+  letterSpacing: "calc(var(--letter-spacing-base) - 1.5px)",
+  lineHeight: "10px",
+} as const;
+const TEXT_SPACING_STYLE = {
+  letterSpacing: "calc(var(--letter-spacing-base) - 0.5px)",
+  lineHeight: "18px",
+} as const;
 
 type Step = {
   id: string;
