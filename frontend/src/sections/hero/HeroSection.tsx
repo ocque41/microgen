@@ -46,6 +46,13 @@ const AMBIENT_AMPLITUDE_FACTOR = 0.13;
  */
 export const HOW_IT_WORKS_STEP2_BG = "/background.png";
 
+/** Giant logo sizing to sit BEHIND the animation inside the same SVG */
+const LOGO_SCALE = 3.6; // very big
+const LOGO_W = VIEWBOX_WIDTH * LOGO_SCALE;   // 3744
+const LOGO_H = VIEWBOX_HEIGHT * LOGO_SCALE;  // 2016
+const LOGO_X = (VIEWBOX_WIDTH - LOGO_W) / 2; // -1352
+const LOGO_Y = (VIEWBOX_HEIGHT - LOGO_H) / 2; // -728
+
 function buildPathD(flow: FlowInternal, offset: number) {
   const amplitude = offset * flow.amplitude;
   const { base, shape } = flow;
@@ -471,9 +478,8 @@ export function HeroSection() {
     >
       <h1 className="sr-only">microagents</h1>
 
-      {/* Remove outer max-width so animation + logo can scale as requested */}
+      {/* Full-width container; logo is now inside the SVG behind the animation */}
       <div className="flex w-full max-w-none flex-col items-center gap-0">
-        {/* Animation */}
         <div
           className="relative w-full max-w-[1200px] sm:max-w-[1700px] lg:max-w-[2300px] xl:max-w-[2800px] mb-0"
           onPointerEnter={handlePointerEnter}
@@ -490,6 +496,7 @@ export function HeroSection() {
             style={{ overflow: "visible" }}
           >
             <defs>
+              {/* Guides / flows */}
               <linearGradient id="guide-stroke" x1="0" x2="0" y1="0" y2="1">
                 <stop offset="0%" stopColor="rgba(255,255,255,0.25)" />
                 <stop offset="100%" stopColor="rgba(255,255,255,0.05)" />
@@ -498,6 +505,8 @@ export function HeroSection() {
                 <stop offset="0%" stopColor="rgba(255,255,255,0.98)" />
                 <stop offset="100%" stopColor="rgba(255,255,255,0.05)" />
               </radialGradient>
+
+              {/* Soft path glow (unchanged for lines) */}
               <filter id="path-glow" x="-40%" y="-40%" width="180%" height="180%">
                 <feGaussianBlur in="SourceGraphic" stdDeviation="7" result="blur" />
                 <feMerge>
@@ -505,8 +514,51 @@ export function HeroSection() {
                   <feMergeNode in="SourceGraphic" />
                 </feMerge>
               </filter>
+
+              {/* Logo organic blend: subtle displacement + soft-light; no external glow */}
+              <filter id="logo-organic" x="-20%" y="-20%" width="140%" height="140%">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="blur1" />
+                <feTurbulence type="fractalNoise" baseFrequency="0.008" numOctaves="2" seed="7" result="noise" />
+                <feDisplacementMap in="blur1" in2="noise" scale="16" xChannelSelector="R" yChannelSelector="G" result="displaced" />
+                <feColorMatrix in="displaced" type="matrix"
+                  values="
+                    1 0 0 0 0
+                    0 1 0 0 0
+                    0 0 1 0 0
+                    0 0 0 0.65 0" result="dimmed" />
+                <feBlend in="dimmed" in2="SourceGraphic" mode="screen" />
+              </filter>
+
+              {/* Radial mask to feather the giant logo edges */}
+              <radialGradient id="logo-fade" cx="50%" cy="50%" r="50%">
+                <stop offset="55%" stopColor="white" />
+                <stop offset="100%" stopColor="black" />
+              </radialGradient>
+              <mask id="logo-mask" maskUnits="userSpaceOnUse" x={LOGO_X} y={LOGO_Y} width={LOGO_W} height={LOGO_H}>
+                <rect x={LOGO_X} y={LOGO_Y} width={LOGO_W} height={LOGO_H} fill="url(#logo-fade)" />
+              </mask>
             </defs>
 
+            {/* === MERGED: GIANT LOGO BEHIND THE ANIMATION === */}
+            <g
+              id="bg-logo"
+              mask="url(#logo-mask)"
+              filter="url(#logo-organic)"
+              opacity="0.55"
+              style={{ mixBlendMode: "soft-light" as any }}
+            >
+              <image
+                x={LOGO_X}
+                y={LOGO_Y}
+                width={LOGO_W}
+                height={LOGO_H}
+                href="/white-logo-trans.png"
+                xlinkHref="/white-logo-trans.png"
+                preserveAspectRatio="xMidYMid meet"
+              />
+            </g>
+
+            {/* Horizontal guide lines */}
             {horizontalGuides.map((y) => (
               <line
                 key={`guide-${y}`}
@@ -520,6 +572,7 @@ export function HeroSection() {
               />
             ))}
 
+            {/* Animated flows (drawn AFTER the logo so they sit on top) */}
             {flows.map((flow, index) => {
               const offset = pathOffsets[index] ?? 0;
               const pathD = buildPathD(flow, offset);
@@ -618,25 +671,6 @@ export function HeroSection() {
               );
             })}
           </svg>
-        </div>
-
-        {/* Logo directly below the animation with minimal padding — enforced layout */}
-        <div className="relative mt-1 flex w-full justify-center overflow-hidden isolate">
-          {/* Soft, cooled-down glow that stays within this container and won't affect other sections */}
-          <span
-            className="pointer-events-none absolute inset-0 z-0 mx-auto aspect-[11/3] w-[60%] max-w-[1100px] bg-[radial-gradient(circle_at_center,rgba(58,124,165,0.18)_0%,rgba(58,124,165,0.08)_38%,rgba(58,124,165,0)_78%)] blur-[70px] sm:w-[56%] md:w-[52%] lg:w-[48%]"
-            aria-hidden="true"
-          />
-          <img
-            data-hero-wordmark
-            id="hero-wordmark-image"
-            src="/white-logo-trans.png"
-            alt="Microagents logo"
-            /* 3× bigger, still responsive; sits directly under animation */
-            className="relative z-10 block h-auto w-[clamp(480px,70vw,2400px)]"
-            loading="lazy"
-            style={{ objectFit: "contain" }}
-          />
         </div>
 
         {/* Hidden preloader to ensure the background asset is available from /public */}
