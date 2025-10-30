@@ -258,42 +258,45 @@ export function MarketingPage() {
 
         <section className="flex min-h-screen items-center px-6 py-20 lg:px-12">
           <div className="mx-auto w-full max-w-6xl overflow-hidden rounded-[5px] border border-[color:rgba(244,241,234,0.08)] bg-[#090909] p-12 shadow-[0_60px_160px_-110px_rgba(0,0,0,0.9)]">
-            <div className="mx-auto flex max-w-4xl flex-col gap-12 text-left">
+            <div className="mx-auto flex max-w-3xl flex-col gap-12 text-left">
               <div className="space-y-4">
-                <h2 className="text-3xl font-semibold">Craft pricing with your micro agent</h2>
+                <h2 className="text-3xl font-semibold">Pricing crafted as you build</h2>
                 <p className="text-sm" style={{ color: "color-mix(in srgb, var(--text-primary) 70%, transparent)" }}>
-                  Describe your workloads, compliance needs, and support expectations directly to a Microagents pricing specialist—powered by a conversational agent builders trust every day. The agent assembles a deployment mix and commercial terms that fit how you operate.
+                  Every engagement begins with a live conversation inside your microagent workspace. Share priorities with a pricing co-pilot that listens, models usage, and assembles a commercial path while you shape the agent itself.
                 </p>
               </div>
-              <div className="grid gap-6 text-left md:grid-cols-3">
-                <div className="rounded-[5px] border border-[color:rgba(244,241,234,0.1)] bg-[#090909] p-6">
-                  <p className="text-xs uppercase tracking-[0.25em] text-[color:rgba(244,241,234,0.45)]">Outline</p>
-                  <h3 className="mt-4 text-xl font-semibold">Map your operations</h3>
-                  <p className="mt-3 text-sm" style={{ color: "color-mix(in srgb, var(--text-primary) 70%, transparent)" }}>
-                    Share channels, volume expectations, and the accountability rules your assistants must uphold.
-                  </p>
-                </div>
-                <div className="rounded-[5px] border border-[color:rgba(244,241,234,0.1)] bg-[#090909] p-6">
-                  <p className="text-xs uppercase tracking-[0.25em] text-[color:rgba(244,241,234,0.45)]">Co-create</p>
-                  <h3 className="mt-4 text-xl font-semibold">Tune safeguards live</h3>
-                  <p className="mt-3 text-sm" style={{ color: "color-mix(in srgb, var(--text-primary) 70%, transparent)" }}>
-                    Adjust policy guardrails, review cadences, and retention settings as the agent drafts your bundle.
-                  </p>
-                </div>
-                <div className="rounded-[5px] border border-[color:rgba(244,241,234,0.1)] bg-[#090909] p-6">
-                  <p className="text-xs uppercase tracking-[0.25em] text-[color:rgba(244,241,234,0.45)]">Confirm</p>
-                  <h3 className="mt-4 text-xl font-semibold">Approve your build</h3>
-                  <p className="mt-3 text-sm" style={{ color: "color-mix(in srgb, var(--text-primary) 70%, transparent)" }}>
-                    Receive a contract-ready package that mirrors the assistant footprint and support depth you confirmed.
-                  </p>
-                </div>
-              </div>
+              <article className="space-y-6 rounded-[5px] border border-[color:rgba(244,241,234,0.1)] bg-[#090909] p-8">
+                <h3 className="text-2xl font-semibold">How the co-pilot personalizes your plan</h3>
+                <ul className="space-y-4 text-sm" style={{ color: "color-mix(in srgb, var(--text-primary) 70%, transparent)" }}>
+                  <li>
+                    <span className="block text-xs font-semibold uppercase tracking-[0.25em] text-[color:rgba(244,241,234,0.45)]">
+                      Frame your goals
+                    </span>
+                    Surface workloads, compliance mandates, and stakeholder expectations as the agent maps capacity.
+                  </li>
+                  <li>
+                    <span className="block text-xs font-semibold uppercase tracking-[0.25em] text-[color:rgba(244,241,234,0.45)]">
+                      Iterate in-session
+                    </span>
+                    Tune safeguards, data access, and success metrics in real time while the co-pilot refines mix and pricing.
+                  </li>
+                  <li>
+                    <span className="block text-xs font-semibold uppercase tracking-[0.25em] text-[color:rgba(244,241,234,0.45)]">
+                      Confirm when ready
+                    </span>
+                    Close with a deployment schedule and agreement tailored to the microagent you just finished constructing.
+                  </li>
+                </ul>
+                <p className="text-sm" style={{ color: "color-mix(in srgb, var(--text-primary) 70%, transparent)" }}>
+                  Your price evolves with your build—no static tiers, just a plan your agent and team endorse.
+                </p>
+              </article>
               <div className="flex justify-center">
                 <TransitionLink
                   to="/signup"
                   className="inline-flex items-center justify-center rounded-full bg-[color:var(--accent)] px-8 py-3 text-sm font-semibold text-[color:var(--accent-inverse)] transition hover:bg-[color:var(--accent-hover)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--accent)]"
                 >
-                  Get Started
+                  Start the conversation
                 </TransitionLink>
               </div>
             </div>
