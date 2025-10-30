@@ -438,7 +438,7 @@ export function HeroSection() {
           The separate logo element and its glow have been REMOVED by design. */}
       <div className="flex w-full max-w-none flex-col items-center gap-0">
         <div
-          className="relative w-full max-w-[1200px] sm:max-w-[1700px] lg:max-w-[2300px] xl:max-w-[2800px] mb-0"
+          className="relative w-full max-w-[700px] sm:max-w-[900px] lg:max-w-[1000px] xl:max-w-[1500px] mb-0"
           onPointerEnter={handlePointerEnter}
           onPointerLeave={handlePointerLeave}
           onPointerMove={handlePointerMove}
