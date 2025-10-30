@@ -1,3 +1,4 @@
+// frontend/src/sections/hero/HeroSection.tsx
 import type { PointerEvent as ReactPointerEvent } from "react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
@@ -37,6 +38,13 @@ const VIEWBOX_WIDTH = 1040;
 const VIEWBOX_HEIGHT = 560;
 const HORIZONTAL_EXTENSION = 220;
 const AMBIENT_AMPLITUDE_FACTOR = 0.13;
+
+/**
+ * For the "How it works" section (step 2) image reference, use this constant.
+ * Files inside `frontend/public` are served from `/`, so `frontend/public/background.png`
+ * must be referenced as `/background.png`.
+ */
+export const HOW_IT_WORKS_STEP2_BG = "/background.png";
 
 function buildPathD(flow: FlowInternal, offset: number) {
   const amplitude = offset * flow.amplitude;
@@ -463,7 +471,8 @@ export function HeroSection() {
     >
       <h1 className="sr-only">microagents</h1>
 
-      <div className="flex w-full max-w-6xl flex-col items-center gap-2">
+      <div className="flex w-full max-w-6xl flex-col items-center gap-0">
+        {/* Animation */}
         <div
           className="relative w-full max-w-[1200px] sm:max-w-[1700px] lg:max-w-[2300px] xl:max-w-[2800px]"
           onPointerEnter={handlePointerEnter}
@@ -609,17 +618,26 @@ export function HeroSection() {
           </svg>
         </div>
 
-        <div className="relative flex w-full justify-center">
-          <span className="pointer-events-none absolute inset-0 mx-auto aspect-[11/3] w-[110%] max-w-[1600px] -translate-y-[9%] rounded-full bg-[radial-gradient(circle_at_center,rgba(58,124,165,0.58) 0%,rgba(58,124,165,0.26) 38%,rgba(58,124,165,0)_78%)] blur-[120px] sm:w-[64%] sm:max-w-[1280px]" aria-hidden="true" />
+        {/* Logo directly below the animation with minimal padding, fully responsive */}
+        <div className="relative mt-3 flex w-full justify-center sm:mt-4 md:mt-5">
+          {/* Soft glow behind the logo */}
+          <span
+            className="pointer-events-none absolute inset-0 mx-auto aspect-[11/3] w-[110%] max-w-[1600px] -translate-y-[6%] rounded-full bg-[radial-gradient(circle_at_center,rgba(58,124,165,0.58)_0%,rgba(58,124,165,0.26)_38%,rgba(58,124,165,0)_78%)] blur-[120px] sm:w-[72%] sm:max-w-[1280px]"
+            aria-hidden="true"
+          />
           <img
             data-hero-wordmark
             id="hero-wordmark-image"
             src="/white-logo-trans.png"
             alt="Microagents logo"
-            className="w-[720%] max-w-none -mt-36 opacity-100 sm:w-[320%] sm:-mt-24 md:w-[200%] md:max-w-[2600px] md:-mt-20 lg:-mt-18 xl:-mt-16"
+            className="relative z-[1] block h-auto w-[clamp(160px,60vw,1100px)] sm:w-[clamp(200px,54vw,1200px)] md:w-[clamp(240px,48vw,1300px)] lg:w-[clamp(280px,44vw,1400px)] xl:w-[clamp(320px,40vw,1500px)]"
             loading="lazy"
+            style={{ objectFit: "contain" }}
           />
         </div>
+
+        {/* Hidden preloader to ensure the background asset is available from /public */}
+        <img src={HOW_IT_WORKS_STEP2_BG} alt="" className="hidden" aria-hidden="true" />
       </div>
     </section>
   );
