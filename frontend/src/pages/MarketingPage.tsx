@@ -268,7 +268,7 @@ export function MarketingPage() {
               <article className="space-y-6 rounded-[5px] border border-[color:rgba(244,241,234,0.1)] bg-[#090909] p-8">
                 <h3 className="text-2xl font-semibold">How the pilot personalizes your plan</h3>
                 <div className="overflow-hidden rounded-[5px] border border-[color:rgba(244,241,234,0.08)]">
-                  <img src="/gradient2.png" alt="Gradient accent for pricing flow" className="h-48 w-full object-cover" />
+                  <img src="/gradient2.png" alt="Gradient accent for pricing flow" className="h-[600px] w-full object-cover" />
                 </div>
                 <ul className="space-y-4 text-sm" style={{ color: "color-mix(in srgb, var(--text-primary) 70%, transparent)" }}>
                   <li>
@@ -277,23 +277,11 @@ export function MarketingPage() {
                     </span>
                     Surface workloads, compliance mandates, and stakeholder expectations as the agent maps capacity.
                   </li>
-                  <li>
-                    <span className="block text-xs font-semibold uppercase tracking-[0.25em] text-[color:rgba(244,241,234,0.45)]">
-                      Iterate in-session
-                    </span>
-                    Tune safeguards, data access, and success metrics in real time while the co-pilot refines mix and pricing.
-                  </li>
-                  <li>
-                    <span className="block text-xs font-semibold uppercase tracking-[0.25em] text-[color:rgba(244,241,234,0.45)]">
-                      Confirm when ready
-                    </span>
-                    Close with a deployment schedule and agreement tailored to the microagent you just finished constructing.
-                  </li>
                 </ul>
                 <p className="text-sm" style={{ color: "color-mix(in srgb, var(--text-primary) 70%, transparent)" }}>
                   Your static tier will be per agent, plan your agent and team endorse.
                 </p>
-                {/* Plan Step 1 update: added visual and reinstated goal framing */}
+                {/* Plan Step 1 update: hero visual expanded and focused narrative */}
               </article>
               <div className="flex justify-center">
                 <TransitionLink
