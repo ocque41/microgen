@@ -50,7 +50,7 @@ const steps: Step[] = [
     id: "run",
     title: "Run with confidence",
     highlight: "Launch the automation with real-time accountability dashboards and human-ready escalation trails.",
-    imageSrc: "frontend/public/gradient1.jpg",
+    imageSrc: "/gradient1.jpg",
     description: (
       <>
         <p>
