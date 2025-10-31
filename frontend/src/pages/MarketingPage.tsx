@@ -227,8 +227,14 @@ export function MarketingPage() {
         <footer className="flex min-h-screen flex-col justify-between px-6 py-14 text-[color:rgba(244,241,234,0.78)] lg:px-12">
           <div className="flex flex-1 flex-col justify-between gap-16">
             <div className="flex flex-col gap-10 md:flex-row md:items-start md:justify-between">
+              {/* Footer refresh step: replaced wordmark text with brand icon for consistent branding */}
               <div className="max-w-sm space-y-3 text-left">
-                <span className="text-xs uppercase tracking-[0.4em] text-[color:rgba(244,241,234,0.5)]">Microagents</span>
+                <img
+                  src="/icon-white-trans.png"
+                  alt="Microagents icon"
+                  className="h-9 w-9 object-contain"
+                  loading="lazy"
+                />
                 <p className="text-sm text-[color:rgba(244,241,234,0.62)]">
                   Operational AI for accountable teams delivering evidence-first assistance across every workflow.
                 </p>
