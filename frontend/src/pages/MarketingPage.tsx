@@ -261,7 +261,10 @@ export function MarketingPage() {
               </div>
             </div>
             <div className="flex flex-1 items-center justify-center">
-              <h2 className="text-[min(18vw,220px)] font-semibold leading-none tracking-tight text-[color:rgba(244,241,234,0.12)]">
+              <h2
+                className="text-[min(18vw,220px)] font-semibold leading-none tracking-tight text-[color:rgba(244,241,234,0.12)]"
+                style={{ letterSpacing: "-2px" }}
+              >
                 Microagents
               </h2>
             </div>
