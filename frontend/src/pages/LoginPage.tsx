@@ -1,11 +1,13 @@
 import { Navigate } from "react-router-dom";
 import { SignIn, useUser } from "@stackframe/react";
 
+import { AUTH_CHAT_ROUTE } from "@/lib/authRoutes";
+
 export function LoginPage() {
   const user = useUser({ or: "return-null" });
 
   if (user) {
-    return <Navigate to="/chat" replace />;
+    return <Navigate to={AUTH_CHAT_ROUTE} replace />;
   }
 
   return (

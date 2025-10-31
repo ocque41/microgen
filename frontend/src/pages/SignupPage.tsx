@@ -2,11 +2,13 @@ import { Suspense } from "react";
 import { Navigate } from "react-router-dom";
 import { SignUp, useUser } from "@stackframe/react";
 
+import { AUTH_CHAT_ROUTE } from "@/lib/authRoutes";
+
 function SignupContent() {
   const user = useUser({ or: "return-null" });
 
   if (user) {
-    return <Navigate to="/dashboard" replace />;
+    return <Navigate to={AUTH_CHAT_ROUTE} replace />;
   }
 
   return <SignUp automaticRedirect />;

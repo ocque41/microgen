@@ -1,6 +1,8 @@
 import { StackClientApp } from "@stackframe/stack";
 import { useNavigate } from "react-router-dom";
 
+import { AUTH_CHAT_ROUTE } from "./lib/authRoutes";
+
 type NavigateFn = (to: string) => void;
 
 let stackNavigate: NavigateFn | undefined;
@@ -64,8 +66,8 @@ export const stackClientApp = new StackClientApp({
   urls: {
     signIn: "/login",
     signUp: "/signup",
-    afterSignIn: "/chat",
-    afterSignUp: "/dashboard",
+    afterSignIn: AUTH_CHAT_ROUTE,
+    afterSignUp: AUTH_CHAT_ROUTE,
     afterSignOut: "/",
     handler: "/handler",
     accountSettings: "/handler/account-settings",
