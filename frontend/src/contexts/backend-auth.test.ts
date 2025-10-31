@@ -14,7 +14,8 @@ describe("BackendAuth helpers", () => {
   it("exchanges Stack tokens for a backend JWT", async () => {
     const fetchMock = vi.fn(async (_input: RequestInfo | URL, init?: RequestInit) => {
       const body = init?.body ? JSON.parse(String(init.body)) : null;
-      expect(body).toEqual({ accessToken: "stack-access", refreshToken: "stack-refresh" });
+      expect(body).toEqual({ access_token: "stack-access", refresh_token: "stack-refresh" });
+      // plan-step[1]: Test verifies snake_case contract for the backend exchange.
       return new Response(JSON.stringify({ access_token: "jwt-token" }), {
         status: 200,
         headers: { "Content-Type": "application/json" },

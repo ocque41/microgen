@@ -1,6 +1,8 @@
 import type { Metric } from "web-vitals";
 import { onCLS, onFCP, onINP, onLCP, onTTFB } from "web-vitals";
 
+import { resolveBackendUrl } from "../../lib/config";
+
 type WebVitalsOptions = {
   endpoint?: string;
   sampleRate?: number;
@@ -83,7 +85,9 @@ export function initWebVitals(options?: WebVitalsOptions) {
   }
   initialized = true;
 
-  const endpoint = options?.endpoint ?? import.meta.env.VITE_RUM_ENDPOINT ?? DEFAULT_ENDPOINT;
+  const endpointCandidate = options?.endpoint ?? import.meta.env.VITE_RUM_ENDPOINT ?? DEFAULT_ENDPOINT;
+  const endpoint = resolveBackendUrl(endpointCandidate);
+  // plan-step[2]: Ensure RUM metrics follow the deployed backend origin automatically.
   const sampleRate = options?.sampleRate ?? DEFAULT_SAMPLE_RATE;
 
   if (!shouldSample(sampleRate)) {

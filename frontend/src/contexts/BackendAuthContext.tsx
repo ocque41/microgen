@@ -52,10 +52,11 @@ export async function requestJwtExchange(tokens: StackSessionTokens): Promise<st
     },
     credentials: "include",
     body: JSON.stringify({
-      accessToken: tokens.accessToken,
-      refreshToken: tokens.refreshToken,
+      access_token: tokens.accessToken,
+      refresh_token: tokens.refreshToken,
     }),
   });
+  // plan-step[1]: Align posted token keys with FastAPI's StackTokenExchangeRequest.
 
   if (!response.ok) {
     throw new Error(`JWT exchange failed with status ${response.status}`);

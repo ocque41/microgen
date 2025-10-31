@@ -18,6 +18,26 @@ export const THEME_STORAGE_KEY = "microagents-theme";
 
 export const STACK_JWT_EXCHANGE_URL =
   import.meta.env.VITE_STACK_JWT_EXCHANGE_URL ?? "/api/auth/stack/exchange";
+// plan-step[1]: Provide utilities so other modules resolve backend-relative endpoints consistently.
+
+export function resolveBackendUrl(candidate: string): string {
+  if (/^https?:\/\//i.test(candidate)) {
+    return candidate;
+  }
+
+  try {
+    if (/^https?:\/\//i.test(STACK_JWT_EXCHANGE_URL)) {
+      const origin = new URL(STACK_JWT_EXCHANGE_URL).origin;
+      return new URL(candidate, origin).toString();
+    }
+  } catch (error) {
+    if (import.meta.env.DEV) {
+      console.warn("[config] Failed to resolve backend URL", error);
+    }
+  }
+
+  return candidate;
+}
 
 export const GREETING = "Welcome to Microagents.";
 
