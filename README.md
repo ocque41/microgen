@@ -140,13 +140,29 @@ Stack Auth powers the hosted authentication screens that now render directly on 
 - `VITE_STACK_PUBLISHABLE_CLIENT_KEY` – the publishable client key for the same project.
 - The FastAPI backend reads `STACK_PROJECT_ID` / `STACK_SECRET_KEY` and now falls back to
   `VITE_STACK_PROJECT_ID` / `STACK_SECRET_SERVER_KEY` if the primary variables are not supplied, so
-  mirror whichever naming scheme your hosting provider injects.  # plan-step[3]
+  mirror whichever naming scheme your hosting provider injects.
 - Optionally `VITE_STACK_APP_URL` if the Stack handler runs on a different origin than your deployed frontend.
 - Optionally `VITE_STACK_JWT_EXCHANGE_URL` when the FastAPI service is hosted on a separate origin; defaults to `/api/auth/stack/exchange` and should point to the JWT exchange route described below.
 
 After wiring the variables, run `npm --prefix frontend run build && npm --prefix frontend run preview`, then visit `/signup` and `/login` to confirm the embedded Stack Auth UI renders and that successful sign-ins redirect to `/chat`.
 
 The chat surface now exchanges the active Stack session for a FastAPI JWT before initializing ChatKit. Ensure the backend implements `POST /api/auth/stack/exchange` and responds with the same envelope as `TokenResponse` (`access_token`, `token_type`, and `user`). The React client caches that JWT, applies it to every `/chatkit` request via `Authorization: Bearer <token>`, and retries once when a 401 indicates the credential expired. Verify the flow locally with `npm --prefix frontend exec vitest run`.
+
+<!-- plan-step[3]: Document operational checklist for aligning Stack Auth configuration. -->
+
+### Stack Auth deployment checklist
+
+1. Set `STACK_PROJECT_ID` and `STACK_SECRET_KEY` (or `STACK_SECRET_SERVER_KEY`) on the FastAPI host before deploying. For providers like Render, update the production environment and trigger a redeploy so the new secrets load.
+2. Mirror the same project ID on the frontend (`VITE_STACK_PROJECT_ID`) and ensure `VITE_STACK_JWT_EXCHANGE_URL` points at the backend origin (for example `https://<backend>/api/auth/stack/exchange`).
+3. After the backend restarts, run a manual `curl` POST to `/api/auth/stack/exchange` using a valid Stack session pair to confirm a 200 response with `TokenResponse` JSON.
+4. Watch backend logs for the `Stack Auth credentials are missing` startup check—if it triggers, the process aborts before serving requests so you can fix credentials immediately.
+
+<!-- plan-step[4]: Provide validation and testing guidance post-deployment. -->
+
+### Validation and testing flow
+
+- Refresh the `/chat` route in the deployed frontend and verify the network tab reports a successful `POST /api/auth/stack/exchange` before ChatKit sessions initialize.
+- Run `cd backend && uv run pytest` locally or in CI to execute configuration regressions such as `backend/tests/test_config_env.py` along with the rest of the backend suite once credentials are populated.
 
 Run `alembic upgrade head` after configuring `DATABASE_URL` so the new tables (users, password reset tokens, micro agents) are available before serving requests.
 

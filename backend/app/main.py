@@ -78,6 +78,20 @@ app.include_router(rum_routes.router)
 app.include_router(webhook_routes.router)
 
 
+@app.on_event("startup")
+async def _verify_stack_auth_configuration() -> None:
+    """Fail fast when the Stack exchange cannot possibly succeed."""
+
+    # plan-step[2]: Guard against deployments that omit Stack credentials.
+    if not settings.stack_project_id or not settings.stack_secret_key:
+        logger.error(
+            "Stack Auth credentials are missing; set STACK_PROJECT_ID and STACK_SECRET_KEY before deployment."
+        )
+        raise RuntimeError(
+            "Stack Auth credentials are required to service /api/auth/stack/exchange requests."
+        )
+
+
 class WorkflowOptions(BaseModel):
     """Options that influence which workflow powers the ChatKit session."""
 
