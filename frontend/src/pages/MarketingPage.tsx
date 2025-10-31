@@ -2,81 +2,14 @@ import type { CSSProperties } from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { TransitionLink } from "@/components/motion/TransitionLink";
 import { marketingTheme } from "@/lib/marketingTheme";
-import { cn } from "@/lib/utils";
-import heroImage from "@/assets/hero.png";
 import { HeroSection } from "@/sections/hero";
 import { HowItWorksSection } from "@/sections/how-it-works";
-
-const featureTiles = [
-  {
-    title: "AI that understands",
-    description: "Surface the context, policies, and past resolutions your teams rely on.",
-    image: heroImage,
-    alt: "AI workspace synthesizing context for operators.",
-  },
-  {
-    title: "AI that organizes",
-    description: "Segment channels, tickets, and logs so operators see what matters first.",
-    image: heroImage,
-    alt: "Structured view of prioritized operational queues.",
-  },
-  {
-    title: "AI that builds",
-    description: "Compose workflows that stay within evidence-based guardrails end-to-end.",
-    image: heroImage,
-    alt: "Workflow builder keeping teams within guardrails.",
-  },
-  {
-    title: "AI that emails",
-    description: "Draft respectful responses grounded in records, not improvisation.",
-    image: heroImage,
-    alt: "Email composition interface showcasing grounded messaging.",
-  },
-  {
-    title: "AI that creates",
-    description: "Prepare study packs, runbooks, and debriefs without losing accountability.",
-    image: heroImage,
-    alt: "Creative suite preparing operational documentation.",
-  },
-  {
-    title: "AI that shops",
-    description: "Evaluate vendor choices with sourced justifications and cost controls.",
-    image: heroImage,
-    alt: "Procurement dashboard comparing compliant vendors.",
-  },
-];
 
 const marketingThemeStyles = {
   "--marketing-background-color": marketingTheme.background,
   "--surface-background": marketingTheme.background,
   backgroundColor: marketingTheme.background,
 } as CSSProperties;
-
-function IllustrationMedia({ alt, src, className }: { alt: string; src: string; className?: string }) {
-  const [isBroken, setIsBroken] = useState(!src);
-
-  if (isBroken) {
-    return (
-      <div
-        role="img"
-        aria-label={`${alt} (placeholder shown until hero.png is restored).`}
-        className={cn("marketing-illustration marketing-illustration--fallback", className)}
-      >
-        <span className="marketing-illustration__message">Restore hero.png for full-fidelity art.</span>
-      </div>
-    );
-  }
-
-  return (
-    <img
-      src={src}
-      alt={alt}
-      loading="lazy"
-      onError={() => setIsBroken(true)}
-      className={cn("marketing-illustration", className)}
-    />
-  );
-}
 
 export function MarketingPage() {
   useEffect(() => {
@@ -201,15 +134,6 @@ export function MarketingPage() {
     };
   }, [updateNavTop]);
 
-  const featureRows = featureTiles.reduce((rows, tile, index) => {
-    if (index % 2 === 0) {
-      rows.push([tile]);
-    } else {
-      rows[rows.length - 1]?.push(tile);
-    }
-    return rows;
-  }, [] as Array<(typeof featureTiles)[number][]>);
-
   return (
     <div className="relative min-h-screen overflow-x-hidden text-text" style={marketingThemeStyles}>
       <div className="mesh-background pointer-events-none" />
@@ -300,40 +224,6 @@ export function MarketingPage() {
           </div>
         </section>
 
-        {featureRows.map((row, rowIndex) => (
-          <section
-            key={`feature-row-${rowIndex}`}
-            className="flex min-h-screen items-center px-6 py-16 lg:px-12"
-          >
-            <div className="mx-auto grid w-full max-w-6xl gap-8 md:grid-cols-2">
-              {rowIndex === 0 && (
-                <div className="md:col-span-2 space-y-3 text-center">
-                  <h2 className="text-3xl font-semibold">What Microagents delivers</h2>
-                  <p className="text-sm" style={{ color: "color-mix(in srgb, var(--text-primary) 70%, transparent)" }}>
-                    Evidence-first assistance across every operational lane, packaged for responsible teams.
-                  </p>
-                </div>
-              )}
-              {row.map((tile) => (
-                <article
-                  key={tile.title}
-                  className="flex h-full flex-col justify-between gap-8 rounded-[5px] border border-[color:rgba(244,241,234,0.1)] bg-[#090909] p-9 text-left shadow-[0_70px_180px_-110px_rgba(0,0,0,0.9)]"
-                >
-                  <div className="overflow-hidden rounded-[5px] border border-[color:rgba(244,241,234,0.08)] bg-[#090909]">
-                    <IllustrationMedia alt={tile.alt} src={tile.image} className="h-[340px] w-full object-cover" />
-                  </div>
-                  <div className="space-y-3">
-                    <h3 className="text-3xl font-semibold">{tile.title}</h3>
-                    <p className="text-sm" style={{ color: "color-mix(in srgb, var(--text-primary) 70%, transparent)" }}>
-                      {tile.description}
-                    </p>
-                  </div>
-                </article>
-              ))}
-            </div>
-          </section>
-        ))}
-
         <footer className="flex min-h-screen flex-col justify-between px-6 py-14 text-[color:rgba(244,241,234,0.78)] lg:px-12">
           <div className="flex flex-1 flex-col justify-between gap-16">
             <div className="flex flex-col gap-10 md:flex-row md:items-start md:justify-between">
@@ -346,21 +236,21 @@ export function MarketingPage() {
               <div className="grid grid-cols-1 gap-8 text-left text-sm text-[color:rgba(244,241,234,0.68)] sm:grid-cols-3">
                 <div className="space-y-2">
                   <p className="text-xs uppercase tracking-[0.3em] text-[color:rgba(244,241,234,0.45)]">Resources</p>
-                  <TransitionLink to="/research" className="block transition hover:text-[color:var(--accent)]">Research</TransitionLink>
-                  <TransitionLink to="/safety" className="block transition hover:text-[color:var(--accent)]">Safety</TransitionLink>
-                  <TransitionLink to="/api" className="block transition hover:text-[color:var(--accent)]">API</TransitionLink>
+                  <TransitionLink to="/research" className="block text-[#f9f9f9] transition hover:text-white">Research</TransitionLink>
+                  <TransitionLink to="/safety" className="block text-[#f9f9f9] transition hover:text-white">Safety</TransitionLink>
+                  <TransitionLink to="/api" className="block text-[#f9f9f9] transition hover:text-white">API</TransitionLink>
                 </div>
                 <div className="space-y-2">
                   <p className="text-xs uppercase tracking-[0.3em] text-[color:rgba(244,241,234,0.45)]">Company</p>
-                  <TransitionLink to="/about" className="block transition hover:text-[color:var(--accent)]">About</TransitionLink>
-                  <TransitionLink to="/careers" className="block transition hover:text-[color:var(--accent)]">Careers</TransitionLink>
-                  <TransitionLink to="/press" className="block transition hover:text-[color:var(--accent)]">Press</TransitionLink>
+                  <TransitionLink to="/about" className="block text-[#f9f9f9] transition hover:text-white">About</TransitionLink>
+                  <TransitionLink to="/careers" className="block text-[#f9f9f9] transition hover:text-white">Careers</TransitionLink>
+                  <TransitionLink to="/press" className="block text-[#f9f9f9] transition hover:text-white">Press</TransitionLink>
                 </div>
                 <div className="space-y-2">
                   <p className="text-xs uppercase tracking-[0.3em] text-[color:rgba(244,241,234,0.45)]">Terms &amp; policies</p>
-                  <TransitionLink to="/terms" className="block transition hover:text-[color:var(--accent)]">Terms of use</TransitionLink>
-                  <TransitionLink to="/privacy" className="block transition hover:text-[color:var(--accent)]">Privacy policy</TransitionLink>
-                  <TransitionLink to="/usage" className="block transition hover:text-[color:var(--accent)]">Usage policy</TransitionLink>
+                  <TransitionLink to="/terms" className="block text-[#f9f9f9] transition hover:text-white">Terms of use</TransitionLink>
+                  <TransitionLink to="/privacy" className="block text-[#f9f9f9] transition hover:text-white">Privacy policy</TransitionLink>
+                  <TransitionLink to="/usage" className="block text-[#f9f9f9] transition hover:text-white">Usage policy</TransitionLink>
                 </div>
               </div>
             </div>
@@ -373,10 +263,10 @@ export function MarketingPage() {
           <div className="flex flex-col gap-6 text-xs text-[color:rgba(244,241,234,0.45)] md:flex-row md:items-center md:justify-between">
             <span>© {new Date().getFullYear()} Microagents, Inc. All rights reserved.</span>
             <div className="flex flex-wrap gap-4">
-              <TransitionLink to="/legal" className="transition hover:text-[color:var(--accent)]">Legal</TransitionLink>
-              <TransitionLink to="/status" className="transition hover:text-[color:var(--accent)]">Status</TransitionLink>
-              <TransitionLink to="/docs" className="transition hover:text-[color:var(--accent)]">Docs</TransitionLink>
-              <TransitionLink to="/contact" className="transition hover:text-[color:var(--accent)]">Contact</TransitionLink>
+              <TransitionLink to="/legal" className="text-[#f9f9f9] transition hover:text-white">Legal</TransitionLink>
+              <TransitionLink to="/status" className="text-[#f9f9f9] transition hover:text-white">Status</TransitionLink>
+              <TransitionLink to="/docs" className="text-[#f9f9f9] transition hover:text-white">Docs</TransitionLink>
+              <TransitionLink to="/contact" className="text-[#f9f9f9] transition hover:text-white">Contact</TransitionLink>
             </div>
           </div>
         </footer>
