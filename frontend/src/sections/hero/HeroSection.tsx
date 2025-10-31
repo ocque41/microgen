@@ -275,6 +275,26 @@ export function HeroSection() {
   }, [flows]);
 
   const [pathOffsets, setPathOffsets] = useState<number[]>(() => flows.map(() => 0));
+  const pathOffsetsRef = useRef(pathOffsets);
+  useEffect(() => {
+    pathOffsetsRef.current = pathOffsets;
+  }, [pathOffsets]);
+  // Plan Step 1 implemented: keep a ref synced with rendered offsets for low-churn pointer math.
+
+  const pendingPointerOffsetsRef = useRef<number[] | null>(null);
+  const pointerFrameRef = useRef<number | undefined>(undefined);
+  const flushPointerOffsets = useCallback(() => {
+    pointerFrameRef.current = undefined;
+    if (pendingPointerOffsetsRef.current) {
+      setPathOffsets(pendingPointerOffsetsRef.current);
+      pendingPointerOffsetsRef.current = null;
+    }
+  }, []);
+  const schedulePointerFlush = useCallback(() => {
+    if (pointerFrameRef.current !== undefined) return;
+    pointerFrameRef.current = requestAnimationFrame(flushPointerOffsets);
+  }, [flushPointerOffsets]);
+  // Plan Step 2 implemented: batch pointer-driven updates behind requestAnimationFrame for smoother frames.
   const pointerActiveRef = useRef(false);
   const relaxFrameRef = useRef<number | undefined>(undefined);
   const ambientFrameRef = useRef<number | undefined>(undefined);
@@ -286,8 +306,10 @@ export function HeroSection() {
   useEffect(() => {
     return () => {
       if (relaxFrameRef.current !== undefined) cancelAnimationFrame(relaxFrameRef.current);
+      if (pointerFrameRef.current !== undefined) cancelAnimationFrame(pointerFrameRef.current);
     };
   }, []);
+  // Plan Step 3 implemented: ensure pending pointer frames are cancelled on teardown to avoid leaks.
 
   const scheduleRelax = useCallback(() => {
     if (pointerActiveRef.current) return;
@@ -368,31 +390,35 @@ export function HeroSection() {
       const pointerX = ((clientX - bounds.left) / bounds.width) * VIEWBOX_WIDTH;
       const pointerY = ((clientY - bounds.top) / bounds.height) * VIEWBOX_HEIGHT;
 
-      setPathOffsets((prev) =>
-        prev.map((offset, index) => {
-          const flow = flows[index];
-          const dx = (pointerX - flow.centerX) * 0.22;
-          const dy = pointerY - flow.centerY;
-          const distance = Math.hypot(dx, dy);
-          const depthFactor = flow.centerY / VIEWBOX_HEIGHT;
-          const radius = 420 + depthFactor * 420;
-          const influence = Math.max(0, 1 - distance / radius);
+      const baseOffsets = pendingPointerOffsetsRef.current ?? pathOffsetsRef.current;
+      const nextOffsets = baseOffsets.map((offset, index) => {
+        const flow = flows[index];
+        const dx = (pointerX - flow.centerX) * 0.22;
+        const dy = pointerY - flow.centerY;
+        const distance = Math.hypot(dx, dy);
+        const depthFactor = flow.centerY / VIEWBOX_HEIGHT;
+        const radius = 420 + depthFactor * 420;
+        const influence = Math.max(0, 1 - distance / radius);
 
-          if (influence <= 0.0004) {
-            const eased = offset * 0.95;
-            return Math.abs(eased) < 0.08 ? 0 : eased;
-          }
+        if (influence <= 0.0004) {
+          const eased = offset * 0.95;
+          return Math.abs(eased) < 0.08 ? 0 : eased;
+        }
 
-          const direction = dy >= 0 ? 1 : -1;
-          const strength = flow.interactiveGain * (0.32 + depthFactor * 0.28);
-          const target = direction * influence * strength;
-          const next = offset * 0.9 + target * 0.1;
-          return Math.abs(next) < 0.1 ? 0 : next;
-        })
-      );
+        const direction = dy >= 0 ? 1 : -1;
+        const strength = flow.interactiveGain * (0.32 + depthFactor * 0.28);
+        const target = direction * influence * strength;
+        const next = offset * 0.9 + target * 0.1;
+        return Math.abs(next) < 0.1 ? 0 : next;
+      });
+
+      pendingPointerOffsetsRef.current = nextOffsets;
+      pathOffsetsRef.current = nextOffsets;
+      schedulePointerFlush();
     },
-    [flows]
+    [flows, schedulePointerFlush]
   );
+  // Plan Step 4 implemented: reuse the new batching system inside pointer influence math.
 
   const handlePointerMove = useCallback(
     (event: ReactPointerEvent<HTMLDivElement>) => {
