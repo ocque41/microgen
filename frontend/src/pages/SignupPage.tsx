@@ -6,7 +6,8 @@ function SignupContent() {
   const user = useUser({ or: "return-null" });
 
   if (user) {
-    return <Navigate to="/dashboard" replace />;
+    return <Navigate to="/chat" replace />;
+    // Plan Step 1 Complete: redirect authenticated signups through the ChatKit guard route.
   }
 
   return <SignUp automaticRedirect />;

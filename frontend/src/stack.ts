@@ -65,7 +65,8 @@ export const stackClientApp = new StackClientApp({
     signIn: "/login",
     signUp: "/signup",
     afterSignIn: "/chat",
-    afterSignUp: "/dashboard",
+    afterSignUp: "/chat",
+    // Plan Step 2 Complete: align Stack automatic post-signup redirect with the ChatKit route.
     afterSignOut: "/",
     handler: "/handler",
     accountSettings: "/handler/account-settings",
