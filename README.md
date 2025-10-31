@@ -138,6 +138,9 @@ Stack Auth powers the hosted authentication screens that now render directly on 
 
 - `VITE_STACK_PROJECT_ID` – the Stack Auth project identifier copied from the Stack dashboard.
 - `VITE_STACK_PUBLISHABLE_CLIENT_KEY` – the publishable client key for the same project.
+- The FastAPI backend reads `STACK_PROJECT_ID` / `STACK_SECRET_KEY` and now falls back to
+  `VITE_STACK_PROJECT_ID` / `STACK_SECRET_SERVER_KEY` if the primary variables are not supplied, so
+  mirror whichever naming scheme your hosting provider injects.  # plan-step[3]
 - Optionally `VITE_STACK_APP_URL` if the Stack handler runs on a different origin than your deployed frontend.
 - Optionally `VITE_STACK_JWT_EXCHANGE_URL` when the FastAPI service is hosted on a separate origin; defaults to `/api/auth/stack/exchange` and should point to the JWT exchange route described below.
 

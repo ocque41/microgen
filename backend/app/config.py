@@ -49,8 +49,15 @@ class Settings(BaseModel):
     email_sender_name: str = Field(default=os.getenv("EMAIL_SENDER_NAME", "Microagents"))
     email_sender_address: str = Field(default=os.getenv("EMAIL_SENDER_ADDRESS", "hi@cumulush.com"))
 
-    stack_project_id: str | None = Field(default=os.getenv("STACK_PROJECT_ID"))
-    stack_secret_key: str | None = Field(default=os.getenv("STACK_SECRET_KEY"))
+    # plan-step[1]: Accept alternate Stack env names emitted by Vercel integrations.
+    stack_project_id: str | None = Field(
+        default=os.getenv("STACK_PROJECT_ID")
+        or os.getenv("VITE_STACK_PROJECT_ID")
+        or os.getenv("NEXT_PUBLIC_STACK_PROJECT_ID")
+    )
+    stack_secret_key: str | None = Field(
+        default=os.getenv("STACK_SECRET_KEY") or os.getenv("STACK_SECRET_SERVER_KEY")
+    )
     stack_api_base_url: str = Field(default=os.getenv("STACK_API_BASE_URL", "https://api.stack-auth.com"))
     stack_timeout_seconds: float = Field(default=float(os.getenv("STACK_TIMEOUT_SECONDS", "10")))
 
