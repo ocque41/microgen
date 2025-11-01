@@ -12,6 +12,40 @@ from pydantic import BaseModel, EmailStr, ValidationError
 from .config import get_settings
 
 
+def _resolve_email(payload: dict[str, Any]) -> str | None:
+    """Extract a usable email address from Stack Auth API payloads."""
+
+    def _coerce(value: Any) -> str | None:
+        if isinstance(value, str) and value.strip():
+            return value.strip()
+        if isinstance(value, dict):
+            for key in ("email", "address", "value"):
+                candidate = value.get(key)
+                if isinstance(candidate, str) and candidate.strip():
+                    return candidate.strip()
+        return None
+
+    direct = _coerce(payload.get("email"))
+    if direct:
+        return direct
+
+    for key in ("primary_email", "primaryEmail", "primary_email_address"):
+        resolved = _coerce(payload.get(key))
+        if resolved:
+            return resolved
+
+    for key in ("emails", "email_addresses", "emailsList"):
+        entries = payload.get(key)
+        if not isinstance(entries, list):
+            continue
+        for entry in entries:
+            resolved = _coerce(entry)
+            if resolved:
+                return resolved
+
+    return None
+
+
 class StackAuthError(RuntimeError):
     """Raised when Stack Auth verification fails."""
 
@@ -95,11 +129,17 @@ class StackAuthClient:
 
         data = response.json()
         try:
-            user_payload = None
+            user_payload: dict[str, Any] | None = None
             if isinstance(data, dict):
-                user_payload = data.get("user") or data
+                candidate = data.get("user") or data
+                if isinstance(candidate, dict):
+                    user_payload = candidate.copy()
             if user_payload is None:
                 raise KeyError("user")
+
+            normalized_email = _resolve_email(user_payload)
+            if normalized_email:
+                user_payload.setdefault("email", normalized_email)
 
             user = StackAuthUser.model_validate(user_payload)
             session = StackAuthSession(
