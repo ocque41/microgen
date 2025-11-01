@@ -41,25 +41,15 @@ export async function requestJwtExchange(tokens: StackSessionTokens): Promise<st
   if (!tokens.accessToken) {
     throw new Error("Stack session is missing access token");
   }
-  if (!tokens.refreshToken) {
-    throw new Error("Stack session is missing refresh token");
-  }
 
   const response = await fetch(STACK_JWT_EXCHANGE_URL, {
     method: "POST",
     headers: {
-      "Content-Type": "application/json",
       "X-Stack-Access-Token": tokens.accessToken,
       ...(tokens.refreshToken ? { "X-Stack-Refresh-Token": tokens.refreshToken } : {}),
     },
     credentials: "include",
-    body: JSON.stringify({
-      access_token: tokens.accessToken,
-      refresh_token: tokens.refreshToken,
-    }),
   });
-  // plan-step[1]: Align posted token keys with FastAPI's StackTokenExchangeRequest.
-
   if (!response.ok) {
     throw new Error(`JWT exchange failed with status ${response.status}`);
   }

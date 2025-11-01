@@ -62,12 +62,16 @@ class StackAuthClient:
     ) -> StackAuthSession:
         """Validate Stack Auth tokens and return the associated session."""
 
-        payload: dict[str, Any] = {"access_token": access_token}
+        base = self._base_url.rstrip("/")
+        url = f"{base}/api/v1/users/me"
+        headers = {
+            "X-Stack-Access-Type": "server",
+            "X-Stack-Project-Id": self._project_id,
+            "X-Stack-Secret-Server-Key": self._secret_key,
+            "X-Stack-Access-Token": access_token,
+        }
         if refresh_token:
-            payload["refresh_token"] = refresh_token
-
-        url = f"{self._base_url}/projects/{self._project_id}/sessions/verify"
-        headers = {"Authorization": f"Bearer {self._secret_key}"}
+            headers["X-Stack-Refresh-Token"] = refresh_token
 
         needs_close = False
         if client is None:
@@ -75,7 +79,7 @@ class StackAuthClient:
             needs_close = True
 
         try:
-            response = await client.post(url, json=payload, headers=headers)
+            response = await client.get(url, headers=headers)
             response.raise_for_status()
         except httpx.HTTPStatusError as exc:
             detail = exc.response.text if exc.response is not None else ""
@@ -91,15 +95,16 @@ class StackAuthClient:
 
         data = response.json()
         try:
-            session_payload = data.get("session") or {}
-            user_payload = data.get("user") or session_payload.get("user")
+            user_payload = None
+            if isinstance(data, dict):
+                user_payload = data.get("user") or data
             if user_payload is None:
                 raise KeyError("user")
 
             user = StackAuthUser.model_validate(user_payload)
             session = StackAuthSession(
-                id=session_payload.get("id"),
-                expires_at=session_payload.get("expires_at"),
+                id=None,
+                expires_at=None,
                 user=user,
             )
             return session

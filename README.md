@@ -146,7 +146,7 @@ Stack Auth powers the hosted authentication screens that now render directly on 
 
 After wiring the variables, run `npm --prefix frontend run build && npm --prefix frontend run preview`, then visit `/signup` and `/login` to confirm the embedded Stack Auth UI renders and that successful sign-ins redirect to `/chat`.
 
-The chat surface now exchanges the active Stack session for a FastAPI JWT before initializing ChatKit. Ensure the backend implements `POST /api/auth/stack/exchange` and responds with the same envelope as `TokenResponse` (`access_token`, `token_type`, and `user`). The React client forwards the Stack session in two places—the JSON body **and** the `X-Stack-Access-Token` / `X-Stack-Refresh-Token` headers—so the FastAPI handler can short-circuit with a 401 if the header is missing. Once the backend returns a JWT, the client caches it, applies it to every `/chatkit` request via `Authorization: Bearer <token>`, and retries once when a 401 signals the credential expired. Verify the flow locally with `npm --prefix frontend exec vitest run`.
+The chat surface now exchanges the active Stack session for a FastAPI JWT before initializing ChatKit. Ensure the backend implements `POST /api/auth/stack/exchange` and responds with the same envelope as `TokenResponse` (`access_token`, `token_type`, and `user`). The React client forwards the Stack session via `X-Stack-Access-Token` (and `X-Stack-Refresh-Token` when available), matching Stack Auth's backend REST contract. Once the backend returns a JWT, the client caches it, applies it to every `/chatkit` request via `Authorization: Bearer <token>`, and retries once when a 401 signals the credential expired. Verify the flow locally with `npm --prefix frontend exec vitest run`.
 
 <!-- plan-step[3]: Document operational checklist for aligning Stack Auth configuration. -->
 
@@ -158,10 +158,8 @@ The chat surface now exchanges the active Stack session for a FastAPI JWT before
 
    ```bash
    curl -i \
-     -H "Content-Type: application/json" \
      -H "X-Stack-Access-Token: $STACK_ACCESS_TOKEN" \
      -H "X-Stack-Refresh-Token: $STACK_REFRESH_TOKEN" \
-     -d '{"access_token":"'$STACK_ACCESS_TOKEN'","refresh_token":"'$STACK_REFRESH_TOKEN'"}' \
      https://<backend-domain>/api/auth/stack/exchange
    ```
 

@@ -13,9 +13,10 @@ describe("BackendAuth helpers", () => {
 
   it("exchanges Stack tokens for a backend JWT", async () => {
     const fetchMock = vi.fn(async (_input: RequestInfo | URL, init?: RequestInit) => {
-      const body = init?.body ? JSON.parse(String(init.body)) : null;
-      expect(body).toEqual({ access_token: "stack-access", refresh_token: "stack-refresh" });
-      // plan-step[1]: Test verifies snake_case contract for the backend exchange.
+      expect(init?.body).toBeUndefined();
+      const headers = new Headers(init?.headers);
+      expect(headers.get("X-Stack-Access-Token")).toBe("stack-access");
+      expect(headers.get("X-Stack-Refresh-Token")).toBe("stack-refresh");
       return new Response(JSON.stringify({ access_token: "jwt-token" }), {
         status: 200,
         headers: { "Content-Type": "application/json" },
@@ -33,11 +34,9 @@ describe("BackendAuth helpers", () => {
     expect(fetchMock).toHaveBeenCalledTimes(1);
     const [, init] = fetchMock.mock.calls[0];
     expect(init?.credentials).toBe("include");
-    expect(init?.headers).toEqual(
-      expect.objectContaining({
-        "Content-Type": "application/json",
-      })
-    );
+    const headers = new Headers(init?.headers);
+    expect(headers.get("X-Stack-Access-Token")).toBe("stack-access");
+    expect(headers.get("X-Stack-Refresh-Token")).toBe("stack-refresh");
   });
 
   it("adds authorization headers and retries once after a 401", async () => {
