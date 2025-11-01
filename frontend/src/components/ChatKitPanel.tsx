@@ -73,7 +73,7 @@ export function ChatKitPanel({
           level: 2,
         },
       },
-      radius: "large",
+      radius: "round",
       typography: {
         fontFamily: '"InterVariable", "Inter", "Helvetica Neue", Arial, sans-serif',
       },

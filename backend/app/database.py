@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import logging
 from typing import AsyncIterator
 
 from sqlalchemy.engine import make_url
@@ -14,6 +15,8 @@ from .config import get_settings
 class Base(DeclarativeBase):
     """Declarative base for ORM models."""
 
+
+logger = logging.getLogger(__name__)
 
 settings = get_settings()
 
@@ -41,6 +44,16 @@ if isinstance(sslmode, str):
 url = url.set(query=query)
 
 engine = create_async_engine(str(url), pool_pre_ping=True, connect_args=connect_args)
+
+logger.info(
+    "Configured async engine",
+    extra={
+        "driver": url.drivername,
+        "host": url.host,
+        "database": url.database,
+        "ssl": connect_args.get("ssl"),
+    },
+)
 SessionLocal = async_sessionmaker(engine, expire_on_commit=False, class_=AsyncSession)
 
 

@@ -3,12 +3,15 @@
 from __future__ import annotations
 
 import asyncio
+import logging
 import math
 from collections import defaultdict, deque
 from typing import DefaultDict, Deque, Sequence
 
-from fastapi import APIRouter, HTTPException, status
-from pydantic import BaseModel, ConfigDict, Field, HttpUrl
+from fastapi import APIRouter, Depends, HTTPException, Request, status
+from pydantic import BaseModel, ConfigDict, Field, HttpUrl, ValidationError
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/api/rum", tags=["rum"])
 
@@ -121,8 +124,28 @@ class _MetricStore:
 _store = _MetricStore()
 
 
+async def _parse_metric(request: Request) -> MetricSample:
+    """Parse incoming vitals payloads that may be sent as JSON or plain text."""
+
+    raw = await request.body()
+    if not raw:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Empty vitals payload")
+
+    content_type = request.headers.get("content-type", "").lower()
+    try:
+        if "application/json" in content_type:
+            return MetricSample.model_validate_json(raw.decode("utf-8"))
+        text_payload = raw.decode("utf-8")
+        if not text_payload:
+            raise ValueError("blank text payload")
+        return MetricSample.model_validate_json(text_payload)
+    except (ValueError, ValidationError) as exc:
+        logger.debug("Rejected vitals payload", exc_info=exc)
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid vitals payload") from exc
+
+
 @router.post("/vitals", status_code=status.HTTP_202_ACCEPTED, response_model=MetricIngestResponse)
-async def record_metric(sample: MetricSample) -> MetricIngestResponse:
+async def record_metric(sample: MetricSample = Depends(_parse_metric)) -> MetricIngestResponse:
     """Record a Core Web Vitals sample sent from the frontend."""
 
     summary = await _store.add(sample)
