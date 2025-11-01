@@ -55,6 +55,17 @@ if settings.app_base_url:
 
 ALLOWED_ORIGIN_REGEX = settings.allowed_origin_regex or r"https://microgen-git-[\w-]+-.*\.vercel\.app"
 
+ALLOWED_HEADERS = [
+    "authorization",
+    "content-type",
+    "x-stack-access-token",
+    "x-stack-refresh-token",
+    "X-Stack-Access-Token",
+    "X-Stack-Refresh-Token",
+]
+
+EXPOSED_HEADERS = ["set-cookie", "content-type"]
+
 STREAMING_HEADERS = {
     "Cache-Control": "no-cache",
     "Connection": "keep-alive",
@@ -68,7 +79,8 @@ app.add_middleware(
     allow_origin_regex=ALLOWED_ORIGIN_REGEX,
     allow_credentials=True,
     allow_methods=["*"],
-    allow_headers=["*"],
+    allow_headers=ALLOWED_HEADERS,
+    expose_headers=EXPOSED_HEADERS,
 )
 app.add_middleware(SessionMiddleware, secret_key=settings.session_secret)
 

@@ -213,19 +213,26 @@ async def stack_exchange(
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid Stack tokens") from exc
 
     stack_email = stack_session.user.email.strip().lower()
-    db_user = await session.scalar(select(User).where(User.email == stack_email))
 
-    if db_user is None:
-        db_user = User(email=stack_email)
-        session.add(db_user)
-        await session.commit()
-        await session.refresh(db_user)
-        logger.info("Created user %s from Stack Auth exchange", db_user.id)
-    else:
-        if db_user.email != stack_email:
+    try:
+        db_user = await session.scalar(select(User).where(User.email == stack_email))
+
+        if db_user is None:
+            db_user = User(email=stack_email)
+            session.add(db_user)
+            await session.commit()
+            await session.refresh(db_user)
+            logger.info("Created user %s from Stack Auth exchange", db_user.id)
+        elif db_user.email != stack_email:
             db_user.email = stack_email
             await session.commit()
             await session.refresh(db_user)
+    except Exception as exc:  # pragma: no cover - database outage path
+        logger.exception("Failed to resolve Stack user against database", exc_info=exc)
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Unable to reach user store while exchanging Stack tokens.",
+        )
 
     return _token_response(db_user)
 

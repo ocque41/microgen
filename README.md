@@ -154,7 +154,8 @@ The chat surface now exchanges the active Stack session for a FastAPI JWT before
 
 1. Set `STACK_PROJECT_ID` and `STACK_SECRET_KEY` (or `STACK_SECRET_SERVER_KEY`) on the FastAPI host before deploying. For providers like Render, update the production environment and trigger a redeploy so the new secrets load.
 2. Mirror the same project ID on the frontend (`VITE_STACK_PROJECT_ID`) and ensure `VITE_STACK_JWT_EXCHANGE_URL` points at the backend origin (for example `https://<backend>/api/auth/stack/exchange`).
-3. After the backend restarts, run a manual `curl` POST to `/api/auth/stack/exchange` using a valid Stack session pair to confirm a 200 response with `TokenResponse` JSON:
+3. Confirm CORS is allowing your frontend origin (`https://microagents.cumulush.com`) and the custom Stack headers (`X-Stack-Access-Token`, `X-Stack-Refresh-Token`). These are defined in `backend/app/main.py` via `ALLOWED_ORIGINS` and `ALLOWED_HEADERS`.
+4. After the backend restarts, run a manual `curl` POST to `/api/auth/stack/exchange` using a valid Stack session pair to confirm a 200 response with `TokenResponse` JSON:
 
    ```bash
    curl -i \
@@ -164,13 +165,24 @@ The chat surface now exchanges the active Stack session for a FastAPI JWT before
    ```
 
    Replace the environment variables with the values reported by `user.getAuthJson()` (frontend) or the Stack dashboard.
-4. Watch backend logs for the `Stack Auth credentials are missing` startup check—if it triggers, the process aborts before serving requests so you can fix credentials immediately. The exchange handler now also logs the raw Stack error payload whenever verification fails, so redeploys surface misconfigured credentials quickly.
+5. Watch backend logs for the `Stack Auth credentials are missing` startup check—if it triggers, the process aborts before serving requests so you can fix credentials immediately. The exchange handler now also logs the raw Stack error payload whenever verification fails, so redeploys surface misconfigured credentials quickly.
 
 <!-- plan-step[4]: Provide validation and testing guidance post-deployment. -->
 
 ### Validation and testing flow
 
 - Refresh the `/chat` route in the deployed frontend and verify the network tab reports a successful `POST /api/auth/stack/exchange` before ChatKit sessions initialize.
+- Validate CORS wiring with an OPTIONS probe before testing in the browser:
+
+  ```bash
+  curl -i -X OPTIONS \
+    -H "Origin: https://microagents.cumulush.com" \
+    -H "Access-Control-Request-Method: POST" \
+    -H "Access-Control-Request-Headers: X-Stack-Access-Token" \
+    https://<backend-domain>/api/auth/stack/exchange
+  ```
+
+  The response should include `Access-Control-Allow-Origin: https://microagents.cumulush.com` and list `X-Stack-Access-Token` in `Access-Control-Allow-Headers`.
 - Run `cd backend && uv run pytest` locally or in CI to execute configuration regressions such as `backend/tests/test_config_env.py` along with the rest of the backend suite once credentials are populated.
 
 Run `alembic upgrade head` after configuring `DATABASE_URL` so the new tables (users, password reset tokens, micro agents) are available before serving requests.
