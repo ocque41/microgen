@@ -146,7 +146,7 @@ Stack Auth powers the hosted authentication screens that now render directly on 
 
 After wiring the variables, run `npm --prefix frontend run build && npm --prefix frontend run preview`, then visit `/signup` and `/login` to confirm the embedded Stack Auth UI renders and that successful sign-ins redirect to `/chat`.
 
-The chat surface now exchanges the active Stack session for a FastAPI JWT before initializing ChatKit. Ensure the backend implements `POST /api/auth/stack/exchange` and responds with the same envelope as `TokenResponse` (`access_token`, `token_type`, and `user`). The React client caches that JWT, applies it to every `/chatkit` request via `Authorization: Bearer <token>`, and retries once when a 401 indicates the credential expired. Verify the flow locally with `npm --prefix frontend exec vitest run`.
+The chat surface now exchanges the active Stack session for a FastAPI JWT before initializing ChatKit. Ensure the backend implements `POST /api/auth/stack/exchange` and responds with the same envelope as `TokenResponse` (`access_token`, `token_type`, and `user`). The React client forwards the Stack session in two places—the JSON body **and** the `X-Stack-Access-Token` / `X-Stack-Refresh-Token` headers—so the FastAPI handler can short-circuit with a 401 if the header is missing. Once the backend returns a JWT, the client caches it, applies it to every `/chatkit` request via `Authorization: Bearer <token>`, and retries once when a 401 signals the credential expired. Verify the flow locally with `npm --prefix frontend exec vitest run`.
 
 <!-- plan-step[3]: Document operational checklist for aligning Stack Auth configuration. -->
 
@@ -154,8 +154,19 @@ The chat surface now exchanges the active Stack session for a FastAPI JWT before
 
 1. Set `STACK_PROJECT_ID` and `STACK_SECRET_KEY` (or `STACK_SECRET_SERVER_KEY`) on the FastAPI host before deploying. For providers like Render, update the production environment and trigger a redeploy so the new secrets load.
 2. Mirror the same project ID on the frontend (`VITE_STACK_PROJECT_ID`) and ensure `VITE_STACK_JWT_EXCHANGE_URL` points at the backend origin (for example `https://<backend>/api/auth/stack/exchange`).
-3. After the backend restarts, run a manual `curl` POST to `/api/auth/stack/exchange` using a valid Stack session pair to confirm a 200 response with `TokenResponse` JSON.
-4. Watch backend logs for the `Stack Auth credentials are missing` startup check—if it triggers, the process aborts before serving requests so you can fix credentials immediately.
+3. After the backend restarts, run a manual `curl` POST to `/api/auth/stack/exchange` using a valid Stack session pair to confirm a 200 response with `TokenResponse` JSON:
+
+   ```bash
+   curl -i \
+     -H "Content-Type: application/json" \
+     -H "X-Stack-Access-Token: $STACK_ACCESS_TOKEN" \
+     -H "X-Stack-Refresh-Token: $STACK_REFRESH_TOKEN" \
+     -d '{"access_token":"'$STACK_ACCESS_TOKEN'","refresh_token":"'$STACK_REFRESH_TOKEN'"}' \
+     https://<backend-domain>/api/auth/stack/exchange
+   ```
+
+   Replace the environment variables with the values reported by `user.getAuthJson()` (frontend) or the Stack dashboard.
+4. Watch backend logs for the `Stack Auth credentials are missing` startup check—if it triggers, the process aborts before serving requests so you can fix credentials immediately. The exchange handler now also logs the raw Stack error payload whenever verification fails, so redeploys surface misconfigured credentials quickly.
 
 <!-- plan-step[4]: Provide validation and testing guidance post-deployment. -->
 

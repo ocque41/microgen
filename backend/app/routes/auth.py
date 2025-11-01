@@ -8,7 +8,7 @@ from datetime import datetime, timedelta, timezone
 from functools import lru_cache
 
 from authlib.integrations.starlette_client import OAuth, OAuthError
-from fastapi import APIRouter, Depends, HTTPException, Request, Response, status
+from fastapi import APIRouter, Body, Depends, Header, HTTPException, Request, Response, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -184,9 +184,16 @@ async def me(current_user: User = Depends(get_current_user)) -> UserRead:
 
 @router.post("/stack/exchange", response_model=TokenResponse)
 async def stack_exchange(
-    payload: StackTokenExchangeRequest,
+    payload: StackTokenExchangeRequest | None = Body(default=None),
+    stack_access_token: str | None = Header(default=None, alias="X-Stack-Access-Token"),
+    stack_refresh_token: str | None = Header(default=None, alias="X-Stack-Refresh-Token"),
     session: AsyncSession = Depends(get_session),
 ) -> TokenResponse:
+    access_token = stack_access_token or (payload.access_token if payload else None)
+    refresh_token = stack_refresh_token or (payload.refresh_token if payload else None)
+
+    if not access_token:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Stack access token missing")
     try:
         stack_client = _get_stack_client()
     except RuntimeError as exc:
@@ -198,8 +205,8 @@ async def stack_exchange(
 
     try:
         stack_session = await stack_client.verify_tokens(
-            access_token=payload.access_token,
-            refresh_token=payload.refresh_token,
+            access_token=access_token,
+            refresh_token=refresh_token,
         )
     except StackAuthError as exc:
         logger.info("Stack Auth token exchange failed: %s", exc)

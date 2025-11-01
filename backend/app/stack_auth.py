@@ -78,7 +78,11 @@ class StackAuthClient:
             response = await client.post(url, json=payload, headers=headers)
             response.raise_for_status()
         except httpx.HTTPStatusError as exc:
-            raise StackAuthError("Stack Auth rejected the provided tokens") from exc
+            detail = exc.response.text if exc.response is not None else ""
+            message = "Stack Auth rejected the provided tokens"
+            if detail:
+                message = f"{message}: {detail}"
+            raise StackAuthError(message) from exc
         except httpx.RequestError as exc:  # pragma: no cover - network failure handled by caller
             raise StackAuthError("Failed to contact Stack Auth") from exc
         finally:

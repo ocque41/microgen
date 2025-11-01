@@ -82,6 +82,29 @@ async def test_stack_exchange_reuses_existing_user(async_client, session_factory
         assert users[0].id == existing_id
 
 
+async def test_stack_exchange_accepts_header_tokens(async_client, monkeypatch: pytest.MonkeyPatch):
+    _override_stack_client(monkeypatch, _SuccessfulClient(email="header@example.com"))
+
+    response = await async_client.post(
+        "/api/auth/stack/exchange",
+        headers={
+            "X-Stack-Access-Token": "header-access",
+            "X-Stack-Refresh-Token": "header-refresh",
+        },
+    )
+
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["user"]["email"] == "header@example.com"
+
+
+async def test_stack_exchange_missing_tokens_returns_unauthorized(async_client):
+    response = await async_client.post("/api/auth/stack/exchange")
+
+    assert response.status_code == 401
+    assert response.json()["detail"] == "Stack access token missing"
+
+
 async def test_stack_exchange_invalid_tokens_returns_unauthorized(
     async_client,
     session_factory,

@@ -49,6 +49,8 @@ export async function requestJwtExchange(tokens: StackSessionTokens): Promise<st
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      "X-Stack-Access-Token": tokens.accessToken,
+      ...(tokens.refreshToken ? { "X-Stack-Refresh-Token": tokens.refreshToken } : {}),
     },
     credentials: "include",
     body: JSON.stringify({
