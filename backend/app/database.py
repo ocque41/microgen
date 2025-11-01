@@ -43,7 +43,8 @@ if isinstance(sslmode, str):
 
 url = url.set(query=query)
 
-engine = create_async_engine(str(url), pool_pre_ping=True, connect_args=connect_args)
+database_dsn = url.render_as_string(hide_password=False)
+engine = create_async_engine(database_dsn, pool_pre_ping=True, connect_args=connect_args)
 
 logger.info(
     "Configured async engine",
