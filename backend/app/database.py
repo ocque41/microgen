@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from typing import AsyncIterator
 
+from sqlalchemy.engine import make_url
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.orm import DeclarativeBase
 
@@ -16,13 +17,30 @@ class Base(DeclarativeBase):
 
 settings = get_settings()
 
-database_url = settings.require_database_url()
-if database_url.startswith("postgres://"):
-    database_url = database_url.replace("postgres://", "postgresql+asyncpg://", 1)
-elif database_url.startswith("postgresql://") and "+asyncpg" not in database_url:
-    database_url = database_url.replace("postgresql://", "postgresql+asyncpg://", 1)
+raw_database_url = settings.require_database_url()
+url = make_url(raw_database_url)
 
-engine = create_async_engine(database_url, pool_pre_ping=True)
+if url.drivername in {"postgres", "postgresql"}:
+    url = url.set(drivername="postgresql+asyncpg")
+elif url.drivername.startswith("postgresql") and "+asyncpg" not in url.drivername:
+    url = url.set(drivername="postgresql+asyncpg")
+
+query = dict(url.query)
+connect_args: dict[str, object] = {}
+
+sslmode = query.pop("sslmode", None)
+if isinstance(sslmode, str):
+    sslmode_lower = sslmode.lower()
+    if sslmode_lower in {"require", "verify-full", "verify-ca"}:
+        connect_args["ssl"] = True
+    elif sslmode_lower in {"disable", "allow"}:
+        connect_args["ssl"] = False
+    else:
+        connect_args["ssl"] = sslmode
+
+url = url.set(query=query)
+
+engine = create_async_engine(str(url), pool_pre_ping=True, connect_args=connect_args)
 SessionLocal = async_sessionmaker(engine, expire_on_commit=False, class_=AsyncSession)
 
 
