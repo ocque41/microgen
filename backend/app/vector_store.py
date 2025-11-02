@@ -18,7 +18,8 @@ from .models import UserVectorStore
 
 async def _create_vector_store(name: str) -> str:
     def _call() -> str:
-        store = openai_client.beta.vector_stores.create(name=name)
+        # plan-step[3]: use the stable vector store endpoint from the 1.x SDK surface
+        store = openai_client.vector_stores.create(name=name)
         return store.id
 
     return await asyncio.to_thread(_call)
@@ -33,7 +34,7 @@ async def _upload_fact(vector_store_id: str, content: str, metadata: dict[str, A
             file=(filename, BytesIO(file_bytes)),
             purpose="assistants",
         )
-        openai_client.beta.vector_stores.files.create(
+        openai_client.vector_stores.files.create(
             vector_store_id=vector_store_id,
             file_id=file.id,
             metadata=metadata,

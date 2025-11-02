@@ -7,6 +7,7 @@ import logging
 from typing import Any
 from uuid import UUID, uuid4
 
+import openai
 from chatkit.server import StreamingResult
 from fastapi import Depends, FastAPI, HTTPException, Request, status
 from fastapi.middleware.cors import CORSMiddleware
@@ -103,6 +104,11 @@ async def _verify_stack_auth_configuration() -> None:
         raise RuntimeError(
             "Stack Auth credentials are required to service /api/auth/stack/exchange requests."
         )
+
+    logger.info(
+        "plan-step[3]: OpenAI SDK version %s loaded for ChatKit vector store operations",
+        getattr(openai, "__version__", "unknown"),
+    )
 
 
 class WorkflowOptions(BaseModel):
