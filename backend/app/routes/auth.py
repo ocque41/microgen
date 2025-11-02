@@ -11,6 +11,7 @@ from authlib.integrations.starlette_client import OAuth, OAuthError
 from fastapi import APIRouter, Body, Depends, Header, HTTPException, Request, Response, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import load_only
 
 from ..config import get_settings
 from ..database import get_session
@@ -215,7 +216,12 @@ async def stack_exchange(
     stack_email = stack_session.user.email.strip().lower()
 
     try:
-        db_user = await session.scalar(select(User).where(User.email == stack_email))
+        user_lookup = (
+            select(User)
+            .options(load_only(User.id, User.email, User.created_at, User.updated_at))
+            .where(User.email == stack_email)
+        )
+        db_user = await session.scalar(user_lookup)
 
         if db_user is None:
             db_user = User(email=stack_email)
