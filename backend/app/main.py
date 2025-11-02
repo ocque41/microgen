@@ -330,6 +330,13 @@ async def discard_fact(fact_id: str) -> dict[str, Any]:
     return {"fact": fact.as_dict()}
 
 
+@app.get("/", include_in_schema=False)
+async def root() -> dict[str, str]:
+    """Lightweight health probe for Render and other uptime checks."""
+
+    return {"status": "ok"}
+
+
 @app.get("/health")
 async def health_check() -> dict[str, str]:
     return {"status": "healthy"}
