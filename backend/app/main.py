@@ -32,10 +32,7 @@ from .routes import auth as auth_routes
 from .routes import microagents as microagent_routes
 from .routes import rum as rum_routes
 from .routes import webhooks as webhook_routes
-from .vector_store import (
-    get_or_create_user_vector_store,
-    get_user_vector_store_id,
-)
+from .vector_store import get_or_create_user_vector_store
 
 settings = get_settings()
 
@@ -241,9 +238,13 @@ async def chatkit_endpoint(
     request: Request,
     server: FactAssistantServer = Depends(get_chatkit_server),
     current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_session),
 ) -> Response:
     payload = await request.body()
-    vector_store_id = await get_user_vector_store_id(current_user.id)
+    # plan-step[2]: guarantee each user has a vector store record before
+    # delegating to the ChatKit server, preventing missing-table lookups and
+    # ensuring new users get provisioned automatically.
+    vector_store_id = await get_or_create_user_vector_store(db, current_user.id)
     result = await server.process(
         payload,
         {
