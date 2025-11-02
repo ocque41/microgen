@@ -6,12 +6,12 @@ import logging
 import secrets
 from datetime import datetime, timedelta, timezone
 from functools import lru_cache
+from typing import Union
 
 from authlib.integrations.starlette_client import OAuth, OAuthError
 from fastapi import APIRouter, Body, Depends, Header, HTTPException, Request, Response, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import load_only
 
 from ..config import get_settings
 from ..database import get_session
@@ -61,12 +61,20 @@ def _lower_email(email: str) -> str:
     return email.strip().lower()
 
 
-def _token_response(user: User) -> TokenResponse:
-    token = create_access_token(user_id=user.id)
+def _token_response(user: Union[User, UserRead]) -> TokenResponse:
+    # Plan step A: allow token responses from ORM instances and lightweight projections
+    if isinstance(user, UserRead):
+        user_read = user
+        user_id = user.id
+    else:
+        user_read = UserRead.model_validate(user)
+        user_id = user.id
+
+    token = create_access_token(user_id=user_id)
     return TokenResponse(
         access_token=token,
         expires_in=settings.jwt_expires_seconds,
-        user=UserRead.model_validate(user),
+        user=user_read,
     )
 
 
@@ -216,23 +224,29 @@ async def stack_exchange(
     stack_email = stack_session.user.email.strip().lower()
 
     try:
+        # Plan step A: fetch only stable columns to avoid missing-field errors while migrations roll out
         user_lookup = (
-            select(User)
-            .options(load_only(User.id, User.email, User.created_at, User.updated_at))
+            select(User.id, User.email, User.created_at)
             .where(User.email == stack_email)
         )
-        db_user = await session.scalar(user_lookup)
+        lookup_result = await session.execute(user_lookup)
+        existing_mapping = lookup_result.mappings().first()
+        existing_user = dict(existing_mapping) if existing_mapping is not None else None
 
-        if db_user is None:
+        if existing_user is None:
             db_user = User(email=stack_email)
             session.add(db_user)
             await session.commit()
             await session.refresh(db_user)
             logger.info("Created user %s from Stack Auth exchange", db_user.id)
-        elif db_user.email != stack_email:
-            db_user.email = stack_email
-            await session.commit()
-            await session.refresh(db_user)
+        else:
+            user_read = UserRead(
+                id=existing_user["id"],
+                email=existing_user["email"],
+                created_at=existing_user["created_at"],
+                updated_at=existing_user.get("updated_at", existing_user["created_at"]),
+            )
+            return _token_response(user_read)
     except Exception as exc:  # pragma: no cover - database outage path
         logger.exception("Failed to resolve Stack user against database", exc_info=exc)
         raise HTTPException(
