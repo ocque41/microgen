@@ -14,6 +14,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response, StreamingResponse
 from openai import OpenAIError
 from pydantic import AliasChoices, BaseModel, ConfigDict, Field
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.middleware.sessions import SessionMiddleware
 from starlette.responses import JSONResponse
@@ -28,11 +29,12 @@ from .constants import WORKFLOW_ID, WORKFLOW_VERSION
 from .database import get_session
 from .dependencies import get_current_user
 from .facts import fact_store
-from .models import User
+from .models import ChatTranscriptMessage, User
 from .routes import auth as auth_routes
 from .routes import microagents as microagent_routes
 from .routes import rum as rum_routes
 from .routes import webhooks as webhook_routes
+from .schemas import ChatTranscriptMessageRead
 from .vector_store import get_or_create_user_vector_store
 
 settings = get_settings()
@@ -326,6 +328,27 @@ async def refresh_chatkit_session(
         "Refreshed ChatKit session %s for %s", session.id, session.user
     )
     return _session_payload(session)
+
+
+@app.get("/api/chatkit/transcript", response_model=list[ChatTranscriptMessageRead])
+async def list_chat_transcript(
+    thread_id: str | None = None,
+    limit: int = 200,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_session),
+) -> list[ChatTranscriptMessageRead]:
+    capped_limit = max(1, min(limit, 500))
+    stmt = select(ChatTranscriptMessage).where(ChatTranscriptMessage.user_id == current_user.id)
+    if thread_id:
+        stmt = stmt.where(ChatTranscriptMessage.thread_id == thread_id)
+    stmt = stmt.order_by(ChatTranscriptMessage.created_at.desc()).limit(capped_limit)
+    result = await db.execute(stmt)
+    records = result.scalars().all()
+    # plan-step[3]: expose an audit-friendly transcript surface in chronological order.
+    return [
+        ChatTranscriptMessageRead.model_validate(record)
+        for record in reversed(records)
+    ]
 
 
 @app.get("/facts")

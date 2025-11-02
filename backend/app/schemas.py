@@ -84,7 +84,22 @@ class StripeWebhookResponse(BaseModel):
     received: bool
 
 
+class ChatTranscriptMessageRead(BaseModel):
+    """Serialized transcript entry for the authenticated user."""
+
+    model_config = ConfigDict(from_attributes=True)
+
+    id: uuid.UUID
+    thread_id: str
+    item_id: str
+    role: str
+    message: str
+    created_at: datetime
+    updated_at: datetime
+
+
 __all__ = [
+    "ChatTranscriptMessageRead",
     "CheckoutSessionResponse",
     "ForgotPasswordRequest",
     "LoginRequest",

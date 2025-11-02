@@ -2,10 +2,15 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from datetime import datetime
+import logging
 from typing import Any, Dict, List
 
 from chatkit.store import NotFoundError, Store
 from chatkit.types import Attachment, Page, Thread, ThreadItem, ThreadMetadata
+
+from .vector_store import record_chat_message
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -19,6 +24,7 @@ class MemoryStore(Store[dict[str, Any]]):
 
     def __init__(self) -> None:
         self._threads: Dict[str, _ThreadState] = {}
+        self._persisted_item_states: Dict[str, str] = {}
         # Attachments intentionally unsupported; use a real store that enforces auth.
 
     @staticmethod
@@ -125,14 +131,17 @@ class MemoryStore(Store[dict[str, Any]]):
         self, thread_id: str, item: ThreadItem, context: dict[str, Any]
     ) -> None:
         self._items(thread_id).append(item.model_copy(deep=True))
+        await self._persist_transcript(thread_id, item, context)
 
     async def save_item(self, thread_id: str, item: ThreadItem, context: dict[str, Any]) -> None:
         items = self._items(thread_id)
         for idx, existing in enumerate(items):
             if existing.id == item.id:
                 items[idx] = item.model_copy(deep=True)
+                await self._persist_transcript(thread_id, item, context)
                 return
         items.append(item.model_copy(deep=True))
+        await self._persist_transcript(thread_id, item, context)
 
     async def load_item(self, thread_id: str, item_id: str, context: dict[str, Any]) -> ThreadItem:
         for item in self._items(thread_id):
@@ -145,6 +154,72 @@ class MemoryStore(Store[dict[str, Any]]):
     ) -> None:
         items = self._items(thread_id)
         self._threads[thread_id].items = [item for item in items if item.id != item_id]
+        self._persisted_item_states.pop(f"{thread_id}:{item_id}", None)
+
+    async def _persist_transcript(
+        self,
+        thread_id: str,
+        item: ThreadItem,
+        context: dict[str, Any],
+    ) -> None:
+        """Persist user/assistant messages to external stores."""
+
+        user = context.get("user")
+        if user is None:
+            return
+
+        item_type = getattr(item, "type", None)
+        role = None
+        if item_type == "user_message":
+            role = "user"
+        elif item_type == "assistant_message":
+            role = "assistant"
+        if role is None:
+            return
+
+        status = getattr(item, "status", None)
+        if status in {"in_progress", "streaming", "pending"}:
+            return
+
+        text_parts: list[str] = []
+        for part in getattr(item, "content", []) or []:
+            maybe_text = getattr(part, "text", None)
+            if maybe_text:
+                text_parts.append(maybe_text)
+                continue
+            dump = part.model_dump() if hasattr(part, "model_dump") else {}
+            value = dump.get("text") or dump.get("value") or dump.get("input_text") or dump.get("output_text")
+            if isinstance(value, str) and value.strip():
+                text_parts.append(value)
+
+        message = " ".join(chunk.strip() for chunk in text_parts if chunk).strip()
+        if not message:
+            return
+
+        item_id = getattr(item, "id", None)
+        if not item_id:
+            return
+
+        cache_key = f"{thread_id}:{item_id}"
+        payload_signature = f"{role}:{message}"
+        if self._persisted_item_states.get(cache_key) == payload_signature:
+            return
+
+        try:
+            # plan-step[2]: mirror every finalized chat turn into long-term storage for recalls.
+            await record_chat_message(
+                user.id,
+                thread_id=thread_id,
+                item_id=item_id,
+                role=role,
+                message=message,
+                metadata={"status": status} if status else None,
+            )
+        except Exception:  # pragma: no cover - persistence failures shouldn't break chat
+            logger.exception("Failed to persist chat transcript entry", extra={"thread_id": thread_id})
+            return
+
+        self._persisted_item_states[cache_key] = payload_signature
 
     # -- Files -----------------------------------------------------------
     # These methods are not currently used but required to be compatible with the Store interface.

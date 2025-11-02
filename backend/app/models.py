@@ -44,6 +44,9 @@ class User(Base, TimestampMixin):
     vector_store: Mapped[UserVectorStore | None] = relationship(
         back_populates="user", cascade="all, delete-orphan", uselist=False
     )
+    transcript_messages: Mapped[list["ChatTranscriptMessage"]] = relationship(
+        back_populates="user", cascade="all, delete-orphan"
+    )
 
 
 class PasswordResetToken(Base, TimestampMixin):
@@ -109,6 +112,25 @@ class UserVectorStore(Base, TimestampMixin):
     user: Mapped[User] = relationship(back_populates="vector_store")
 
 
+class ChatTranscriptMessage(Base, TimestampMixin):
+    """Archived chat transcript entries for user review."""
+
+    __tablename__ = "chat_transcript_messages"
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, nullable=False
+    )
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    thread_id: Mapped[str] = mapped_column(String(255), nullable=False, index=True)
+    item_id: Mapped[str] = mapped_column(String(255), nullable=False, unique=True)
+    role: Mapped[str] = mapped_column(String(32), nullable=False)
+    message: Mapped[str] = mapped_column(Text, nullable=False)
+
+    user: Mapped[User] = relationship(back_populates="transcript_messages")
+
+
 class OutboundEmail(Base, TimestampMixin):
     """Email messages queued for delivery (stored in Neon)."""
 
@@ -124,6 +146,7 @@ class OutboundEmail(Base, TimestampMixin):
 
 
 __all__ = [
+    "ChatTranscriptMessage",
     "MicroAgent",
     "MicroAgentStatus",
     "OutboundEmail",

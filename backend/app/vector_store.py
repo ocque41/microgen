@@ -13,7 +13,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from .clients import openai_client
 from .database import SessionLocal
-from .models import UserVectorStore
+from .models import ChatTranscriptMessage, UserVectorStore
 
 
 async def _create_vector_store(name: str) -> str:
@@ -68,13 +68,18 @@ async def append_fact_for_user(
     user_id: UUID,
     fact_text: str,
     metadata: dict[str, Any] | None = None,
+    *,
+    payload_key: str = "fact",
 ) -> None:
     async with SessionLocal() as session:
         vector_store_id = await get_or_create_user_vector_store(session, user_id)
-        payload = json.dumps({
-            "fact": fact_text,
-            **(metadata or {}),
-        }, ensure_ascii=False)
+        payload = json.dumps(
+            {
+                payload_key: fact_text,
+                **(metadata or {}),
+            },
+            ensure_ascii=False,
+        )
         await _upload_fact(
             vector_store_id,
             content=payload,
@@ -83,8 +88,56 @@ async def append_fact_for_user(
         await session.commit()
 
 
+async def record_chat_message(
+    user_id: UUID,
+    *,
+    thread_id: str,
+    item_id: str,
+    role: str,
+    message: str,
+    metadata: dict[str, Any] | None = None,
+) -> None:
+    """Persist a chat message to OpenAI vector store and Neon history."""
+
+    meta = {
+        "type": "chat_message",
+        "role": role,
+        "thread_id": thread_id,
+        "item_id": item_id,
+        **(metadata or {}),
+    }
+
+    await append_fact_for_user(
+        user_id,
+        message,
+        metadata=meta,
+        payload_key="message",
+    )
+
+    async with SessionLocal() as session:
+        existing = await session.scalar(
+            select(ChatTranscriptMessage).where(ChatTranscriptMessage.item_id == item_id)
+        )
+        if existing:
+            existing.message = message
+            existing.role = role
+            existing.thread_id = thread_id
+        else:
+            session.add(
+                ChatTranscriptMessage(
+                    user_id=user_id,
+                    thread_id=thread_id,
+                    item_id=item_id,
+                    role=role,
+                    message=message,
+                )
+            )
+        await session.commit()
+
+
 __all__ = [
     "append_fact_for_user",
     "get_or_create_user_vector_store",
+    "record_chat_message",
     "get_user_vector_store_id",
 ]
