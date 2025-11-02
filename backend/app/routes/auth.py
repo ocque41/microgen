@@ -226,7 +226,7 @@ async def stack_exchange(
     try:
         # Plan step A: fetch only stable columns to avoid missing-field errors while migrations roll out
         user_lookup = (
-            select(User.id, User.email, User.created_at)
+            select(User.id, User.email, User.created_at, getattr(User, "updated_at", User.created_at))
             .where(User.email == stack_email)
         )
         lookup_result = await session.execute(user_lookup)

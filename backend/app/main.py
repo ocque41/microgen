@@ -73,16 +73,20 @@ STREAMING_HEADERS = {
 
 logger = logging.getLogger(__name__)
 
+# plan-step[1]: ensure session data is set up before wrapping everything with CORS.
+app.add_middleware(SessionMiddleware, secret_key=settings.session_secret)
+
+# plan-step[1]: place CORSMiddleware last so it executes first and handles preflights.
 app.add_middleware(
     CORSMiddleware,
     allow_origins=ALLOWED_ORIGINS,
     allow_origin_regex=ALLOWED_ORIGIN_REGEX,
     allow_credentials=True,
     allow_methods=["*"],
-    allow_headers=ALLOWED_HEADERS,
+    allow_headers=["*"],
     expose_headers=EXPOSED_HEADERS,
+    max_age=86400,
 )
-app.add_middleware(SessionMiddleware, secret_key=settings.session_secret)
 
 app.include_router(auth_routes.router)
 app.include_router(microagent_routes.router)
@@ -227,7 +231,9 @@ def get_chatkit_server() -> FactAssistantServer:
 
 @app.options("/chatkit")
 async def chatkit_options() -> Response:
-    return Response(status_code=status.HTTP_204_NO_CONTENT)
+    """Plan-step[1]: explicit handler to keep ChatKit preflight responses at HTTP 200."""
+
+    return Response(status_code=status.HTTP_200_OK)
 
 
 @app.post("/chatkit")
@@ -251,6 +257,13 @@ async def chatkit_endpoint(
     if hasattr(result, "json"):
         return Response(content=result.json, media_type="application/json")
     return JSONResponse(result)
+
+
+@app.options("/{rest_of_path:path}", include_in_schema=False)
+async def wildcard_options(rest_of_path: str) -> Response:
+    """Plan-step[1]: backstop for any OPTIONS request that slips past specific routes."""
+
+    return Response(status_code=status.HTTP_200_OK)
 
 
 def _session_payload(session: Any) -> dict[str, Any]:
