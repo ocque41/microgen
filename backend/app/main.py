@@ -41,31 +41,32 @@ settings = get_settings()
 
 app = FastAPI(title="ChatKit API")
 
-# Allow production, preview, and local frontends to reach the API.
-ALLOWED_ORIGINS = [
-    "https://microagents.cumulush.com",
-    "https://microgen.vercel.app",
-    # Add preview deployments here if you test them, e.g.:
-    # "https://microgen-git-main-<hash>-<team>.vercel.app",
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
-]
-if settings.app_base_url:
-    ALLOWED_ORIGINS.append(settings.app_base_url)
+def _dedupe(items: list[str]) -> list[str]:
+    return list(dict.fromkeys(items))
+
+
+def _build_allowed_origins() -> list[str]:
+    defaults = [
+        "https://microagents.cumulush.com",
+        "https://microgen.vercel.app",
+        # Add preview deployments here if you test them, e.g.:
+        # "https://microgen-git-main-<hash>-<team>.vercel.app",
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+    ]
+    env_overrides = [origin for origin in settings.allowed_origins if origin]
+    origins = env_overrides if env_overrides else defaults
+    if settings.app_base_url:
+        origins.append(settings.app_base_url)
+    return _dedupe(origins)
+
+
+ALLOWED_ORIGINS = _build_allowed_origins()
 
 ALLOWED_ORIGIN_REGEX = (
     settings.allowed_origin_regex
     or r"https://microgen-git-[\w-]+-.*\.vercel\.app"
 )
-
-ALLOWED_HEADERS = [
-    "authorization",
-    "content-type",
-    "x-stack-access-token",
-    "x-stack-refresh-token",
-    "X-Stack-Access-Token",
-    "X-Stack-Refresh-Token",
-]
 
 EXPOSED_HEADERS = ["set-cookie", "content-type"]
 
@@ -168,7 +169,16 @@ class RefreshRequest(WorkflowOptions):
 
 
 def _ensure_workflow_id(candidate: str | None) -> str:
-    workflow_id = candidate or WORKFLOW_ID
+    configured = WORKFLOW_ID
+    if configured:
+        if candidate and candidate != configured:
+            logger.warning(
+                "Ignoring workflow override in request; enforcing configured workflow",
+                extra={"requested_workflow_id": candidate, "configured_workflow_id": configured},
+            )
+        workflow_id = configured
+    else:
+        workflow_id = candidate
     if not workflow_id:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -260,13 +270,6 @@ def get_chatkit_server() -> FactAssistantServer:
     return _chatkit_server
 
 
-@app.options("/chatkit")
-async def chatkit_options() -> Response:
-    """Plan-step[1]: explicit handler to keep ChatKit preflight responses at HTTP 200."""
-
-    return Response(status_code=status.HTTP_200_OK)
-
-
 @app.post("/chatkit")
 async def chatkit_endpoint(
     request: Request,
@@ -293,6 +296,7 @@ async def chatkit_endpoint(
             "request": request,
             "user": current_user,
             "vector_store_id": vector_store_id,
+            "workflow_id": _ensure_workflow_id(None),
         },
     )
     if isinstance(result, StreamingResult):
@@ -300,15 +304,6 @@ async def chatkit_endpoint(
     if hasattr(result, "json"):
         return Response(content=result.json, media_type="application/json")
     return JSONResponse(result)
-
-
-@app.options("/{rest_of_path:path}", include_in_schema=False)
-async def wildcard_options(rest_of_path: str) -> Response:
-    """Plan-step[1]: backstop for any OPTIONS request that slips past specific routes."""
-
-    return Response(status_code=status.HTTP_200_OK)
-
-
 def _session_payload(session: Any) -> dict[str, Any]:
     return {
         "client_secret": session.client_secret,

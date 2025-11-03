@@ -9,6 +9,13 @@ from functools import lru_cache
 from pydantic import BaseModel, ConfigDict, Field
 
 
+def _split_env(name: str) -> list[str]:
+    raw = os.getenv(name)
+    if not raw:
+        return []
+    return [part.strip() for part in raw.split(",") if part.strip()]
+
+
 class Settings(BaseModel):
     """Application settings sourced from environment variables."""
 
@@ -45,6 +52,7 @@ class Settings(BaseModel):
     app_base_url: str | None = Field(default=os.getenv("APP_BASE_URL"))
 
     allowed_origin_regex: str | None = Field(default=os.getenv("ALLOWED_ORIGIN_REGEX"))
+    allowed_origins: list[str] = Field(default_factory=lambda: _split_env("ALLOWED_ORIGINS"))
 
     email_sender_name: str = Field(default=os.getenv("EMAIL_SENDER_NAME", "Microagents"))
     email_sender_address: str = Field(default=os.getenv("EMAIL_SENDER_ADDRESS", "hi@cumulush.com"))

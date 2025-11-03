@@ -4,7 +4,9 @@ from __future__ import annotations
 
 import asyncio
 import json
+import logging
 from io import BytesIO
+from functools import lru_cache
 from typing import Any
 from uuid import UUID, uuid4
 
@@ -15,11 +17,40 @@ from .clients import openai_client
 from .database import SessionLocal
 from .models import ChatTranscriptMessage, UserVectorStore
 
+logger = logging.getLogger(__name__)
+
+
+class _VectorStoreClients(tuple[Any, Any, str]):
+    __slots__ = ()
+
+
+@lru_cache(maxsize=1)
+def _resolve_vector_store_clients() -> _VectorStoreClients:
+    vector_store_surface = "top_level"
+    vector_store_client = getattr(openai_client, "vector_stores", None)
+    if vector_store_client is None:
+        beta_client = getattr(openai_client, "beta", None)
+        if beta_client is not None:
+            vector_store_client = getattr(beta_client, "vector_stores", None)
+            vector_store_surface = "beta"
+    if vector_store_client is None:
+        raise RuntimeError(
+            "OpenAI SDK does not expose vector store APIs; pin openai>=1.66.0 or adjust the integration."
+        )
+    files_client = getattr(vector_store_client, "files", None)
+    if files_client is None:
+        raise RuntimeError("OpenAI SDK vector store client is missing the files sub-resource.")
+    logger.info(
+        "Detected OpenAI vector store surface",
+        extra={"vector_store_surface": vector_store_surface},
+    )
+    return _VectorStoreClients((vector_store_client, files_client, vector_store_surface))
+
 
 async def _create_vector_store(name: str) -> str:
     def _call() -> str:
-        # plan-step[3]: use the stable vector store endpoint from the 1.x SDK surface
-        store = openai_client.vector_stores.create(name=name)
+        vector_store_client, _, _ = _resolve_vector_store_clients()
+        store = vector_store_client.create(name=name)
         return store.id
 
     return await asyncio.to_thread(_call)
@@ -30,11 +61,12 @@ async def _upload_fact(vector_store_id: str, content: str, metadata: dict[str, A
     file_bytes = content.encode("utf-8")
 
     def _create_and_attach() -> None:
+        _, files_client, _ = _resolve_vector_store_clients()
         file = openai_client.files.create(
             file=(filename, BytesIO(file_bytes)),
             purpose="assistants",
         )
-        openai_client.vector_stores.files.create(
+        files_client.create(
             vector_store_id=vector_store_id,
             file_id=file.id,
             metadata=metadata,
