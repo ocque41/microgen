@@ -337,7 +337,7 @@ requires-dist = [
     { name = "httpx", specifier = ">=0.28,<0.29" },
     { name = "itsdangerous", specifier = ">=2.2.0" },
     { name = "mypy", marker = "extra == 'dev'", specifier = ">=1.8,<2" },
-    { name = "openai", specifier = ">=1.40" },
+    { name = "openai", specifier = ">=1.82,<2" },
     { name = "openai-chatkit", specifier = ">=1.0.2,<2" },
     { name = "passlib", extras = ["bcrypt"], specifier = ">=1.7,<2" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=8,<9" },

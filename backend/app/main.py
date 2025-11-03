@@ -53,7 +53,10 @@ ALLOWED_ORIGINS = [
 if settings.app_base_url:
     ALLOWED_ORIGINS.append(settings.app_base_url)
 
-ALLOWED_ORIGIN_REGEX = settings.allowed_origin_regex or r"https://microgen-git-[\w-]+-.*\.vercel\.app"
+ALLOWED_ORIGIN_REGEX = (
+    settings.allowed_origin_regex
+    or r"https://microgen-git-[\w-]+-.*\.vercel\.app"
+)
 
 ALLOWED_HEADERS = [
     "authorization",
@@ -101,16 +104,31 @@ async def _verify_stack_auth_configuration() -> None:
     # plan-step[2]: Guard against deployments that omit Stack credentials.
     if not settings.stack_project_id or not settings.stack_secret_key:
         logger.error(
-            "Stack Auth credentials are missing; set STACK_PROJECT_ID and STACK_SECRET_KEY before deployment."
+            "Stack Auth credentials are missing; set STACK_PROJECT_ID and "
+            "STACK_SECRET_KEY before deployment."
         )
         raise RuntimeError(
             "Stack Auth credentials are required to service /api/auth/stack/exchange requests."
         )
 
+    openai_version = getattr(openai, "__version__", "unknown")
     logger.info(
         "plan-step[3]: OpenAI SDK version %s loaded for ChatKit vector store operations",
-        getattr(openai, "__version__", "unknown"),
+        openai_version,
     )
+
+    if WORKFLOW_ID:
+        logger.info(
+            "ChatKit workflow configured",
+            extra={
+                "workflow_id": WORKFLOW_ID,
+                "workflow_version": WORKFLOW_VERSION,
+            },
+        )
+    else:
+        logger.error(
+            "ChatKit workflow ID missing; set OPENAI_WORKFLOW_ID before serving chat endpoints"
+        )
 
 
 class WorkflowOptions(BaseModel):
@@ -195,6 +213,14 @@ async def _create_session(
     workflow: dict[str, Any],
 ) -> Any:
     def _call() -> Any:
+        logger.info(
+            "Creating ChatKit session",
+            extra={
+                "workflow_id": workflow.get("id"),
+                "workflow_version": workflow.get("version"),
+                "user_id": user_id,
+            },
+        )
         return openai_client.beta.chatkit.sessions.create(
             user=user_id,
             workflow=workflow,
@@ -253,6 +279,14 @@ async def chatkit_endpoint(
     # delegating to the ChatKit server, preventing missing-table lookups and
     # ensuring new users get provisioned automatically.
     vector_store_id = await get_or_create_user_vector_store(db, current_user.id)
+    logger.info(
+        "Processing ChatKit payload",
+        extra={
+            "user_id": str(current_user.id),
+            "vector_store_id": vector_store_id,
+            "payload_bytes": len(payload),
+        },
+    )
     result = await server.process(
         payload,
         {

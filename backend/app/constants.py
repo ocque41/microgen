@@ -36,7 +36,8 @@ INSTRUCTIONS: Final[str] = (
 
 MODEL = "gpt-4.1-mini"
 
-# Workflow ID published via Agent Builder; optional version overrides keep
-# deployments stable across environments.
-WORKFLOW_ID = os.getenv("WORKFLOW_ID")
-WORKFLOW_VERSION = os.getenv("WORKFLOW_VERSION")
+# Workflow identifiers published via Agent Builder. Prefer the explicit
+# OPENAI_* names when available and fall back to the legacy names for
+# backwards compatibility with existing deployments.
+WORKFLOW_ID = os.getenv("OPENAI_WORKFLOW_ID") or os.getenv("WORKFLOW_ID")
+WORKFLOW_VERSION = os.getenv("OPENAI_WORKFLOW_VERSION") or os.getenv("WORKFLOW_VERSION")
