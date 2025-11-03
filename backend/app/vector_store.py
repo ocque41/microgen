@@ -5,8 +5,8 @@ from __future__ import annotations
 import asyncio
 import json
 import logging
-from io import BytesIO
 from functools import lru_cache
+from io import BytesIO
 from typing import Any
 from uuid import UUID, uuid4
 
@@ -66,11 +66,17 @@ async def _upload_fact(vector_store_id: str, content: str, metadata: dict[str, A
             file=(filename, BytesIO(file_bytes)),
             purpose="assistants",
         )
-        files_client.create(
-            vector_store_id=vector_store_id,
-            file_id=file.id,
-            metadata=metadata,
-        )
+        try:
+            files_client.create(
+                vector_store_id=vector_store_id,
+                file_id=file.id,
+                metadata=metadata,
+            )
+        except TypeError:
+            files_client.create(
+                vector_store_id=vector_store_id,
+                file_id=file.id,
+            )
 
     await asyncio.to_thread(_create_and_attach)
 

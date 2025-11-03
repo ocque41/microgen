@@ -1,367 +1,255 @@
-"""ChatKit server integration for the boilerplate backend."""
+"""ChatKit server that proxies requests to an OpenAI workflow."""
 
 from __future__ import annotations
 
-import inspect
+import asyncio
 import logging
 from datetime import datetime
-from typing import Annotated, Any, AsyncIterator, Final, Literal
+from typing import Any, AsyncIterator
 from uuid import uuid4
 
-from agents import Agent, RunContextWrapper, Runner, function_tool
-from chatkit.agents import (
-    AgentContext,
-    ClientToolCall,
-    ThreadItemConverter,
-    stream_agent_response,
-)
-from chatkit.server import ChatKitServer, ThreadItemDoneEvent
+from chatkit.server import ChatKitServer
 from chatkit.types import (
-    Attachment,
-    ClientToolCallItem,
-    HiddenContextItem,
-    ThreadItem,
+    AssistantMessageContent,
+    AssistantMessageItem,
+    ErrorEvent,
+    ThreadItemAddedEvent,
+    ThreadItemDoneEvent,
     ThreadMetadata,
     ThreadStreamEvent,
     UserMessageItem,
 )
-from openai.types.responses import ResponseInputContentParam
-from pydantic import ConfigDict, Field
+from openai import OpenAIError
 
-from .constants import INSTRUCTIONS, MODEL
-from .facts import Fact, fact_store
+from .clients import openai_client
 from .memory_store import MemoryStore
-from .sample_widget import render_weather_widget, weather_widget_copy_text
-from .weather import (
-    WeatherLookupError,
-    retrieve_weather,
-)
-from .weather import (
-    normalize_unit as normalize_temperature_unit,
-)
-from .vector_store import append_fact_for_user
 
-# If you want to check what's going on under the hood, set this to DEBUG
-logging.basicConfig(level=logging.INFO)
-
-SUPPORTED_COLOR_SCHEMES: Final[frozenset[str]] = frozenset({"light", "dark"})
-CLIENT_THEME_TOOL_NAME: Final[str] = "switch_theme"
-
-
-def _normalize_color_scheme(value: str) -> str:
-    normalized = str(value).strip().lower()
-    if normalized in SUPPORTED_COLOR_SCHEMES:
-        return normalized
-    if "dark" in normalized:
-        return "dark"
-    if "light" in normalized:
-        return "light"
-    raise ValueError("Theme must be either 'light' or 'dark'.")
+logger = logging.getLogger(__name__)
 
 
 def _gen_id(prefix: str) -> str:
     return f"{prefix}_{uuid4().hex[:8]}"
 
 
-def _is_tool_completion_item(item: Any) -> bool:
-    return isinstance(item, ClientToolCallItem)
+def _extract_text(parts: Any) -> str:
+    """Coerce a list of ChatKit content parts into plain text."""
 
-
-class FactAgentContext(AgentContext):
-    model_config = ConfigDict(arbitrary_types_allowed=True)
-    store: Annotated[MemoryStore, Field(exclude=True)]
-    request_context: dict[str, Any]
-
-
-async def _stream_saved_hidden(ctx: RunContextWrapper[FactAgentContext], fact: Fact) -> None:
-    await ctx.context.stream(
-        ThreadItemDoneEvent(
-            item=HiddenContextItem(
-                id=_gen_id("msg"),
-                thread_id=ctx.context.thread.id,
-                created_at=datetime.now(),
-                content=(
-                    f'<FACT_SAVED id="{fact.id}" threadId="{ctx.context.thread.id}">{fact.text}</FACT_SAVED>'
-                ),
-            ),
-        )
-    )
-
-
-@function_tool(description_override="Record a fact shared by the user so it is saved immediately.")
-async def save_fact(
-    ctx: RunContextWrapper[FactAgentContext],
-    fact: str,
-) -> dict[str, str] | None:
-    try:
-        saved = await fact_store.create(text=fact)
-        confirmed = await fact_store.mark_saved(saved.id)
-        if confirmed is None:
-            raise ValueError("Failed to save fact")
-        await _stream_saved_hidden(ctx, confirmed)
-        ctx.context.client_tool_call = ClientToolCall(
-            name="record_fact",
-            arguments={"fact_id": confirmed.id, "fact_text": confirmed.text},
-        )
-        user = ctx.context.request_context.get("user")
-        if user is not None:
-            metadata = {
-                "fact_id": confirmed.id,
-                "source": "save_fact",
-            }
-            try:
-                await append_fact_for_user(user.id, confirmed.text, metadata=metadata)
-            except Exception:  # noqa: BLE001
-                logging.exception("Failed to persist fact to vector store")
-        print(f"FACT SAVED: {confirmed}")
-        return {"fact_id": confirmed.id, "status": "saved"}
-    except Exception:
-        logging.exception("Failed to save fact")
-        return None
-
-
-@function_tool(
-    description_override="Switch the chat interface between light and dark color schemes."
-)
-async def switch_theme(
-    ctx: RunContextWrapper[FactAgentContext],
-    theme: str,
-) -> dict[str, str] | None:
-    logging.debug(f"Switching theme to {theme}")
-    try:
-        requested = _normalize_color_scheme(theme)
-        ctx.context.client_tool_call = ClientToolCall(
-            name=CLIENT_THEME_TOOL_NAME,
-            arguments={"theme": requested},
-        )
-        return {"theme": requested}
-    except Exception:
-        logging.exception("Failed to switch theme")
-        return None
-
-
-@function_tool(
-    description_override="Look up the current weather and upcoming forecast for a location and render an interactive weather dashboard."
-)
-async def get_weather(
-    ctx: RunContextWrapper[FactAgentContext],
-    location: str,
-    unit: Literal["celsius", "fahrenheit"] | str | None = None,
-) -> dict[str, str | None]:
-    print("[WeatherTool] tool invoked", {"location": location, "unit": unit})
-    try:
-        normalized_unit = normalize_temperature_unit(unit)
-    except WeatherLookupError as exc:
-        print("[WeatherTool] invalid unit", {"error": str(exc)})
-        raise ValueError(str(exc)) from exc
-
-    try:
-        data = await retrieve_weather(location, normalized_unit)
-    except WeatherLookupError as exc:
-        print("[WeatherTool] lookup failed", {"error": str(exc)})
-        raise ValueError(str(exc)) from exc
-
-    print(
-        "[WeatherTool] lookup succeeded",
-        {
-            "location": data.location,
-            "temperature": data.temperature,
-            "unit": data.temperature_unit,
-        },
-    )
-    try:
-        widget = render_weather_widget(data)
-        copy_text = weather_widget_copy_text(data)
-        payload: Any
-        try:
-            payload = widget.model_dump()
-        except AttributeError:
-            payload = widget
-        print("[WeatherTool] widget payload", payload)
-    except Exception as exc:  # noqa: BLE001
-        print("[WeatherTool] widget build failed", {"error": str(exc)})
-        raise ValueError("Weather data is currently unavailable for that location.") from exc
-
-    print("[WeatherTool] streaming widget")
-    try:
-        await ctx.context.stream_widget(widget, copy_text=copy_text)
-    except Exception as exc:  # noqa: BLE001
-        print("[WeatherTool] widget stream failed", {"error": str(exc)})
-        raise ValueError("Weather data is currently unavailable for that location.") from exc
-
-    print("[WeatherTool] widget streamed")
-
-    observed = data.observation_time.isoformat() if data.observation_time else None
-
-    return {
-        "location": data.location,
-        "unit": normalized_unit,
-        "observed_at": observed,
-    }
-
-
-def _user_message_text(item: UserMessageItem) -> str:
-    parts: list[str] = []
-    for part in item.content:
+    chunks: list[str] = []
+    for part in parts or []:
         text = getattr(part, "text", None)
-        if text:
-            parts.append(text)
-    return " ".join(parts).strip()
+        if isinstance(text, str) and text.strip():
+            chunks.append(text.strip())
+            continue
+        if hasattr(part, "model_dump"):
+            payload = part.model_dump()
+        elif isinstance(part, dict):
+            payload = part
+        else:
+            payload = {}
+        for key in ("text", "value", "output_text", "input_text"):
+            candidate = payload.get(key)
+            if isinstance(candidate, str) and candidate.strip():
+                chunks.append(candidate.strip())
+                break
+    return " ".join(chunks).strip()
+
+
+async def _load_thread_messages(
+    store: MemoryStore,
+    thread_id: str,
+    context: dict[str, Any],
+) -> list[dict[str, Any]]:
+    """Return conversation history formatted for the Responses API."""
+
+    history: list[dict[str, Any]] = []
+    try:
+        items = await store.load_thread_items(thread_id, after=None, limit=250, order="asc", context=context)
+    except Exception:  # pragma: no cover - defensive guard against store failure
+        logger.exception("Failed to load thread history", extra={"thread_id": thread_id})
+        return history
+
+    for item in items.data:
+        role: str | None = None
+        text = ""
+        if isinstance(item, UserMessageItem):
+            role = "user"
+            text = _extract_text(item.content)
+        elif getattr(item, "type", None) == "assistant_message":
+            role = "assistant"
+            text = _extract_text(getattr(item, "content", []))
+
+        if role and text:
+            history.append(
+                {
+                    "role": role,
+                    "content": [
+                        {
+                            "type": "input_text" if role == "user" else "output_text",
+                            "text": text,
+                        }
+                    ],
+                }
+            )
+    return history
+
+
+def _extract_output_text(result: Any) -> str:
+    """Best-effort extraction of assistant text from a workflow run response."""
+
+    def _as_dict(value: Any) -> dict[str, Any]:
+        if value is None:
+            return {}
+        if hasattr(value, "model_dump"):
+            return value.model_dump()
+        if hasattr(value, "dict") and callable(value.dict):
+            return value.dict()
+        if isinstance(value, dict):
+            return value
+        return {}
+
+    payload = _as_dict(result)
+    output_candidates: list[str] = []
+
+    for key in ("output", "outputs", "response", "responses"):
+        data = payload.get(key)
+        if not data:
+            continue
+
+        items = data if isinstance(data, list) else [data]
+        for entry in items:
+            entry_dict = _as_dict(entry)
+            role = entry_dict.get("role")
+            if role and role != "assistant":
+                continue
+            content = entry_dict.get("content")
+            if isinstance(content, list):
+                output_text = _extract_text(content)
+                if output_text:
+                    output_candidates.append(output_text)
+            elif isinstance(content, str) and content.strip():
+                output_candidates.append(content.strip())
+            text_value = entry_dict.get("text")
+            if isinstance(text_value, str) and text_value.strip():
+                output_candidates.append(text_value.strip())
+
+    if not output_candidates:
+        message = payload.get("message") or payload.get("error")
+        if isinstance(message, str):
+            logger.warning("Workflow run returned no assistant text", extra={"message": message})
+        return ""
+
+    return "\n\n".join(dict.fromkeys(output_candidates))
+
+
+async def _invoke_workflow(
+    *,
+    workflow_id: str,
+    workflow_version: str | None,
+    messages: list[dict[str, Any]],
+    vector_store_id: str | None,
+    user_id: str | None,
+    thread_id: str,
+) -> Any:
+    body: dict[str, Any] = {"input": {"messages": messages, "thread_id": thread_id}}
+    if workflow_version:
+        body["version"] = workflow_version
+        body["input"]["workflow_version"] = workflow_version
+    if vector_store_id:
+        body["input"]["vector_store_id"] = vector_store_id
+    if user_id:
+        body["input"]["user_id"] = user_id
+
+    path = f"/workflows/{workflow_id}/runs"
+
+    def _call() -> Any:
+        return openai_client.post(path, body=body)
+
+    return await asyncio.to_thread(_call)
 
 
 class FactAssistantServer(ChatKitServer[dict[str, Any]]):
-    """ChatKit server wired up with the fact-recording tool."""
+    """ChatKit server that forwards requests to an Agent Builder workflow."""
 
     def __init__(self) -> None:
-        self.store: MemoryStore = MemoryStore()
+        self.store = MemoryStore()
         super().__init__(self.store)
-        tools = [save_fact, switch_theme, get_weather]
-        self.assistant = Agent[FactAgentContext](
-            model=MODEL,
-            name="ChatKit Guide",
-            instructions=INSTRUCTIONS,
-            tools=tools,  # type: ignore[arg-type]
-        )
-        self._thread_item_converter = self._init_thread_item_converter()
 
     async def respond(
         self,
         thread: ThreadMetadata,
-        item: UserMessageItem | None,
+        input_user_message: UserMessageItem | None,
         context: dict[str, Any],
     ) -> AsyncIterator[ThreadStreamEvent]:
-        agent_context = FactAgentContext(
-            thread=thread,
-            store=self.store,
-            request_context=context,
-        )
+        workflow_id = context.get("workflow_id")
+        workflow_version = context.get("workflow_version")
+        vector_store_id = context.get("vector_store_id")
+        user = context.get("user")
 
-        target_item: ThreadItem | None = item
-        if target_item is None:
-            target_item = await self._latest_thread_item(thread, context)
-
-        if target_item is None or _is_tool_completion_item(target_item):
+        if not workflow_id:
+            logger.error("Workflow ID missing from context; cannot process request")
+            yield ErrorEvent(message="Chat workflow is not configured.", allow_retry=False)
             return
 
-        agent_input = await self._to_agent_input(thread, target_item)
-        if agent_input is None:
-            return
+        messages = await _load_thread_messages(self.store, thread.id, context)
 
-        result = Runner.run_streamed(
-            self.assistant,
-            agent_input,
-            context=agent_context,
-        )
+        # Ensure the current user message is included even if the store has not yet persisted it.
+        if input_user_message is not None:
+            text = _extract_text(input_user_message.content)
+            if text:
+                if not messages or messages[-1]["role"] != "user" or messages[-1]["content"][0]["text"] != text:
+                    messages.append(
+                        {
+                            "role": "user",
+                            "content": [{"type": "input_text", "text": text}],
+                        }
+                    )
 
-        async for event in stream_agent_response(agent_context, result):
-            yield event
-        return
-
-    async def to_message_content(self, _input: Attachment) -> ResponseInputContentParam:
-        raise RuntimeError("File attachments are not supported in this demo.")
-
-    def _init_thread_item_converter(self) -> Any | None:
-        converter_cls = ThreadItemConverter
-        if converter_cls is None or not callable(converter_cls):
-            return None
-
-        attempts: tuple[dict[str, Any], ...] = (
-            {"to_message_content": self.to_message_content},
-            {"message_content_converter": self.to_message_content},
-            {},
-        )
-
-        for kwargs in attempts:
-            try:
-                return converter_cls(**kwargs)
-            except TypeError:
-                continue
-        return None
-
-    async def _latest_thread_item(
-        self, thread: ThreadMetadata, context: dict[str, Any]
-    ) -> ThreadItem | None:
         try:
-            items = await self.store.load_thread_items(thread.id, None, 1, "desc", context)
-        except Exception:  # pragma: no cover - defensive
-            return None
-
-        return items.data[0] if getattr(items, "data", None) else None
-
-    async def _to_agent_input(
-        self,
-        thread: ThreadMetadata,
-        item: ThreadItem,
-    ) -> Any | None:
-        if _is_tool_completion_item(item):
-            return None
-
-        converter = getattr(self, "_thread_item_converter", None)
-        if converter is not None:
-            for attr in (
-                "to_input_item",
-                "convert",
-                "convert_item",
-                "convert_thread_item",
-            ):
-                method = getattr(converter, attr, None)
-                if method is None:
-                    continue
-                call_args: list[Any] = [item]
-                call_kwargs: dict[str, Any] = {}
-                try:
-                    signature = inspect.signature(method)
-                except (TypeError, ValueError):
-                    signature = None
-
-                if signature is not None:
-                    params = [
-                        parameter
-                        for parameter in signature.parameters.values()
-                        if parameter.kind
-                        not in (
-                            inspect.Parameter.VAR_POSITIONAL,
-                            inspect.Parameter.VAR_KEYWORD,
-                        )
-                    ]
-                    if len(params) >= 2:
-                        next_param = params[1]
-                        if next_param.kind in (
-                            inspect.Parameter.POSITIONAL_ONLY,
-                            inspect.Parameter.POSITIONAL_OR_KEYWORD,
-                        ):
-                            call_args.append(thread)
-                        else:
-                            call_kwargs[next_param.name] = thread
-
-                result = method(*call_args, **call_kwargs)
-                if inspect.isawaitable(result):
-                    return await result
-                return result
-
-        if isinstance(item, UserMessageItem):
-            return _user_message_text(item)
-
-        return None
-
-    async def _add_hidden_item(
-        self,
-        thread: ThreadMetadata,
-        context: dict[str, Any],
-        content: str,
-    ) -> None:
-        await self.store.add_thread_item(
-            thread.id,
-            HiddenContextItem(
-                id=_gen_id("msg"),
+            result = await _invoke_workflow(
+                workflow_id=workflow_id,
+                workflow_version=workflow_version,
+                messages=messages,
+                vector_store_id=vector_store_id,
+                user_id=str(getattr(user, "id", "")) or None,
                 thread_id=thread.id,
-                created_at=datetime.now(),
-                content=content,
-            ),
-            context,
+            )
+        except OpenAIError:  # pragma: no cover - network/HTTP errors
+            logger.exception("Workflow execution failed")
+            yield ErrorEvent(message="Assistant is temporarily unavailable.", allow_retry=True)
+            return
+        except Exception:  # pragma: no cover - unexpected client errors
+            logger.exception("Unexpected error running workflow")
+            yield ErrorEvent(message="Unexpected assistant error.", allow_retry=True)
+            return
+
+        response_text = _extract_output_text(result)
+        logger.info(
+            "Workflow run completed",
+            extra={
+                "workflow_id": workflow_id,
+                "workflow_version": workflow_version,
+                "thread_id": thread.id,
+                "has_text": bool(response_text),
+            },
         )
+        if not response_text:
+            yield ErrorEvent(message="Assistant returned an empty response.", allow_retry=True)
+            return
+
+        assistant_item = AssistantMessageItem(
+            id=_gen_id("msg"),
+            thread_id=thread.id,
+            created_at=datetime.utcnow(),
+            content=[AssistantMessageContent(text=response_text)],
+        )
+
+        await self.store.add_thread_item(thread.id, assistant_item, context)
+
+        yield ThreadItemAddedEvent(item=assistant_item)
+        yield ThreadItemDoneEvent(item=assistant_item)
 
 
 def create_chatkit_server() -> FactAssistantServer | None:
     """Return a configured ChatKit server instance if dependencies are available."""
+
     return FactAssistantServer()

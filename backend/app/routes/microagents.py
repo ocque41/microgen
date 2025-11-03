@@ -11,8 +11,8 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from ..config import get_settings
-from ..dependencies import get_current_user
 from ..database import get_session
+from ..dependencies import get_current_user
 from ..models import MicroAgent, MicroAgentStatus, User
 from ..schemas import (
     CheckoutSessionResponse,

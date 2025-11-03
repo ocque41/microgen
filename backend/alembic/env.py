@@ -9,7 +9,7 @@ import sys
 
 from alembic import context
 from sqlalchemy import pool
-from sqlalchemy.engine import Connection
+from sqlalchemy.engine import Connection, make_url
 from sqlalchemy.ext.asyncio import AsyncEngine, create_async_engine
 
 BASE_DIR = pathlib.Path(__file__).resolve().parents[1]
@@ -55,9 +55,32 @@ def run_migrations_offline() -> None:
 def run_migrations_online() -> None:
     """Run migrations in 'online' mode."""
 
+    raw_url = settings.require_database_url()
+    url = make_url(raw_url)
+
+    if url.drivername in {"postgres", "postgresql"}:
+        url = url.set(drivername="postgresql+asyncpg")
+    elif url.drivername.startswith("postgresql") and "+asyncpg" not in url.drivername:
+        url = url.set(drivername="postgresql+asyncpg")
+
+    connect_args: dict[str, object] = {}
+    query = dict(url.query)
+    sslmode = query.pop("sslmode", None)
+    if isinstance(sslmode, str):
+        lowered = sslmode.lower()
+        if lowered in {"require", "verify-full", "verify-ca"}:
+            connect_args["ssl"] = True
+        elif lowered in {"disable", "allow"}:
+            connect_args["ssl"] = False
+        else:
+            connect_args["ssl"] = sslmode
+
+    url = url.set(query=query)
+
     connectable = create_async_engine(
-        settings.require_database_url(),
+        url.render_as_string(hide_password=False),
         poolclass=pool.NullPool,
+        connect_args=connect_args,
     )
 
     async def _run_migrations(connection: Connection) -> None:

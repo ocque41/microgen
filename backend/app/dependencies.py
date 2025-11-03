@@ -13,7 +13,6 @@ from .database import get_session
 from .models import User
 from .security import decode_token
 
-
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/login")
 
 

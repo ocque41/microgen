@@ -297,6 +297,7 @@ async def chatkit_endpoint(
             "user": current_user,
             "vector_store_id": vector_store_id,
             "workflow_id": _ensure_workflow_id(None),
+            "workflow_version": WORKFLOW_VERSION,
         },
     )
     if isinstance(result, StreamingResult):
