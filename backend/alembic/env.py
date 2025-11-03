@@ -11,6 +11,8 @@ from alembic import context
 from sqlalchemy import pool
 from sqlalchemy.engine import Connection, make_url
 from sqlalchemy.ext.asyncio import AsyncEngine, create_async_engine
+import os
+import ssl
 
 BASE_DIR = pathlib.Path(__file__).resolve().parents[1]
 if str(BASE_DIR) not in sys.path:  # pragma: no cover - runtime path setup
@@ -66,6 +68,7 @@ def run_migrations_online() -> None:
     connect_args: dict[str, object] = {}
     query = dict(url.query)
     sslmode = query.pop("sslmode", None)
+    sslrootcert = query.pop("sslrootcert", None) or os.getenv("PGSSLROOTCERT")
     if isinstance(sslmode, str):
         lowered = sslmode.lower()
         if lowered in {"require", "verify-full", "verify-ca"}:
@@ -76,6 +79,17 @@ def run_migrations_online() -> None:
             connect_args["ssl"] = sslmode
 
     url = url.set(query=query)
+
+    if sslrootcert:
+        expanded = os.path.expanduser(sslrootcert)
+        if not os.path.isabs(expanded):
+            expanded = os.path.abspath(expanded)
+        if os.path.exists(expanded):
+            connect_args["ssl"] = ssl.create_default_context(cafile=expanded)
+        else:
+            context.get_context().log.warning("SSL root certificate not found", extra={"path": expanded})
+    elif connect_args.get("ssl") is True:
+        connect_args["ssl"] = ssl.create_default_context()
 
     connectable = create_async_engine(
         url.render_as_string(hide_password=False),

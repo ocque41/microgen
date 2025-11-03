@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import logging
+import os
+import ssl
 from typing import AsyncIterator
 
 from sqlalchemy.engine import make_url
@@ -32,6 +34,7 @@ query = dict(url.query)
 connect_args: dict[str, object] = {}
 
 sslmode = query.pop("sslmode", None)
+sslrootcert = query.pop("sslrootcert", None) or os.getenv("PGSSLROOTCERT")
 if isinstance(sslmode, str):
     sslmode_lower = sslmode.lower()
     if sslmode_lower in {"require", "verify-full", "verify-ca"}:
@@ -42,6 +45,17 @@ if isinstance(sslmode, str):
         connect_args["ssl"] = sslmode
 
 url = url.set(query=query)
+
+if sslrootcert:
+    expanded = os.path.expanduser(sslrootcert)
+    if not os.path.isabs(expanded):
+        expanded = os.path.abspath(expanded)
+    if os.path.exists(expanded):
+        connect_args["ssl"] = ssl.create_default_context(cafile=expanded)
+    else:
+        logger.warning("SSL root certificate not found", extra={"path": expanded})
+elif connect_args.get("ssl") is True:
+    connect_args["ssl"] = ssl.create_default_context()
 
 database_dsn = url.render_as_string(hide_password=False)
 engine = create_async_engine(database_dsn, pool_pre_ping=True, connect_args=connect_args)
