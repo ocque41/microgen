@@ -46,10 +46,10 @@ export function MarketingPage() {
         strategy="fixed"
         blurAmount="22px"
         height="220px"
-        className="z-[9990]"
+        className="z-[9988]"
         backgroundColor="rgba(9,9,9,0.98)"
       />
-      {/* Plan Step 2: fixed bottom blur to sit behind navigation across the home journey. */}
+      {/* Plan Step 2: fixed bottom blur now layered under navigation shell. */}
       <div className="relative">
         <section className="relative isolate z-[998] flex justify-center" aria-label="Primary navigation">
           <div className="pointer-events-none fixed inset-x-0 bottom-6 z-[9999] flex w-full justify-center px-3 sm:px-6">
