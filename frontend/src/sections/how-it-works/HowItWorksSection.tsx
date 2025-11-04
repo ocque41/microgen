@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 
 import { publicAsset } from "../../lib/publicAsset";
 
-const BORDER_COLOR = "rgba(244, 241, 234, 0.16)";
+const BORDER_COLOR = "rgba(244, 241, 234, 0.36)";
 const TEXT_SOFT = "color-mix(in srgb, var(--text-primary) 68%, transparent)";
 const TITLE_SPACING_STYLE = {
   letterSpacing: "calc(var(--letter-spacing-base) - 1.5px)",
@@ -96,14 +96,20 @@ export function HowItWorksSection() {
             className="relative flex min-h-screen flex-col bg-[#090909] md:flex-row"
             aria-labelledby={`how-it-works-${step.id}`}
           >
-            <div className="relative flex-1 border-t" style={{ borderColor: BORDER_COLOR }}>
+            <div
+              className="relative flex-1 border-t"
+              style={{ borderColor: BORDER_COLOR, borderTopWidth: "3px" }}
+            >
               <div
-                className="absolute left-6 top-16 bottom-16 hidden w-px md:block"
-                style={{ backgroundColor: BORDER_COLOR }}
+                className="absolute left-6 top-16 bottom-16 hidden md:block"
+                style={{
+                  backgroundColor: BORDER_COLOR,
+                  width: "3px",
+                }}
                 aria-hidden="true"
               />
               <div className="relative z-[1] flex h-full flex-col gap-10 px-6 py-16 sm:px-10 sm:py-20 lg:px-16 xl:px-20 xl:py-24">
-                <header className="border-b pb-10" style={{ borderColor: BORDER_COLOR }}>
+                <header className="border-b pb-10" style={{ borderColor: BORDER_COLOR, borderBottomWidth: "3px" }}>
                   <div className="flex items-baseline gap-4 text-sm font-semibold uppercase tracking-[0.6em] text-[color:rgba(244,241,234,0.55)]">
                     <span>{String(index + 1).padStart(2, "0")}</span>
                     <span className="tracking-[0.3em]">Step</span>
@@ -133,14 +139,14 @@ export function HowItWorksSection() {
                 </div>
 
                 {nextStep ? (
-                  <footer className="border-t pt-8" style={{ borderColor: BORDER_COLOR }}>
+                  <footer className="border-t pt-8" style={{ borderColor: BORDER_COLOR, borderTopWidth: "3px" }}>
                     <p className="text-xs uppercase tracking-[0.4em] text-[color:rgba(244,241,234,0.45)]">Next</p>
                     <p className="mt-3 text-sm font-medium uppercase tracking-[0.3em] text-[color:rgba(244,241,234,0.65)]">
                       {String(index + 2).padStart(2, "0")} — {nextStep.title}
                     </p>
                   </footer>
                 ) : (
-                  <footer className="border-t pt-8" style={{ borderColor: BORDER_COLOR }}>
+                  <footer className="border-t pt-8" style={{ borderColor: BORDER_COLOR, borderTopWidth: "3px" }}>
                     <p className="text-xs uppercase tracking-[0.4em] text-[color:rgba(244,241,234,0.45)]">You&apos;re ready</p>
                     <p className="mt-3 text-sm font-medium uppercase tracking-[0.3em] text-[color:rgba(244,241,234,0.65)]">
                       Launch your microagents
@@ -152,7 +158,7 @@ export function HowItWorksSection() {
 
             <div
               className="relative h-[55vh] w-full overflow-hidden border-t border-l md:h-auto md:min-h-screen md:w-[42%]"
-              style={{ borderColor: BORDER_COLOR }}
+              style={{ borderColor: BORDER_COLOR, borderTopWidth: "3px", borderLeftWidth: "3px" }}
             >
               <img
                 src={step.imageSrc}
