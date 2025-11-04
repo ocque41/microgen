@@ -121,12 +121,16 @@
 
 .hero__artifact-glow {
   position: absolute;
-  width: clamp(15rem, 34vw, 28rem);
-  height: clamp(15rem, 34vw, 28rem);
+  width: clamp(16rem, 36vw, 30rem);
+  height: clamp(16rem, 36vw, 30rem);
   border-radius: 9999px;
-  background: radial-gradient(circle, rgba(9, 9, 9, 0.05) 0%, rgba(9, 9, 9, 0.85) 70%);
-  box-shadow: 0 0 120px rgba(0, 145, 173, 0.45), 0 0 140px rgba(241, 149, 52, 0.3);
-  opacity: 0.95;
+  background: linear-gradient(to top, rgba(9, 9, 9, 0) 0%, rgba(9, 9, 9, 0.82) 85%);
+  mask-image: radial-gradient(circle, rgba(9, 9, 9, 1) 45%, transparent 72%);
+  WebkitMaskImage: radial-gradient(circle, rgba(9, 9, 9, 1) 45%, transparent 72%);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  box-shadow: 0 0 120px rgba(0, 145, 173, 0.4), 0 0 140px rgba(241, 149, 52, 0.28);
+  opacity: 0.85;
 }
 
 .hero__artifact-logo {
