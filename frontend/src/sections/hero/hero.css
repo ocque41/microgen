@@ -4,31 +4,31 @@
   min-height: 100vh;
   height: 100svh;
   background-color: #090909;
-  padding: clamp(3.5rem, 4vw, 6rem) clamp(1.5rem, 6vw, 6rem) clamp(5rem, 10vw, 9rem);
+  padding: clamp(3rem, 3vw, 4rem) clamp(0.75rem, 2vw, 2rem) clamp(4rem, 6vw, 6rem);
   color: #f9f9f9;
   overflow: hidden;
   display: flex;
   align-items: stretch;
   box-sizing: border-box;
-  --hero-divider-spacing: clamp(1.2rem, 4vw, 2rem);
-  /* Plan Step 2: hero section now pins to viewport height via flex shell + box sizing for exact viewport fit. */
+  --hero-divider-spacing: clamp(1rem, 3vw, 1.75rem);
+  /* Plan Step 2: hero now hugs viewport edges with tighter horizontal padding while staying responsive. */
 }
 
 .hero__layout {
   position: relative;
   z-index: 1;
   width: min(1600px, 100%);
-  max-width: min(1600px, 94vw);
+  max-width: min(1600px, 98vw);
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   flex: 1;
-  gap: clamp(2.5rem, 7vw, 4.5rem);
+  gap: clamp(2.2rem, 5vw, 4rem);
   /* Plan Step 1: widened layout to align wordmark and dividers with gradient bounds. */
   /* Plan Step 2: layout flex centering keeps hero content balanced within viewport height. */
-  /* Plan Step 2: width constraints now match viewport span for horizontal coverage. */
+  /* Plan Step 3: boosted max width to 98vw so hero nearly touches viewport edges on all screens. */
 }
 
 .hero__headline {
