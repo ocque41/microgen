@@ -115,7 +115,7 @@ export function MarketingPage() {
                     />
                   </div>
                 </div>
-                <ul className="space-y-3 text-base sm:text-lg" style={{ color: "color-mix(in srgb, var(--text-primary) 70%, transparent)" }}>
+                <ul className="space-y-1.5 text-base sm:text-lg" style={{ color: "color-mix(in srgb, var(--text-primary) 70%, transparent)" }}>
                   <li>
                     <span className="block text-xs font-semibold uppercase tracking-[0.25em] text-[color:rgba(244,241,234,0.45)]">
                       Frame your goals
@@ -123,7 +123,7 @@ export function MarketingPage() {
                     Surface workloads, compliance mandates, and stakeholder expectations as the agent maps capacity.
                   </li>
                 </ul>
-                <p className="text-base sm:text-lg" style={{ color: "color-mix(in srgb, var(--text-primary) 70%, transparent)" }}>
+                <p className="text-base sm:text-lg" style={{ color: "color-mix(in srgb, var(--text-primary) 70%, transparent)", marginTop: "0.65rem" }}>
                   Your static tier will be per agent, plan your agent and team endorse.
                 </p>
                 {/* Plan Step 1 refinement: matched typography scale with How It Works section */}
