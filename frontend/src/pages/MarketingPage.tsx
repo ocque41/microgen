@@ -63,8 +63,8 @@ export function MarketingPage() {
                 aria-label="Microagents home"
               >
                 <img
-                  src="/icon-white-trans.png"
-                  alt="Microagents icon"
+                  src="/logo-4.png"
+                  alt="Microagents logo"
                   className="h-9 w-9 object-contain"
                   loading="lazy"
                 />
@@ -169,13 +169,17 @@ export function MarketingPage() {
                   <TransitionLink to="/usage" className="block text-[#f9f9f9] transition hover:text-white">Usage policy</TransitionLink>
                 </div>
               </div>
+              <img
+                src="/logo-4.png"
+                alt="Microagents wordmark"
+                className="hidden h-14 w-14 object-contain md:block md:self-start"
+                loading="lazy"
+              />
+              {/* Plan Step 5: unified nav/footer branding with logo (4). */}
             </div>
             <div className="flex flex-1 items-center justify-center">
-              <h2
-                className="text-[min(18vw,220px)] font-semibold leading-none tracking-tight text-[color:rgba(244,241,234,0.12)]"
-                style={{ letterSpacing: "-2px" }}
-              >
-                Microagents
+              <h2 className="hero__title text-[color:rgba(244,241,234,0.12)]">
+                MICROAGENTS
               </h2>
             </div>
           </div>
