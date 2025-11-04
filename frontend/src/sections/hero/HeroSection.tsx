@@ -8,8 +8,9 @@ export function HeroSection() {
       <div className="hero__layout">
         <header className="hero__headline">
           <h1 className="hero__title" data-hero-wordmark>
-            microagents
+            MICROAGENTS
           </h1>
+          {/* Plan Step 1: tightened uppercase wordmark and divider rhythm to mirror new art direction. */}
           <div className="hero__divider" aria-hidden="true" />
           <div className="hero__tagline">
             <span className="hero__tagline-primary">AI FOR BUSINESS</span>

@@ -102,9 +102,9 @@ const DEFAULT_COLORS: Required<GradientColors> = {
 };
 
 const DEFAULT_NOISE: Required<NoiseSettings> = {
-  scale: 4.2,
-  intensity: 0.18,
-  accentStrength: 0.58,
+  scale: 6.8,
+  intensity: 0.32,
+  accentStrength: 0.62,
 };
 
 function parseColor(hex: string) {
@@ -126,7 +126,7 @@ export function GradientCard({
   className,
   colors,
   noise,
-  borderRadiusClassName = "rounded-[32px]",
+  borderRadiusClassName = "rounded-[5px]",
   children,
 }: GradientCardProps) {
   const palette = { ...DEFAULT_COLORS, ...colors };
@@ -207,7 +207,8 @@ export function GradientCard({
     const animate = (time: number) => {
       if (lastTimestamp !== null) {
         const delta = (time - lastTimestamp) / 1000;
-        uniforms.uTime.value += delta;
+        uniforms.uTime.value += delta * 1.9;
+        // Plan Step 2: accelerated shader timeline for visibly energetic motion per brief.
       }
       lastTimestamp = time;
       renderer.render(scene, camera);
