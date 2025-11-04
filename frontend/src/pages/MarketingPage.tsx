@@ -1,5 +1,5 @@
 import type { CSSProperties } from "react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect } from "react";
 import { TransitionLink } from "@/components/motion/TransitionLink";
 import { marketingTheme } from "@/lib/marketingTheme";
 import { HeroSection } from "@/sections/hero";
@@ -35,117 +35,16 @@ export function MarketingPage() {
     };
   }, [marketingTheme.background]);
 
-  const navContainerRef = useRef<HTMLDivElement>(null);
-  const [navPosition, setNavPosition] = useState<CSSProperties>(() => {
-    if (typeof window !== "undefined" && window.matchMedia("(max-width: 640px)").matches) {
-      return { bottom: "24px" };
-    }
-    return { top: "50vh" };
-  });
-
-  const updateNavTop = useCallback(() => {
-    if (typeof window === "undefined") {
-      return;
-    }
-
-    const navEl = navContainerRef.current;
-    if (!navEl) {
-      return;
-    }
-
-    const navRect = navEl.getBoundingClientRect();
-    const viewportHeight = window.innerHeight;
-
-    const isMobileViewport = window.matchMedia("(max-width: 640px)").matches;
-    if (isMobileViewport) {
-      const bottomPadding = Math.max(16, viewportHeight * 0.04);
-      setNavPosition({ bottom: `${Math.round(bottomPadding)}px` });
-      return;
-    }
-
-    const preferredCenter = viewportHeight * 0.5;
-    const minCenterBound = viewportHeight * 0.44;
-    const maxCenterBound = viewportHeight * 0.56;
-    const availableBottom = viewportHeight - navRect.height - 24;
-    const maxTop = Math.max(maxCenterBound, availableBottom);
-    const minTop = Math.min(minCenterBound, maxTop);
-
-    const wordmarkElement = document.querySelector<HTMLElement>("[data-hero-wordmark]");
-    const heroSection = document.querySelector<HTMLElement>("[data-hero-section]");
-    const heroBottoms = [wordmarkElement, heroSection]
-      .map((element) => element?.getBoundingClientRect().bottom)
-      .filter((value): value is number => typeof value === "number" && Number.isFinite(value));
-
-    const heroAnchor = heroBottoms.length > 0 ? Math.max(...heroBottoms) : preferredCenter;
-    const desiredTop = Math.max(preferredCenter, heroAnchor + 24);
-    const clampedTop = Math.max(minTop, Math.min(maxTop, desiredTop));
-
-    setNavPosition({ top: `${Math.round(clampedTop)}px` });
-  }, []);
-
-  useEffect(() => {
-    if (typeof window === "undefined") {
-      return undefined;
-    }
-
-    const handleResize = () => window.requestAnimationFrame(updateNavTop);
-    window.addEventListener("resize", handleResize);
-    window.addEventListener("orientationchange", handleResize);
-
-    updateNavTop();
-    const raf = window.requestAnimationFrame(updateNavTop);
-    const timer = window.setTimeout(updateNavTop, 220);
-
-    const heroWordmark = document.querySelector<HTMLImageElement>("[data-hero-wordmark]");
-    const heroSection = document.querySelector<HTMLElement>("[data-hero-section]");
-
-    const handleHeroLoad = () => updateNavTop();
-    if (heroWordmark) {
-      heroWordmark.addEventListener("load", handleHeroLoad, { once: true });
-      if (heroWordmark.complete) {
-        handleHeroLoad();
-      }
-    }
-
-    const observers: ResizeObserver[] = [];
-    const supportsResizeObserver = typeof window.ResizeObserver !== "undefined";
-    if (supportsResizeObserver) {
-      const observerCallback = () => updateNavTop();
-      const attach = (element: Element | null | undefined) => {
-        if (!element) {
-          return;
-        }
-        const observer = new window.ResizeObserver(observerCallback);
-        observer.observe(element);
-        observers.push(observer);
-      };
-
-      attach(heroWordmark);
-      attach(heroSection);
-    }
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-      window.removeEventListener("orientationchange", handleResize);
-      window.cancelAnimationFrame(raf);
-      window.clearTimeout(timer);
-      heroWordmark?.removeEventListener("load", handleHeroLoad);
-      observers.forEach((observer) => observer.disconnect());
-    };
-  }, [updateNavTop]);
+  
 
   return (
     <div className="relative min-h-screen overflow-x-hidden text-text" style={marketingThemeStyles}>
       <div className="mesh-background pointer-events-none" />
       <div className="relative">
         <section className="relative isolate z-[998] flex justify-center" aria-label="Primary navigation">
-          <div
-            ref={navContainerRef}
-            className="pointer-events-none fixed left-0 right-0 z-[9999] flex w-full justify-center px-2 sm:px-4"
-            style={navPosition}
-          >
+          <div className="pointer-events-none fixed inset-x-0 bottom-6 z-[9999] flex w-full justify-center px-3 sm:px-6">
             <nav
-              className="pointer-events-auto relative z-[10000] flex w-full max-w-[20rem] sm:max-w-[22rem] items-center gap-1.5 rounded-full border border-[color:rgba(255,255,255,0.08)] bg-[#090909] px-3 py-1.5 text-xs shadow-[0_25px_70px_-60px_rgba(0,0,0,0.9)]"
+              className="pointer-events-auto relative z-[10000] flex w-full max-w-[22rem] items-center gap-1.5 rounded-full border border-[color:rgba(255,255,255,0.08)] bg-[#090909] px-3 py-1.5 text-xs shadow-[0_25px_70px_-60px_rgba(0,0,0,0.9)] backdrop-blur-sm"
               aria-label="Main navigation"
             >
               <TransitionLink
@@ -176,6 +75,7 @@ export function MarketingPage() {
               </TransitionLink>
             </nav>
           </div>
+          {/* Plan Step 3: anchored marketing nav to bottom edge for persistent CTA visibility. */}
         </section>
         <HeroSection />
         <HowItWorksSection />

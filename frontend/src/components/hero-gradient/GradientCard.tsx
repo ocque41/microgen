@@ -96,15 +96,15 @@ type GradientCardProps = {
 };
 
 const DEFAULT_COLORS: Required<GradientColors> = {
-  top: "#FF6816",
-  bottom: "#641500",
-  accent: "#FFBE3B",
+  top: "#f9f9f9",
+  bottom: "#090909",
+  accent: "#3a7ca5",
 };
 
 const DEFAULT_NOISE: Required<NoiseSettings> = {
-  scale: 6.5,
-  intensity: 0.24,
-  accentStrength: 0.65,
+  scale: 4.2,
+  intensity: 0.18,
+  accentStrength: 0.58,
 };
 
 function parseColor(hex: string) {
@@ -168,7 +168,8 @@ export function GradientCard({
     const camera = new THREE.PerspectiveCamera(50, 1, 0.1, 10);
     camera.position.set(0, 0, 1.8);
 
-    const geometry = new THREE.PlaneGeometry(2, 2, 1, 1);
+    const geometry = new THREE.PlaneGeometry(10, 10, 1, 1);
+    // Plan Step 2: expanded plane size to blanket the hero container per refreshed spec.
     const material = new THREE.ShaderMaterial({
       vertexShader,
       fragmentShader,
@@ -237,7 +238,7 @@ export function GradientCard({
           className="absolute inset-0"
           style={{
             background:
-              "linear-gradient(160deg, rgba(255,104,22,0.95) 0%, rgba(106,18,0,0.95) 55%, rgba(255,180,0,0.85) 100%)",
+              "linear-gradient(120deg, rgba(249,249,249,0.9) 0%, rgba(58,124,165,0.85) 55%, rgba(9,9,9,0.9) 100%)",
           }}
         />
       )}

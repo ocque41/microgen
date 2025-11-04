@@ -1,9 +1,9 @@
 .hero {
   position: relative;
   width: 100%;
-  background-color: #000000;
-  padding: clamp(4rem, 6vw, 8rem) clamp(1.5rem, 5vw, 4rem) clamp(6rem, 9vw, 10rem);
-  color: #f5f5f5;
+  background-color: #090909;
+  padding: clamp(3.5rem, 4vw, 6rem) clamp(1.5rem, 6vw, 6rem) clamp(5rem, 10vw, 9rem);
+  color: #f9f9f9;
   overflow: hidden;
 }
 
@@ -12,56 +12,62 @@
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: radial-gradient(circle at 20% -10%, rgba(255, 255, 255, 0.08), transparent 55%),
-    radial-gradient(circle at 85% 110%, rgba(255, 150, 0, 0.12), transparent 60%);
-  mix-blend-mode: screen;
-  opacity: 0.7;
+  background: radial-gradient(circle at 20% -10%, rgba(249, 249, 249, 0.08), transparent 55%),
+    radial-gradient(circle at 80% 110%, rgba(58, 124, 165, 0.2), transparent 60%);
+  opacity: 0.6;
 }
 
 .hero__layout {
   position: relative;
   z-index: 1;
-  max-width: min(1200px, 92vw);
+  max-width: min(1200px, 94vw);
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: clamp(3rem, 6vw, 5rem);
+  gap: clamp(2.5rem, 7vw, 4.5rem);
 }
 
 .hero__headline {
   display: grid;
   justify-items: center;
-  gap: clamp(1.5rem, 4vw, 2.5rem);
+  gap: clamp(1.25rem, 4vw, 2rem);
   text-align: center;
 }
 
 .hero__title {
   margin: 0;
   font-family: "InterVariable", "Inter", "Helvetica Neue", Arial, sans-serif;
-  font-variation-settings: "wght" 370;
+  font-variation-settings: "wght" 340;
   font-weight: 400;
-  font-size: clamp(3.5rem, 15vw, 11rem);
-  letter-spacing: -0.035em;
-  line-height: 0.88;
+  font-size: clamp(4.75rem, 15vw, 13rem);
+  letter-spacing: -0.04em;
+  line-height: 0.84;
   text-transform: lowercase;
 }
 
-.hero__subtitle {
+.hero__divider {
+  width: min(820px, 86vw);
+  height: 1px;
+  background: rgba(249, 249, 249, 0.32);
+}
+
+.hero__tagline {
   display: grid;
-  gap: clamp(0.4rem, 1.2vw, 0.9rem);
-  color: rgba(255, 255, 255, 0.78);
+  gap: 0.45rem;
+  color: rgba(249, 249, 249, 0.86);
   text-transform: uppercase;
-  letter-spacing: 0.32em;
+  letter-spacing: 0.4em;
 }
 
-.hero__subtitle-primary {
-  font-size: clamp(1rem, 3.2vw, 2rem);
+.hero__tagline-primary {
+  font-size: clamp(1.1rem, 3vw, 2rem);
 }
 
-.hero__subtitle-secondary {
-  font-size: clamp(0.9rem, 2.4vw, 1.3rem);
-  opacity: 0.85;
+.hero__tagline-secondary {
+  font-size: clamp(0.85rem, 2.4vw, 1.1rem);
+  letter-spacing: 0.3em;
+  color: rgba(249, 249, 249, 0.7);
 }
 
 .hero__gradient-wrapper {
@@ -72,9 +78,9 @@
 
 .hero__gradient-card {
   position: relative;
-  width: min(960px, 100%);
-  aspect-ratio: 21 / 9;
-  box-shadow: 0 22px 64px rgba(0, 0, 0, 0.35), 0 8px 24px rgba(0, 0, 0, 0.4);
+  width: min(1400px, 100%);
+  min-height: clamp(20rem, 65vw, 40rem);
+  box-shadow: 0 32px 120px rgba(0, 0, 0, 0.4), 0 12px 48px rgba(0, 0, 0, 0.45);
   isolation: isolate;
 }
 
@@ -84,26 +90,25 @@
 }
 
 .hero__gradient-radius {
-  border-radius: clamp(22px, 5vw, 34px);
+  border-radius: clamp(18px, 4vw, 42px);
 }
 
-@media (max-width: 600px) {
+@media (max-width: 720px) {
   .hero {
-    padding-top: 3rem;
-    padding-bottom: 5rem;
+    padding: 3rem clamp(1rem, 5vw, 3rem) clamp(4rem, 12vw, 6rem);
   }
 
-  .hero__subtitle {
-    letter-spacing: 0.24em;
+  .hero__title {
+    letter-spacing: -0.03em;
+  }
+
+  .hero__tagline {
+    letter-spacing: 0.28em;
   }
 
   .hero__gradient-card {
-    aspect-ratio: 4 / 3;
+    min-height: clamp(16rem, 90vw, 28rem);
   }
 }
 
-@media (min-width: 1200px) {
-  .hero__gradient-card {
-    aspect-ratio: 24 / 8.5;
-  }
-}
+/* Plan Step 2: refreshed hero spacing, dividers, and gradient footprint to mirror provided reference. */
