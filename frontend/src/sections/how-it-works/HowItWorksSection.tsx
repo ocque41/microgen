@@ -1,7 +1,6 @@
 import type { ReactNode } from "react";
 
 import { publicAsset } from "../../lib/publicAsset";
-import { HOW_IT_WORKS_STEP2_BG } from "../../lib/marketingAssets";
 
 const BORDER_COLOR = "rgba(244, 241, 234, 0.16)";
 const TEXT_SOFT = "color-mix(in srgb, var(--text-primary) 68%, transparent)";
@@ -28,8 +27,8 @@ const steps: Step[] = [
     id: "brief",
     title: "Clarify the brief",
     highlight: "Capture the workflow, guardrails, and success metrics so everyone sees the same definition of done.",
-    imageSrc: publicAsset("gradient2.png"),
-    imageAlt: "Kickoff canvas overview with highlighted guardrails",
+    imageSrc: publicAsset("sheets.png"),
+    imageAlt: "Kickoff spreadsheet composed of workflow guardrails",
     description: (
       <>
         <p>
@@ -45,9 +44,8 @@ const steps: Step[] = [
     id: "approve",
     title: "Approve the agent",
     highlight: "Run shadow sessions in a guided sandbox before production traffic ever hits the API.",
-    imageSrc: HOW_IT_WORKS_STEP2_BG,
-    // Plan Step 2: reuse the centralized step 2 asset so /public/background.png is located correctly.
-    imageAlt: "Guided sandbox approval interface snapshot",
+    imageSrc: publicAsset("crystal-cable.jpeg"),
+    imageAlt: "Illuminated crystal data cable suspended in the air",
     description: (
       <>
         <p>
@@ -63,8 +61,8 @@ const steps: Step[] = [
     id: "run",
     title: "Run with confidence",
     highlight: "Launch the automation with real-time accountability dashboards and human-ready escalation trails.",
-    imageSrc: publicAsset("gradient1.jpg"),
-    imageAlt: "Operational dashboard displaying microagent activity",
+    imageSrc: publicAsset("export (1).png"),
+    imageAlt: "Glassy workflow export sheet with modular cards",
     description: (
       <>
         <p>
