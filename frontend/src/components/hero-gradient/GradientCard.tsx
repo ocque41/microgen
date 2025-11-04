@@ -22,34 +22,35 @@ const fragmentShader = /* glsl */ `
   uniform float uAccentStrength;
   uniform float uTime;
 
+  float pulse(float value, float center, float width) {
+    return smoothstep(center - width, center, value) - smoothstep(center, center + width, value);
+  }
+
   void main() {
-    vec3 baseGradient = mix(uColorTop, uColorBottom, smoothstep(0.05, 0.95, vUv.y));
+    vec3 baseGradient = mix(uColorTop, uColorBottom, smoothstep(0.04, 0.96, vUv.y));
 
-    float freqX = 12.0 + uNoiseScale * 1.8;
-    float freqY = 8.5 + uNoiseScale * 1.2;
+    float diagonal = fract((vUv.x + vUv.y) * (10.0 + uNoiseScale * 0.55) + uTime * 2.8);
+    float diagonalPulse = pulse(diagonal, 0.5, 0.06);
 
-    float waveX = sin((vUv.x * freqX) + uTime * 4.2);
-    float waveY = cos((vUv.y * freqY) - uTime * 3.4);
+    float vertical = fract(vUv.x * (4.0 + uNoiseScale * 0.35) - uTime * 1.8);
+    float verticalPulse = pulse(vertical, 0.26, 0.05);
 
-    float circuit = smoothstep(0.2, 0.8, 0.5 + 0.5 * waveX);
-    float sweep = smoothstep(0.25, 0.75, 0.5 + 0.5 * waveY);
+    float sweepWave = sin(uTime * 5.6 + vUv.y * (14.0 + uNoiseScale));
+    float sweep = smoothstep(0.15, 0.95, sweepWave);
 
-    float streak = abs(sin(((vUv.x + vUv.y) * (20.0 + uNoiseScale * 3.0)) + uTime * 6.0));
-    float streakMask = smoothstep(0.55, 0.88, streak);
+    float horizon = smoothstep(0.12, 0.82, vUv.y + sin(uTime * 0.9) * 0.05);
 
-    float bands = abs(fract((vUv.x + uTime * 0.4) * (6.0 + uNoiseScale * 0.6)) - 0.5);
-    float bandMask = smoothstep(0.0, 0.3, bands);
+    float energy = clamp(diagonalPulse * 0.55 + verticalPulse * 0.4 + sweep * 0.35 + horizon * 0.2, 0.0, 1.0);
+    energy = pow(energy, 1.12);
 
-    float highlight = clamp(circuit * 0.45 + sweep * 0.3 + streakMask * 0.6 + bandMask * 0.35, 0.0, 1.0);
-    highlight = pow(highlight, 1.35);
-
-    vec3 accentLayer = mix(baseGradient, uColorAccent, highlight * uNoiseIntensity);
+    vec3 accentLayer = mix(baseGradient, uColorAccent, energy * uNoiseIntensity);
     vec3 color = mix(baseGradient, accentLayer, uAccentStrength);
+    color = mix(color, vec3(1.0), 0.03 * energy);
 
     gl_FragColor = vec4(color, 1.0);
   }
 `;
-// Plan Step 2: replaced noise-based shader with fast, linear pulses for a cleaner futuristic motion.
+// Plan Step 3: refreshed shader with minimal pulses inspired by interfaces.rauno aesthetic.
 
 type GradientColors = {
   top?: string;
@@ -72,15 +73,15 @@ type GradientCardProps = {
 };
 
 const DEFAULT_COLORS: Required<GradientColors> = {
-  top: "#d9dcd6",
+  top: "#242423",
   bottom: "#090909",
   accent: "#0091ad",
 };
 
 const DEFAULT_NOISE: Required<NoiseSettings> = {
-  scale: 6.5,
-  intensity: 0.6,
-  accentStrength: 0.68,
+  scale: 7.5,
+  intensity: 0.82,
+  accentStrength: 0.74,
 };
 
 function parseColor(hex: string) {
@@ -215,11 +216,11 @@ export function GradientCard({
           className="absolute inset-0"
           style={{
             background:
-              "linear-gradient(118deg, rgba(217,220,214,0.92) 0%, rgba(0,145,173,0.72) 52%, rgba(9,9,9,0.94) 100%)",
+              "linear-gradient(115deg, rgba(36,36,35,0.94) 0%, rgba(0,145,173,0.78) 55%, rgba(9,9,9,0.98) 100%)",
           }}
         />
       )}
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_-12%,rgba(8,76,97,0.38),transparent_55%),radial-gradient(circle_at_82%_112%,rgba(0,145,173,0.42),transparent_60%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_16%_-14%,rgba(0,93,112,0.32),transparent_58%),radial-gradient(circle_at_84%_116%,rgba(0,145,173,0.36),transparent_62%)]" />
       <div className="relative z-10 flex h-full w-full items-center justify-center">
         {children}
       </div>

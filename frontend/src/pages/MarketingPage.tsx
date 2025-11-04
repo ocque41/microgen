@@ -1,6 +1,7 @@
 import type { CSSProperties } from "react";
 import { useEffect } from "react";
 import { TransitionLink } from "@/components/motion/TransitionLink";
+import { ProgressiveBlur } from "@/components/effects/ProgressiveBlur";
 import { marketingTheme } from "@/lib/marketingTheme";
 import { HeroSection } from "@/sections/hero";
 import { HowItWorksSection } from "@/sections/how-it-works";
@@ -40,6 +41,15 @@ export function MarketingPage() {
   return (
     <div className="relative min-h-screen overflow-x-hidden text-text" style={marketingThemeStyles}>
       <div className="mesh-background pointer-events-none" />
+      <ProgressiveBlur
+        position="bottom"
+        strategy="fixed"
+        blurAmount="22px"
+        height="220px"
+        className="z-[9990]"
+        backgroundColor="rgba(9,9,9,0.98)"
+      />
+      {/* Plan Step 2: fixed bottom blur to sit behind navigation across the home journey. */}
       <div className="relative">
         <section className="relative isolate z-[998] flex justify-center" aria-label="Primary navigation">
           <div className="pointer-events-none fixed inset-x-0 bottom-6 z-[9999] flex w-full justify-center px-3 sm:px-6">
