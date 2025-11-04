@@ -36,12 +36,13 @@
   font-family: "InterVariable", "Inter", "Helvetica Neue", Arial, sans-serif;
   font-variation-settings: "wght" 320;
   font-weight: 400;
-  font-size: clamp(6.25rem, 16vw, 13.5rem);
-  letter-spacing: -0.1em;
+  font-size: clamp(6rem, 15vw, 13rem);
+  letter-spacing: -0.09em;
   line-height: 0.76;
   text-transform: uppercase;
   margin-bottom: var(--hero-divider-spacing);
-  width: min(1200px, 100%);
+  width: 100%;
+  max-width: none;
   margin-inline: auto;
   text-align: center;
 }
@@ -147,7 +148,6 @@
 
   .hero__title {
     letter-spacing: -0.08em;
-    width: 100%;
   }
 
   .hero__tagline {
