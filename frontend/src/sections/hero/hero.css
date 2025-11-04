@@ -4,7 +4,7 @@
   min-height: 100vh;
   height: 100svh;
   background-color: #090909;
-  padding: clamp(3rem, 3vw, 4rem) clamp(0.125rem, 0.6vw, 0.5rem) clamp(4rem, 6vw, 6rem);
+  padding: clamp(3rem, 3vw, 4rem) clamp(0.05rem, 0.4vw, 0.25rem) clamp(4rem, 6vw, 6rem);
   color: #f9f9f9;
   overflow: hidden;
   display: flex;
@@ -15,13 +15,14 @@
   /* Plan Step Edge-3: narrowed horizontal padding band so section nearly touches viewport edges across sizes. */
   /* Plan V2 Step 3: further reduced side padding for near edge contact while preserving safe gutter. */
   /* Plan V3 Step 1: micro-gutter dialed down again so section nearly touches viewport edges. */
+  /* Plan V4 Step 1: inline padding reduced to hairline gutter for almost full-bleed layout. */
 }
 
 .hero__layout {
   position: relative;
   z-index: 1;
   width: 100%;
-  max-width: min(2200px, calc(100vw - 0.25rem));
+  max-width: min(2400px, calc(100vw - 0.1rem));
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -35,6 +36,7 @@
   /* Plan Step Edge-1: layout now stretches to 96vw max so hero content hugs viewport edges. */
   /* Plan V2 Step 1: expanded layout span to 99vw for near edge-to-edge presentation. */
   /* Plan V3 Step 1: layout now capped to calc(100vw - 0.25rem) for almost edge-to-edge reach. */
+  /* Plan V4 Step 1: updated clamp pushes container to calc(100vw - 0.1rem) for near full width. */
   /* Plan V2 Step 3: stretch alignment ensures headline and visual share identical footprint. */
   /* Plan V3 Step 3: reduced vertical gap keeps headline visible within viewport heights. */
 }
@@ -42,14 +44,16 @@
 .hero__headline {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
   text-align: center;
   width: 100%;
-  max-width: min(2200px, calc(100vw - 0.25rem));
+  max-width: min(2400px, calc(100vw - 0.1rem));
   margin-inline: auto;
   /* Plan Step 1: stretch headline container so dividers align with gradient width. */
   /* Plan V2 Step 2: headline shares same bounding width as visual for perfect parallel dividers. */
   /* Plan V3 Step 1: headline width matches latest near edge-to-edge bounds. */
+  /* Plan V4 Step 1: headline width tracks latest calc(100vw - 0.1rem) bound. */
+  /* Plan V4 Step 3: stretch alignment locks dividers and visuals into 90° parallel edges. */
 }
 
 .hero__title {
@@ -57,19 +61,24 @@
   font-family: "InterVariable", "Inter", "Helvetica Neue", Arial, sans-serif;
   font-variation-settings: "wght" 320;
   font-weight: 400;
-  font-size: clamp(3.4rem, 18vw, 18rem);
-  letter-spacing: clamp(-0.08em, calc(-0.08em + 0.03vw), -0.03em);
-  line-height: 0.8;
+  font-size: clamp(3.2rem, 13vw, 17rem);
+  letter-spacing: clamp(-0.07em, calc(-0.1em + 0.05vw), -0.025em);
+  line-height: clamp(0.82, calc(0.72 + 0.04vw), 0.9);
   text-transform: uppercase;
   margin-bottom: var(--hero-divider-spacing);
   width: 100%;
   max-width: none;
   margin-inline: auto;
   text-align: center;
-  overflow-wrap: anywhere;
+  overflow-wrap: normal;
+  word-break: keep-all;
+  text-wrap: balance;
   /* Plan V2 Step 2: title spans full headline width to mirror visual footprint. */
   /* Plan V3 Step 2: responsive clamp keeps title readable on phones while scaling boldly on desktops. */
   /* Plan V3 Step 2: adaptive letter spacing protects within viewport at all sizes. */
+  /* Plan V4 Step 2: refined clamp and wrapping keep title visible across devices while staying massive. */
+  /* Plan V5 Step 2: ensure continuous word integrity while scaling across layouts. */
+  /* Plan V5 Step 3: shared class keeps footer MICROAGENTS wordmark aligned with hero updates. */
 }
 
 .hero__divider {
@@ -79,6 +88,7 @@
   align-self: stretch;
   border-radius: 0;
   /* Plan V2 Step 3: squared dividers keep 90° angles parallel to layout bounds. */
+  /* Plan V4 Step 3: divider edges verified parallel against stretched headline span. */
 }
 
 /* Plan Step 3: increased divider weight and tightened spacing per refreshed brief. */
@@ -90,6 +100,8 @@
   text-transform: uppercase;
   letter-spacing: 0.12em;
   margin: var(--hero-divider-spacing) 0;
+  justify-items: center;
+  /* Plan V4 Step 3: grid content centered to mirror stretched divider geometry. */
 }
 
 .hero__tagline-primary {
@@ -105,7 +117,7 @@
 
 .hero__visual-wrapper {
   width: 100%;
-  max-width: min(2200px, calc(100vw - 0.25rem));
+  max-width: min(2400px, calc(100vw - 0.1rem));
   display: flex;
   justify-content: center;
   align-items: stretch;
@@ -114,12 +126,13 @@
   /* Plan V2 Step 2: wrapper constrained to shared width so lines align vertically with visual edges. */
   /* Plan V3 Step 1: wrapper updated to latest near edge-to-edge bounds. */
   /* Plan V3 Step 3: stretch alignment locks visual edges parallel with headline dividers. */
+  /* Plan V4 Step 1: wrapper adopts calc(100vw - 0.1rem) width for near full-bleed feel. */
 }
 
 .hero__visual {
   position: relative;
   width: 100%;
-  max-width: min(2200px, calc(100vw - 0.25rem));
+  max-width: min(2400px, calc(100vw - 0.1rem));
   min-height: clamp(22rem, 70vw, 44rem);
   aspect-ratio: 16 / 9;
   border-radius: 0;
@@ -131,6 +144,8 @@
   /* Plan V2 Step 3: squared visual corners align to divider geometry. */
   /* Plan V3 Step 1: visual width capped with minimal gutter to hug viewport edges. */
   /* Plan V3 Step 3: fixed aspect ratio keeps edges parallel to dividers regardless of viewport height. */
+  /* Plan V4 Step 1: visual width extends to calc(100vw - 0.1rem) for maximum span. */
+  /* Plan V4 Step 3: parallelism checked between visual edges and headline dividers. */
 }
 
 .hero__visual-frame {
@@ -183,15 +198,23 @@
 
 @media (max-width: 720px) {
   .hero {
-    padding: 3rem clamp(0.125rem, 5vw, 0.75rem) clamp(4rem, 12vw, 6rem);
+    padding: 3rem clamp(0.05rem, 5vw, 0.5rem) clamp(4rem, 12vw, 6rem);
     /* Plan Step Edge-3: mobile padding tightened to maintain edge alignment on small screens. */
     /* Plan V2 Step 3: mobile gutters minimized for consistent near-edge presentation. */
     /* Plan V3 Step 1: mobile gutters reduced again for near edge-to-edge feel. */
+    /* Plan V4 Step 1: mobile gutter matches hairline edge for full width feel. */
   }
 
   .hero__title {
+    font-size: clamp(2.4rem, 18vw, 6.5rem);
     letter-spacing: -0.06em;
+    line-height: 0.88;
+    overflow-wrap: normal;
+    word-break: keep-all;
+    text-wrap: balance;
     /* Plan V3 Step 2: tightened mobile tracking to keep title inside narrow widths. */
+    /* Plan V5 Step 1: mobile font sizing reduced so MICROAGENTS stays on screen without splitting. */
+    /* Plan V5 Step 2: enforce intact word behavior on small screens. */
   }
 
   .hero__tagline {
