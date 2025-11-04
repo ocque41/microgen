@@ -91,18 +91,18 @@ export function MarketingPage() {
         <HeroSection />
         <HowItWorksSection />
 
-        <section className="flex min-h-screen items-center px-6 py-20 lg:px-12">
-          <div className="mx-auto w-full max-w-6xl overflow-hidden rounded-[5px] border border-transparent bg-[#090909] p-12 shadow-[0_60px_160px_-110px_rgba(0,0,0,0.9)]">
-            <div className="mx-auto flex max-w-3xl flex-col gap-12 text-left">
-              <div className="space-y-4">
-                <h2 className="text-3xl font-semibold sm:text-4xl md:text-5xl">Pricing crafted as you build</h2>
-                <p className="text-base sm:text-lg" style={{ color: "color-mix(in srgb, var(--text-primary) 70%, transparent)" }}>
-                  Every engagement begins with a live conversation inside your microagent workspace. Share priorities with a pricing co-pilot that listens, models usage, and assembles a commercial path while you shape the agent itself.
-                </p>
-              </div>
-              <article className="space-y-6 rounded-[5px] border border-transparent bg-[#090909] p-8">
+        <section className="relative flex min-h-screen flex-col bg-[#090909] px-6 py-24 sm:px-10 lg:px-16 xl:px-20">
+          <div className="mx-auto flex w-full max-w-6xl flex-col gap-16 text-left">
+            <div className="space-y-4">
+              <h2 className="text-3xl font-semibold sm:text-4xl md:text-5xl">Pricing crafted as you build</h2>
+              <p className="text-base sm:text-lg" style={{ color: "color-mix(in srgb, var(--text-primary) 70%, transparent)" }}>
+                Every engagement begins with a live conversation inside your microagent workspace. Share priorities with a pricing co-pilot that listens, models usage, and assembles a commercial path while you shape the agent itself.
+              </p>
+            </div>
+            <div className="grid gap-12 rounded-[5px] bg-[#090909]">
+              <article className="space-y-6">
                 <h3 className="text-2xl font-semibold sm:text-3xl md:text-4xl">How the pilot personalizes your plan</h3>
-                <div className="overflow-hidden rounded-[5px] border border-transparent bg-[#090909]">
+                <div className="overflow-hidden rounded-[5px]">
                   <div className="flex min-h-[420px] w-full items-center justify-center bg-[#090909] px-8 py-12">
                     <video
                       src={publicAsset("insignia.mov")}
@@ -136,8 +136,8 @@ export function MarketingPage() {
                   Get Started
                 </TransitionLink>
               </div>
-              {/* Plan Step 2 complete: refreshed CTA copy */}
             </div>
+            {/* Plan Step 2 complete: refreshed CTA copy */}
           </div>
         </section>
 

@@ -157,8 +157,8 @@ export function HowItWorksSection() {
             </div>
 
             <div
-              className="relative h-[55vh] w-full overflow-hidden border-t border-l md:h-auto md:min-h-screen md:w-[42%]"
-              style={{ borderColor: BORDER_COLOR, borderTopWidth: "3px", borderLeftWidth: "3px" }}
+              className="relative h-[55vh] w-full overflow-hidden border-t md:h-auto md:min-h-screen md:w-[42%]"
+              style={{ borderColor: BORDER_COLOR, borderTopWidth: "3px" }}
             >
               <img
                 src={step.imageSrc}
