@@ -120,13 +120,12 @@
 
 .hero__artifact-glow {
   position: absolute;
-  width: clamp(14rem, 32vw, 26rem);
-  height: clamp(14rem, 32vw, 26rem);
+  width: clamp(15rem, 34vw, 28rem);
+  height: clamp(15rem, 34vw, 28rem);
   border-radius: 9999px;
-  background: radial-gradient(circle at 30% 30%, rgba(0, 145, 173, 0.4), transparent 65%),
-    radial-gradient(circle at 70% 70%, rgba(241, 149, 52, 0.4), transparent 70%);
-  filter: blur(48px);
-  opacity: 0.85;
+  background: radial-gradient(circle, rgba(9, 9, 9, 0.05) 0%, rgba(9, 9, 9, 0.85) 70%);
+  box-shadow: 0 0 120px rgba(0, 145, 173, 0.45), 0 0 140px rgba(241, 149, 52, 0.3);
+  opacity: 0.95;
 }
 
 .hero__artifact-logo {
@@ -135,19 +134,11 @@
   height: clamp(6.5rem, 15vw, 11rem);
   object-fit: contain;
   mix-blend-mode: screen;
-  opacity: 0;
-  transition: opacity 0.9s ease;
-  will-change: opacity;
-}
-
-.hero__artifact-logo--active {
-  opacity: 0.92;
-  z-index: 3;
+  opacity: 1;
 }
 
 .hero__artifact-logo--inactive {
-  opacity: 0;
-  z-index: 2;
+  display: none;
 }
 
 @media (max-width: 720px) {
