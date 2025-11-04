@@ -116,6 +116,7 @@
   display: grid;
   place-items: center;
   pointer-events: none;
+  z-index: 3;
 }
 
 .hero__artifact-glow {
@@ -135,6 +136,7 @@
   object-fit: contain;
   mix-blend-mode: screen;
   opacity: 1;
+  z-index: 4;
 }
 
 .hero__artifact-logo--inactive {
