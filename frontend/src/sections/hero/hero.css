@@ -4,7 +4,7 @@
   min-height: 100vh;
   height: 100svh;
   background-color: #090909;
-  padding: clamp(3rem, 3vw, 4rem) clamp(0.5rem, 1.5vw, 1.5rem) clamp(4rem, 6vw, 6rem);
+  padding: clamp(3rem, 3vw, 4rem) clamp(0.25rem, 1vw, 1rem) clamp(4rem, 6vw, 6rem);
   color: #f9f9f9;
   overflow: hidden;
   display: flex;
@@ -13,17 +13,18 @@
   --hero-divider-spacing: clamp(1rem, 3vw, 1.75rem);
   /* Plan Step 2: hero now hugs viewport edges with tighter horizontal padding while staying responsive. */
   /* Plan Step Edge-3: narrowed horizontal padding band so section nearly touches viewport edges across sizes. */
+  /* Plan V2 Step 3: further reduced side padding for near edge contact while preserving safe gutter. */
 }
 
 .hero__layout {
   position: relative;
   z-index: 1;
   width: 100%;
-  max-width: min(1920px, 96vw);
+  max-width: min(1920px, 99vw);
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
   justify-content: center;
   flex: 1;
   gap: clamp(2.2rem, 5vw, 4rem);
@@ -31,6 +32,8 @@
   /* Plan Step 2: layout flex centering keeps hero content balanced within viewport height. */
   /* Plan Step 3: boosted max width to 98vw so hero nearly touches viewport edges on all screens. */
   /* Plan Step Edge-1: layout now stretches to 96vw max so hero content hugs viewport edges. */
+  /* Plan V2 Step 1: expanded layout span to 99vw for near edge-to-edge presentation. */
+  /* Plan V2 Step 3: stretch alignment ensures headline and visual share identical footprint. */
 }
 
 .hero__headline {
@@ -39,8 +42,10 @@
   align-items: center;
   text-align: center;
   width: 100%;
-  max-width: min(1600px, 100%);
+  max-width: min(1920px, 99vw);
+  margin-inline: auto;
   /* Plan Step 1: stretch headline container so dividers align with gradient width. */
+  /* Plan V2 Step 2: headline shares same bounding width as visual for perfect parallel dividers. */
 }
 
 .hero__title {
@@ -57,6 +62,7 @@
   max-width: none;
   margin-inline: auto;
   text-align: center;
+  /* Plan V2 Step 2: title spans full headline width to mirror visual footprint. */
 }
 
 .hero__divider {
@@ -64,6 +70,8 @@
   height: 3px;
   background: rgba(249, 249, 249, 0.36);
   align-self: stretch;
+  border-radius: 0;
+  /* Plan V2 Step 3: squared dividers keep 90° angles parallel to layout bounds. */
 }
 
 /* Plan Step 3: increased divider weight and tightened spacing per refreshed brief. */
@@ -90,21 +98,26 @@
 
 .hero__visual-wrapper {
   width: 100%;
+  max-width: min(1920px, 99vw);
   display: flex;
   justify-content: center;
   margin-top: var(--hero-divider-spacing);
+  margin-inline: auto;
+  /* Plan V2 Step 2: wrapper constrained to shared width so lines align vertically with visual edges. */
 }
 
 .hero__visual {
   position: relative;
   width: 100%;
-  max-width: min(1920px, 96vw);
+  max-width: min(1920px, 99vw);
   min-height: clamp(22rem, 70vw, 44rem);
-  border-radius: 12px;
+  border-radius: 0;
   overflow: hidden;
   box-shadow: 0 36px 140px rgba(0, 0, 0, 0.45), 0 16px 52px rgba(0, 0, 0, 0.48);
   isolation: isolate;
   /* Plan Step Edge-2: synced hero visual width with expanded layout span to keep imagery near viewport edges. */
+  /* Plan V2 Step 1: visual container widened in sync with layout for consistent edge alignment. */
+  /* Plan V2 Step 3: squared visual corners align to divider geometry. */
 }
 
 .hero__visual-frame {
@@ -157,8 +170,9 @@
 
 @media (max-width: 720px) {
   .hero {
-    padding: 3rem clamp(0.5rem, 5vw, 1.5rem) clamp(4rem, 12vw, 6rem);
+    padding: 3rem clamp(0.25rem, 5vw, 1rem) clamp(4rem, 12vw, 6rem);
     /* Plan Step Edge-3: mobile padding tightened to maintain edge alignment on small screens. */
+    /* Plan V2 Step 3: mobile gutters minimized for consistent near-edge presentation. */
   }
 
   .hero__title {
