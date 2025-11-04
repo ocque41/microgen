@@ -55,7 +55,7 @@ export function MarketingPage() {
         <section className="relative isolate z-[12000] flex justify-center" aria-label="Primary navigation">
           <div className="pointer-events-none fixed inset-x-0 bottom-6 z-[9999] flex w-full justify-center px-3 sm:px-6">
             <nav
-              className="pointer-events-auto relative z-[10000] flex w-full max-w-[22rem] items-center gap-1.5 rounded-full border border-[color:rgba(255,255,255,0.08)] bg-[#090909] px-3 py-1.5 text-xs shadow-[0_25px_70px_-60px_rgba(0,0,0,0.9)] backdrop-blur-sm"
+              className="pointer-events-auto relative z-[10000] flex w-full max-w-[22rem] items-center gap-1.5 px-3 py-1.5 text-xs"
               aria-label="Main navigation"
             >
               <TransitionLink
@@ -80,7 +80,7 @@ export function MarketingPage() {
               </div>
               <TransitionLink
                 to="/signup"
-                className="inline-flex items-center justify-center rounded-full bg-[#3a7ca5] px-4 py-1.5 font-semibold text-white transition-transform duration-200 hover:scale-105 whitespace-nowrap"
+                className="inline-flex items-center justify-center rounded-full px-4 py-1.5 font-semibold text-[#3a7ca5] transition-transform duration-200 hover:scale-105 whitespace-nowrap"
               >
                 Get Started
               </TransitionLink>
@@ -102,16 +102,18 @@ export function MarketingPage() {
               </div>
               <article className="space-y-6 rounded-[5px] border border-[color:rgba(244,241,234,0.1)] bg-[#090909] p-8">
                 <h3 className="text-2xl font-semibold sm:text-3xl md:text-4xl">How the pilot personalizes your plan</h3>
-                <div className="overflow-hidden rounded-[5px] border border-[color:rgba(244,241,234,0.08)]">
-                  <video
-                    src={publicAsset("insignia.mov")}
-                    className="h-[420px] w-full object-cover object-center transition-transform duration-500 ease-out"
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                    aria-label="Insignia animation illustrating pricing flow"
-                  />
+                <div className="overflow-hidden rounded-[5px] border border-[color:rgba(244,241,234,0.08)] bg-[#090909]">
+                  <div className="flex min-h-[420px] w-full items-center justify-center bg-[#090909] px-8 py-12">
+                    <video
+                      src={publicAsset("insignia.mov")}
+                      className="w-full max-w-3xl object-contain transition-transform duration-500 ease-out"
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      aria-label="Insignia animation illustrating pricing flow"
+                    />
+                  </div>
                 </div>
                 <ul className="space-y-3 text-base sm:text-lg" style={{ color: "color-mix(in srgb, var(--text-primary) 70%, transparent)" }}>
                   <li>
@@ -183,7 +185,7 @@ export function MarketingPage() {
               {/* Plan Step 5: unified nav/footer branding with logo (4). */}
             </div>
             <div className="flex flex-1 items-center justify-center">
-              <h2 className="hero__title text-[color:rgba(244,241,234,0.12)]">
+              <h2 className="hero__title text-[#3a7ca5]">
                 MICROAGENTS
               </h2>
             </div>
