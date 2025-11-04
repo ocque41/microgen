@@ -1,36 +1,21 @@
-import type { ComponentPropsWithoutRef } from "react";
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 
 import { renderToString } from "react-dom/server";
 
 import { HeroSection } from "../HeroSection";
 
-vi.mock("@/components/motion/TransitionLink", () => {
-  return {
-    TransitionLink: ({ to, children, href, ...rest }: ComponentPropsWithoutRef<"a"> & { to?: string }) => {
-      const resolvedHref = typeof to === "string" ? to : href;
-      return (
-        <a {...rest} href={resolvedHref}>
-          {children}
-        </a>
-      );
-    },
-  };
-});
-
 describe("HeroSection", () => {
-  it("renders the hero composition with branding", () => {
+  it("renders the new brand headline and messaging", () => {
     const markup = renderToString(<HeroSection />);
 
     expect(markup).toContain("microagents");
-    expect(markup).toContain("/white-logo-trans.png");
-    expect(markup).toContain("<svg");
+    expect(markup).toContain("AI FOR BUSINESS");
+    expect(markup).toContain("NOW FOR EVERY TASK");
   });
 
-  it("includes the hero logotype", () => {
+  it("exposes the gradient card container", () => {
     const markup = renderToString(<HeroSection />);
 
-    expect(markup).toContain("<img");
-    expect(markup).toContain("alt=\"Microagents logo\"");
+    expect(markup).toContain("hero__gradient-card");
   });
 });

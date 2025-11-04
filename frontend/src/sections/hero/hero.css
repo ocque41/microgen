@@ -1,189 +1,109 @@
-@property --hero-progress {
-  syntax: "<number>";
-  initial-value: 0;
-  inherits: false;
-}
-
-.hero-scroll-track {
-  --scroll-track-name: hero-demo;
-  --scroll-animation-range: entry 0% exit 100%;
+.hero {
   position: relative;
-}
-
-.hero-progress-indicator {
-  --hero-progress: 0;
-  animation-name: hero-progress-track;
-}
-
-@keyframes hero-progress-track {
-  from {
-    --hero-progress: 0;
-  }
-
-  to {
-    --hero-progress: 1;
-  }
-}
-
-.hero-progress-bar::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 999px;
-  background: linear-gradient(
-    90deg,
-    var(--accent) 0%,
-    color-mix(in srgb, var(--text-primary) 28%, transparent) 100%
-  );
-  transform-origin: left center;
-  transform: scaleX(calc(clamp(0, var(--hero-progress), 1)));
-  transition: transform var(--motion-duration-medium) var(--motion-easing-standard);
-}
-
-.hero-device-frame {
-  position: relative;
-  border-radius: var(--radius-xl);
-  border: 1px solid color-mix(in srgb, var(--border-strong) 70%, transparent);
-  background: linear-gradient(
-    160deg,
-    color-mix(in srgb, var(--surface-base) 88%, transparent) 0%,
-    color-mix(in srgb, var(--surface-muted) 92%, transparent) 100%
-  );
-  box-shadow: var(--shadow-glass);
+  width: 100%;
+  background-color: #000000;
+  padding: clamp(4rem, 6vw, 8rem) clamp(1.5rem, 5vw, 4rem) clamp(6rem, 9vw, 10rem);
+  color: #f5f5f5;
   overflow: hidden;
 }
 
-.hero-device-frame::before {
+.hero::before {
   content: "";
   position: absolute;
   inset: 0;
-  border-radius: inherit;
-  border: 1px solid color-mix(in srgb, var(--text-primary) 16%, transparent);
   pointer-events: none;
-}
-
-.hero-device-overlay {
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(
-      circle at 20% 20%,
-      color-mix(in srgb, var(--status-info) 42%, transparent) 0%,
-      transparent 65%
-    ),
-    radial-gradient(
-      circle at 80% 30%,
-      color-mix(in srgb, var(--accent-primary) 32%, transparent) 0%,
-      transparent 70%
-    );
+  background: radial-gradient(circle at 20% -10%, rgba(255, 255, 255, 0.08), transparent 55%),
+    radial-gradient(circle at 85% 110%, rgba(255, 150, 0, 0.12), transparent 60%);
   mix-blend-mode: screen;
-  opacity: clamp(0.1, calc(var(--hero-progress) + 0.05), 0.45);
-  transition: opacity var(--motion-duration-medium) var(--motion-easing-standard);
-  pointer-events: none;
+  opacity: 0.7;
 }
 
-.hero-device-poster {
-  display: none;
-  position: absolute;
-  inset: 0;
-}
-
-.hero-device-poster--fallback {
+.hero__layout {
+  position: relative;
+  z-index: 1;
+  max-width: min(1200px, 92vw);
+  margin: 0 auto;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: 1.5rem;
+  gap: clamp(3rem, 6vw, 5rem);
+}
+
+.hero__headline {
+  display: grid;
+  justify-items: center;
+  gap: clamp(1.5rem, 4vw, 2.5rem);
   text-align: center;
-  background: linear-gradient(
-    160deg,
-    color-mix(in srgb, var(--surface-muted) 82%, transparent) 0%,
-    color-mix(in srgb, var(--surface-base) 94%, transparent) 100%
-  );
-  color: color-mix(in srgb, var(--text-primary) 74%, transparent);
-  font-size: 0.75rem;
-  letter-spacing: 0.08em;
+}
+
+.hero__title {
+  margin: 0;
+  font-family: "InterVariable", "Inter", "Helvetica Neue", Arial, sans-serif;
+  font-variation-settings: "wght" 370;
+  font-weight: 400;
+  font-size: clamp(3.5rem, 15vw, 11rem);
+  letter-spacing: -0.035em;
+  line-height: 0.88;
+  text-transform: lowercase;
+}
+
+.hero__subtitle {
+  display: grid;
+  gap: clamp(0.4rem, 1.2vw, 0.9rem);
+  color: rgba(255, 255, 255, 0.78);
   text-transform: uppercase;
+  letter-spacing: 0.32em;
 }
 
-.hero-device-poster__message {
-  max-width: 16ch;
+.hero__subtitle-primary {
+  font-size: clamp(1rem, 3.2vw, 2rem);
 }
 
-.hero-device-video {
-  display: block;
+.hero__subtitle-secondary {
+  font-size: clamp(0.9rem, 2.4vw, 1.3rem);
+  opacity: 0.85;
+}
+
+.hero__gradient-wrapper {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-  background-color: var(--surface-overlay-90);
-}
-
-.hero-device-video[hidden] {
-  display: none;
-}
-
-.hero-device-video-placeholder {
-  position: absolute;
-  inset: 0;
   display: flex;
-  align-items: center;
   justify-content: center;
-  padding: 1.5rem;
-  text-align: center;
-  background: linear-gradient(
-    155deg,
-    color-mix(in srgb, var(--surface-base) 88%, transparent) 0%,
-    color-mix(in srgb, var(--surface-muted) 94%, transparent) 100%
-  );
-  color: color-mix(in srgb, var(--text-primary) 70%, transparent);
-  font-size: 0.72rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
 }
 
-.hero-device-video-placeholder__message {
-  max-width: 20ch;
+.hero__gradient-card {
+  position: relative;
+  width: min(960px, 100%);
+  aspect-ratio: 21 / 9;
+  box-shadow: 0 22px 64px rgba(0, 0, 0, 0.35), 0 8px 24px rgba(0, 0, 0, 0.4);
+  isolation: isolate;
 }
 
-.hero-device-fallback {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  backdrop-filter: blur(var(--glass-blur));
-  background: color-mix(in srgb, var(--surface-overlay-75) 65%, transparent);
-  color: var(--text-inverse);
-  text-transform: uppercase;
-  letter-spacing: 0.4em;
-  font-size: 0.62rem;
+.hero__gradient-card canvas {
+  width: 100% !important;
+  height: 100% !important;
 }
 
-@supports not (background: color-mix(in srgb, #000 10%, #fff 90%)) {
-  .hero-device-frame {
-    background: var(--surface-overlay-90);
+.hero__gradient-radius {
+  border-radius: clamp(22px, 5vw, 34px);
+}
+
+@media (max-width: 600px) {
+  .hero {
+    padding-top: 3rem;
+    padding-bottom: 5rem;
+  }
+
+  .hero__subtitle {
+    letter-spacing: 0.24em;
+  }
+
+  .hero__gradient-card {
+    aspect-ratio: 4 / 3;
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .hero-progress-indicator {
-    animation: none !important;
+@media (min-width: 1200px) {
+  .hero__gradient-card {
+    aspect-ratio: 24 / 8.5;
   }
-
-  .hero-device-poster {
-    display: block;
-  }
-
-  .hero-device-video-placeholder {
-    position: static;
-    border-radius: inherit;
-  }
-}
-
-.motion-disabled .hero-progress-indicator,
-.motion-disabled.hero-progress-indicator {
-  animation: none !important;
-}
-
-.motion-disabled .hero-device-poster,
-.motion-disabled.hero-device-poster {
-  display: block;
 }

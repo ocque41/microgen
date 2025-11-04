@@ -7,7 +7,7 @@ import json
 import logging
 from functools import lru_cache
 from io import BytesIO
-from typing import Any
+from typing import Any, NamedTuple
 from uuid import UUID, uuid4
 
 from sqlalchemy import select
@@ -20,8 +20,11 @@ from .models import ChatTranscriptMessage, UserVectorStore
 logger = logging.getLogger(__name__)
 
 
-class _VectorStoreClients(tuple[Any, Any, str]):
-    __slots__ = ()
+class _VectorStoreClients(NamedTuple):
+    vector_store: Any
+    files: Any
+    file_batches: Any | None
+    surface: str
 
 
 @lru_cache(maxsize=1)
@@ -40,43 +43,53 @@ def _resolve_vector_store_clients() -> _VectorStoreClients:
     files_client = getattr(vector_store_client, "files", None)
     if files_client is None:
         raise RuntimeError("OpenAI SDK vector store client is missing the files sub-resource.")
+    file_batches_client = getattr(vector_store_client, "file_batches", None)
     logger.info(
         "Detected OpenAI vector store surface",
         extra={"vector_store_surface": vector_store_surface},
     )
-    return _VectorStoreClients((vector_store_client, files_client, vector_store_surface))
+    return _VectorStoreClients(vector_store_client, files_client, file_batches_client, vector_store_surface)
 
 
 async def _create_vector_store(name: str) -> str:
     def _call() -> str:
-        vector_store_client, _, _ = _resolve_vector_store_clients()
+        vector_store_client, _, _, _ = _resolve_vector_store_clients()
         store = vector_store_client.create(name=name)
         return store.id
 
     return await asyncio.to_thread(_call)
 
 
-async def _upload_fact(vector_store_id: str, content: str, metadata: dict[str, Any]) -> None:
+async def _upload_fact(vector_store_id: str, content: str, metadata: dict[str, Any] | None) -> None:
     filename = f"memory-{uuid4().hex}.json"
     file_bytes = content.encode("utf-8")
 
     def _create_and_attach() -> None:
-        _, files_client, _ = _resolve_vector_store_clients()
+        vector_store_client, files_client, file_batches_client, surface = _resolve_vector_store_clients()
+        logger.debug(
+            "Uploading fact to vector store",
+            extra={
+                "vector_store_id": vector_store_id,
+                "surface": surface,
+                "metadata_keys": sorted(metadata.keys()) if metadata else [],
+            },
+        )
+
+        if file_batches_client is not None and hasattr(file_batches_client, "upload_and_poll"):
+            file_batches_client.upload_and_poll(
+                vector_store_id=vector_store_id,
+                files=[(filename, BytesIO(file_bytes))],
+            )
+            return
+
         file = openai_client.files.create(
             file=(filename, BytesIO(file_bytes)),
             purpose="assistants",
         )
-        try:
-            files_client.create(
-                vector_store_id=vector_store_id,
-                file_id=file.id,
-                metadata=metadata,
-            )
-        except TypeError:
-            files_client.create(
-                vector_store_id=vector_store_id,
-                file_id=file.id,
-            )
+        files_client.create(
+            vector_store_id=vector_store_id,
+            file_id=file.id,
+        )
 
     await asyncio.to_thread(_create_and_attach)
 

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import asyncio
 import logging
+import time
 from datetime import datetime
 from typing import Any, AsyncIterator
 from uuid import uuid4
@@ -150,19 +151,36 @@ async def _invoke_workflow(
     user_id: str | None,
     thread_id: str,
 ) -> Any:
-    body: dict[str, Any] = {"input": {"messages": messages, "thread_id": thread_id}}
-    if workflow_version:
-        body["version"] = workflow_version
-        body["input"]["workflow_version"] = workflow_version
-    if vector_store_id:
-        body["input"]["vector_store_id"] = vector_store_id
-    if user_id:
-        body["input"]["user_id"] = user_id
+    workflows_client = getattr(openai_client, "workflows", None)
+    if workflows_client is None or not hasattr(workflows_client, "runs"):
+        raise RuntimeError("OpenAI client does not expose the workflows surface.")
 
-    path = f"/workflows/{workflow_id}/runs"
+    runs_client = workflows_client.runs
+
+    input_payload: dict[str, Any] = {"messages": messages, "thread_id": thread_id}
+    if workflow_version:
+        input_payload["workflow_version"] = workflow_version
+    if vector_store_id:
+        input_payload["vector_store_id"] = vector_store_id
+    if user_id:
+        input_payload["user_id"] = user_id
+
+    request_kwargs: dict[str, Any] = {
+        "workflow_id": workflow_id,
+        "input": input_payload,
+    }
+    if workflow_version:
+        request_kwargs["workflow_version"] = workflow_version
 
     def _call() -> Any:
-        return openai_client.post(path, body=body)
+        if hasattr(runs_client, "create_and_poll"):
+            return runs_client.create_and_poll(**request_kwargs)
+
+        run = runs_client.create(**request_kwargs)
+        while getattr(run, "status", None) in {"queued", "in_progress"}:
+            time.sleep(0.8)
+            run = runs_client.retrieve(workflow_id=workflow_id, run_id=run.id)
+        return run
 
     return await asyncio.to_thread(_call)
 
