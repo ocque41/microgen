@@ -1,6 +1,6 @@
 import "./hero.css";
 
-import { GradientCard } from "../../components/gradient";
+import { GradientCard } from "../../components/hero-gradient";
 
 export function HeroSection() {
   return (
