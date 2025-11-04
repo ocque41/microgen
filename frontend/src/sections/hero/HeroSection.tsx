@@ -23,8 +23,9 @@ export function HeroSection() {
             className="hero__gradient-card"
             borderRadiusClassName="hero__gradient-radius"
             colors={{ top: "#f9f9f9", bottom: "#090909", accent: "#3a7ca5" }}
-            noise={{ scale: 4.2, intensity: 0.18, accentStrength: 0.58 }}
+            noise={{ scale: 6.4, intensity: 0.34, accentStrength: 0.62 }}
           />
+          {/* Plan Step 2: tightened shader palette and turbulence for noticeably faster motion. */}
         </div>
       </div>
       {/* Plan Step 2: hero rebuilt to match refreshed reference with expanded shader coverage. */}

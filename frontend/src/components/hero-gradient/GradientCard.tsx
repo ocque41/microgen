@@ -59,21 +59,22 @@ const fragmentShader = /* glsl */ `
     vec3 accentGradient = mix(baseGradient, uColorAccent, smoothstep(0.0, 1.0, vUv.x));
 
     vec2 animatedUv = vUv * uNoiseScale;
-    animatedUv.x += uTime * 0.08;
-    animatedUv.y -= uTime * 0.04;
+    animatedUv.x += uTime * 0.15;
+    animatedUv.y -= uTime * 0.07;
 
-    float grain = fbm(animatedUv);
-    float glow = fbm(vec2(animatedUv.y, animatedUv.x) * 0.5 + uTime * 0.05);
+    float grain = fbm(animatedUv * 1.2);
+    float glow = fbm(vec2(animatedUv.y, animatedUv.x) * 0.65 + uTime * 0.12);
 
     vec3 color = mix(baseGradient, accentGradient, uAccentStrength);
     color += (grain - 0.5) * uNoiseIntensity;
-    color += 0.2 * glow * uNoiseIntensity;
+    color += 0.28 * glow * uNoiseIntensity;
 
     color = clamp(color, 0.0, 1.0);
 
     gl_FragColor = vec4(color, 1.0);
   }
 `;
+// Plan Step 2: retuned shader offsets for heightened turbulence.
 
 type GradientColors = {
   top?: string;
@@ -207,8 +208,8 @@ export function GradientCard({
     const animate = (time: number) => {
       if (lastTimestamp !== null) {
         const delta = (time - lastTimestamp) / 1000;
-        uniforms.uTime.value += delta * 1.9;
-        // Plan Step 2: accelerated shader timeline for visibly energetic motion per brief.
+        uniforms.uTime.value += delta * 3.1;
+        // Plan Step 2: further increased shader timeline speed for aggressive animation.
       }
       lastTimestamp = time;
       renderer.render(scene, camera);
