@@ -13,6 +13,8 @@ const marketingThemeStyles = {
   backgroundColor: marketingTheme.background,
 } as CSSProperties;
 
+const VIEWPORT_MAX_WIDTH = "min(1600px, 94vw)";
+
 export function MarketingPage() {
   useEffect(() => {
     if (typeof document === "undefined") {
@@ -91,10 +93,14 @@ export function MarketingPage() {
         <HeroSection />
         <HowItWorksSection />
 
-        <section className="relative flex min-h-screen w-full flex-col justify-center bg-[#090909] px-6 py-24 sm:px-10 lg:px-16 xl:px-20">
+        <section
+          className="relative flex w-full flex-col justify-center bg-[#090909] px-6 py-24 sm:px-10 lg:px-16 xl:px-20"
+          style={{ minHeight: "100vh", height: "100svh", boxSizing: "border-box" }}
+        >
+          {/* Plan Step 3: pricing stage locks to viewport height while padding respects box model. */}
           <div
             className="mx-auto flex w-full flex-1 flex-col justify-center gap-16 text-left"
-            style={{ maxWidth: "min(1600px, 96vw)" }}
+            style={{ maxWidth: VIEWPORT_MAX_WIDTH }}
           >
             <div className="space-y-4">
               <h2 className="text-3xl font-semibold sm:text-4xl md:text-5xl">Pricing crafted as you build</h2>
