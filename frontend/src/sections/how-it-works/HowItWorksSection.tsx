@@ -78,7 +78,11 @@ const steps: Step[] = [
 
 export function HowItWorksSection() {
   return (
-    <section aria-label="How Microagents works" className="relative mt-24 md:mt-32 xl:mt-40" data-how-it-works>
+    <section
+      aria-label="How Microagents works"
+      className="relative mt-32 mb-32 pb-32 md:mt-48 md:mb-48 md:pb-40 xl:mt-56 xl:mb-56 xl:pb-48"
+      data-how-it-works
+    >
       <div className="flex flex-col gap-4 px-6 pb-12 text-left sm:px-10 lg:px-16 xl:px-20">
         <h2
           className="text-3xl font-semibold text-[color:rgba(249,249,249,0.94)] sm:text-4xl md:text-5xl"
@@ -178,6 +182,7 @@ export function HowItWorksSection() {
           </article>
         );
       })}
+      {/* Plan Spacing Step 1: expanded section margins/padding to keep How It Works clearly separated. */}
     </section>
   );
 }
