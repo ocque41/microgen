@@ -42,7 +42,7 @@ export function HeroSection() {
           {/* Plan Step 1: rescaled wordmark and tagline tracking per refreshed spacing brief. */}
           <div className="hero__divider" aria-hidden="true" />
           <div className="hero__tagline">
-            <span className="hero__tagline-primary">AI FOR BUSINESS</span>
+            <span className="hero__tagline-primary">AI FOR DESIGN</span>
             <span className="hero__tagline-secondary">NOW FOR EVERY TASK</span>
           </div>
           <div className="hero__divider" aria-hidden="true" />

@@ -13,6 +13,9 @@ const marketingThemeStyles = {
   backgroundColor: marketingTheme.background,
 } as CSSProperties;
 
+const SECTION_BORDER_COLOR = "rgba(244, 241, 234, 0.36)";
+const SECTION_TEXT_SOFT = "color-mix(in srgb, var(--text-primary) 70%, transparent)";
+
 export function MarketingPage() {
   useEffect(() => {
     if (typeof document === "undefined") {
@@ -91,54 +94,81 @@ export function MarketingPage() {
         <HeroSection />
         <HowItWorksSection />
 
-        <section className="relative flex min-h-screen flex-col bg-[#090909] px-6 py-24 sm:px-10 lg:px-16 xl:px-20">
-          <div className="mx-auto flex w-full max-w-6xl flex-col gap-16 text-left">
-            <div className="space-y-4">
-              <h2 className="text-3xl font-semibold sm:text-4xl md:text-5xl">Pricing crafted as you build</h2>
-              <p className="text-base sm:text-lg" style={{ color: "color-mix(in srgb, var(--text-primary) 70%, transparent)" }}>
-                Every engagement begins with a live conversation inside your microagent workspace. Share priorities with a pricing co-pilot that listens, models usage, and assembles a commercial path while you shape the agent itself.
-              </p>
-            </div>
-            <div className="grid gap-12 rounded-[5px] bg-[#090909]">
-              <article className="space-y-6">
-                <h3 className="text-2xl font-semibold sm:text-3xl md:text-4xl">How the pilot personalizes your plan</h3>
-                <div className="overflow-hidden rounded-[5px]">
-                  <div className="flex min-h-[420px] w-full items-center justify-center bg-[#090909] px-8 py-12">
-                    <video
-                      src={publicAsset("insignia.mov")}
-                      className="w-full max-w-3xl object-contain transition-transform duration-500 ease-out"
-                      autoPlay
-                      loop
-                      muted
-                      playsInline
-                      aria-label="Insignia animation illustrating pricing flow"
-                    />
-                  </div>
-                </div>
-                <ul className="space-y-1.5 text-base sm:text-lg" style={{ color: "color-mix(in srgb, var(--text-primary) 70%, transparent)" }}>
-                  <li>
-                    <span className="block text-xs font-semibold uppercase tracking-[0.25em] text-[color:rgba(244,241,234,0.45)]">
-                      Frame your goals
-                    </span>
-                    Surface workloads, compliance mandates, and stakeholder expectations as the agent maps capacity.
-                  </li>
-                </ul>
-                <p className="text-base sm:text-lg" style={{ color: "color-mix(in srgb, var(--text-primary) 70%, transparent)", marginTop: "0.65rem" }}>
-                  Your static tier will be per agent, plan your agent and team endorse.
-                </p>
-                {/* Plan Step 1 refinement: matched typography scale with How It Works section */}
-              </article>
-              <div className="flex justify-start">
-                <TransitionLink
-                  to="/signup"
-                  className="inline-flex items-center justify-center px-8 py-3 text-xl font-semibold text-[#3a7ca5] transition-transform duration-200 hover:scale-105 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#3a7ca5]"
+        <section className="relative flex min-h-screen flex-col bg-[#090909]" data-pricing-section>
+          <div className="flex flex-1 flex-col md:flex-row">
+            <div
+              className="relative flex-1 border-t"
+              style={{ borderColor: SECTION_BORDER_COLOR, borderTopWidth: "3px" }}
+            >
+              <div className="relative z-[1] flex h-full flex-col gap-10 px-6 py-16 sm:px-10 sm:py-20 lg:px-16 xl:px-20 xl:py-24">
+                <header
+                  className="border-b pb-10"
+                  style={{ borderColor: SECTION_BORDER_COLOR, borderBottomWidth: "3px" }}
                 >
-                  Get Started
-                </TransitionLink>
+                  <div className="flex items-baseline gap-4 text-sm font-semibold uppercase tracking-[0.6em] text-[color:rgba(244,241,234,0.55)]">
+                    <span>Pricing</span>
+                    <span className="tracking-[0.3em]">Model</span>
+                  </div>
+                  <div className="mt-6 flex items-center gap-3 text-left text-2xl font-semibold sm:text-3xl md:text-4xl">
+                    <span className="text-base font-semibold uppercase tracking-[0.4em] text-[color:rgba(244,241,234,0.45)]">—</span>
+                    <span>Pricing crafted as you build</span>
+                  </div>
+                </header>
+
+                <div className="flex flex-1 flex-col gap-8">
+                  <p className="text-base sm:text-lg" style={{ color: SECTION_TEXT_SOFT }}>
+                    Every engagement begins with a live conversation inside your microagent workspace. Share priorities with a pricing co-pilot that listens, models usage, and assembles a commercial path while you shape the agent itself.
+                  </p>
+                  <ul className="space-y-2 text-base sm:text-lg" style={{ color: SECTION_TEXT_SOFT }}>
+                    <li>
+                      <span className="block text-xs font-semibold uppercase tracking-[0.25em] text-[color:rgba(244,241,234,0.45)]">
+                        Frame your goals
+                      </span>
+                      Surface workloads, compliance mandates, and stakeholder expectations as the agent maps capacity.
+                    </li>
+                  </ul>
+                  <p
+                    className="text-base sm:text-lg"
+                    style={{ color: SECTION_TEXT_SOFT, marginTop: "0.65rem" }}
+                  >
+                    Your static tier will be per agent, plan your agent and team endorse.
+                  </p>
+                </div>
+
+                <footer
+                  className="border-t pt-8"
+                  style={{ borderColor: SECTION_BORDER_COLOR, borderTopWidth: "3px" }}
+                >
+                  <TransitionLink
+                    to="/signup"
+                    className="inline-flex items-center justify-center px-8 py-3 text-xl font-semibold text-[#3a7ca5] transition-transform duration-200 hover:scale-105 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#3a7ca5]"
+                  >
+                    Get Started
+                  </TransitionLink>
+                </footer>
               </div>
             </div>
-            {/* Plan Step 2 complete: refreshed CTA copy */}
+
+            <div
+              className="relative h-[55vh] w-full overflow-hidden border-t md:h-auto md:min-h-screen md:w-[42%]"
+              style={{ borderColor: SECTION_BORDER_COLOR, borderTopWidth: "3px" }}
+            >
+              <video
+                src={publicAsset("insignia.mov")}
+                className="absolute inset-0 h-full w-full object-cover"
+                autoPlay
+                loop
+                muted
+                playsInline
+                aria-label="Insignia animation illustrating pricing flow"
+              />
+              <div
+                className="absolute inset-0 bg-[linear-gradient(180deg,rgba(9,9,9,0.1)_0%,rgba(9,9,9,0.55)_100%)]"
+                aria-hidden="true"
+              />
+            </div>
           </div>
+          {/* Plan Step 3: Pricing shell now inherits How It Works viewport behaviour and column layout. */}
         </section>
 
         <footer className="flex min-h-screen flex-col justify-between px-6 py-14 text-[color:rgba(244,241,234,0.78)] lg:px-12">
@@ -153,7 +183,7 @@ export function MarketingPage() {
                   loading="lazy"
                 />
                 <p className="text-sm text-[color:rgba(244,241,234,0.62)]">
-                  Operational AI for accountable teams delivering evidence-first assistance across every workflow.
+                  Operational AI for design across every workflow.
                 </p>
               </div>
               <div className="grid grid-cols-1 gap-8 text-left text-sm text-[color:rgba(244,241,234,0.68)] sm:grid-cols-3">
