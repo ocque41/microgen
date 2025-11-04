@@ -140,8 +140,8 @@ export function MarketingPage() {
               {/* Footer refresh step: replaced wordmark text with brand icon for consistent branding */}
               <div className="max-w-sm space-y-3 text-left">
                 <img
-                  src="/icon-white-trans.png"
-                  alt="Microagents icon"
+                  src="/logo-4.png"
+                  alt="Microagents logo"
                   className="h-9 w-9 object-contain"
                   loading="lazy"
                 />
