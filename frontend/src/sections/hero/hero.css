@@ -43,8 +43,8 @@
   font-family: "InterVariable", "Inter", "Helvetica Neue", Arial, sans-serif;
   font-variation-settings: "wght" 320;
   font-weight: 400;
-  font-size: clamp(6.5rem, 18vw, 17rem);
-  letter-spacing: -0.12em;
+  font-size: clamp(6rem, 16vw, 14.5rem);
+  letter-spacing: -0.14em;
   line-height: 0.78;
   text-transform: uppercase;
   margin-bottom: var(--hero-divider-spacing);
@@ -61,17 +61,18 @@
   gap: clamp(0.7rem, 2vw, 1.1rem);
   color: rgba(249, 249, 249, 0.86);
   text-transform: uppercase;
-  letter-spacing: 0.34em;
+  letter-spacing: 0.12em;
   margin: var(--hero-divider-spacing) 0;
 }
 
 .hero__tagline-primary {
-  font-size: clamp(1.1rem, 3vw, 2rem);
+  font-size: clamp(2.2rem, 6vw, 4rem);
+  letter-spacing: 0.08em;
 }
 
 .hero__tagline-secondary {
-  font-size: clamp(0.85rem, 2.4vw, 1.1rem);
-  letter-spacing: 0.28em;
+  font-size: clamp(1.7rem, 4.4vw, 2.2rem);
+  letter-spacing: 0.1em;
   color: rgba(249, 249, 249, 0.7);
 }
 
@@ -106,11 +107,11 @@
   }
 
   .hero__title {
-    letter-spacing: -0.06em;
+    letter-spacing: -0.1em;
   }
 
   .hero__tagline {
-    letter-spacing: 0.24em;
+    letter-spacing: 0.08em;
   }
 
   .hero__gradient-card {

@@ -22,59 +22,34 @@ const fragmentShader = /* glsl */ `
   uniform float uAccentStrength;
   uniform float uTime;
 
-  float random(vec2 st) {
-    return fract(sin(dot(st.xy, vec2(12.9898, 78.233))) * 43758.5453123);
-  }
-
-  float noise(vec2 st) {
-    vec2 i = floor(st);
-    vec2 f = fract(st);
-
-    float a = random(i);
-    float b = random(i + vec2(1.0, 0.0));
-    float c = random(i + vec2(0.0, 1.0));
-    float d = random(i + vec2(1.0, 1.0));
-
-    vec2 u = f * f * (3.0 - 2.0 * f);
-
-    return mix(a, b, u.x) + (c - a) * u.y * (1.0 - u.x) + (d - b) * u.x * u.y;
-  }
-
-  float fbm(vec2 st) {
-    float value = 0.0;
-    float amplitude = 0.5;
-    float frequency = 1.0;
-
-    for (int i = 0; i < 5; i++) {
-      value += amplitude * noise(st * frequency);
-      st *= 2.0;
-      amplitude *= 0.55;
-    }
-
-    return value;
-  }
-
   void main() {
     vec3 baseGradient = mix(uColorTop, uColorBottom, smoothstep(0.05, 0.95, vUv.y));
-    vec3 accentGradient = mix(baseGradient, uColorAccent, smoothstep(0.0, 1.0, vUv.x));
 
-    vec2 animatedUv = vUv * uNoiseScale;
-    animatedUv.x += uTime * 0.15;
-    animatedUv.y -= uTime * 0.07;
+    float freqX = 12.0 + uNoiseScale * 1.8;
+    float freqY = 8.5 + uNoiseScale * 1.2;
 
-    float grain = fbm(animatedUv * 1.2);
-    float glow = fbm(vec2(animatedUv.y, animatedUv.x) * 0.65 + uTime * 0.12);
+    float waveX = sin((vUv.x * freqX) + uTime * 4.2);
+    float waveY = cos((vUv.y * freqY) - uTime * 3.4);
 
-    vec3 color = mix(baseGradient, accentGradient, uAccentStrength);
-    color += (grain - 0.5) * uNoiseIntensity;
-    color += 0.28 * glow * uNoiseIntensity;
+    float circuit = smoothstep(0.2, 0.8, 0.5 + 0.5 * waveX);
+    float sweep = smoothstep(0.25, 0.75, 0.5 + 0.5 * waveY);
 
-    color = clamp(color, 0.0, 1.0);
+    float streak = abs(sin(((vUv.x + vUv.y) * (20.0 + uNoiseScale * 3.0)) + uTime * 6.0));
+    float streakMask = smoothstep(0.55, 0.88, streak);
+
+    float bands = abs(fract((vUv.x + uTime * 0.4) * (6.0 + uNoiseScale * 0.6)) - 0.5);
+    float bandMask = smoothstep(0.0, 0.3, bands);
+
+    float highlight = clamp(circuit * 0.45 + sweep * 0.3 + streakMask * 0.6 + bandMask * 0.35, 0.0, 1.0);
+    highlight = pow(highlight, 1.35);
+
+    vec3 accentLayer = mix(baseGradient, uColorAccent, highlight * uNoiseIntensity);
+    vec3 color = mix(baseGradient, accentLayer, uAccentStrength);
 
     gl_FragColor = vec4(color, 1.0);
   }
 `;
-// Plan Step 2: retuned shader offsets for heightened turbulence.
+// Plan Step 2: replaced noise-based shader with fast, linear pulses for a cleaner futuristic motion.
 
 type GradientColors = {
   top?: string;
@@ -97,15 +72,15 @@ type GradientCardProps = {
 };
 
 const DEFAULT_COLORS: Required<GradientColors> = {
-  top: "#f9f9f9",
+  top: "#d9dcd6",
   bottom: "#090909",
-  accent: "#3a7ca5",
+  accent: "#0091ad",
 };
 
 const DEFAULT_NOISE: Required<NoiseSettings> = {
-  scale: 6.8,
-  intensity: 0.32,
-  accentStrength: 0.62,
+  scale: 6.5,
+  intensity: 0.6,
+  accentStrength: 0.68,
 };
 
 function parseColor(hex: string) {
@@ -208,8 +183,8 @@ export function GradientCard({
     const animate = (time: number) => {
       if (lastTimestamp !== null) {
         const delta = (time - lastTimestamp) / 1000;
-        uniforms.uTime.value += delta * 3.1;
-        // Plan Step 2: further increased shader timeline speed for aggressive animation.
+        uniforms.uTime.value += delta * 3.6;
+        // Plan Step 2: escalated timeline speed to keep motion sharp while remaining clean.
       }
       lastTimestamp = time;
       renderer.render(scene, camera);
@@ -240,11 +215,11 @@ export function GradientCard({
           className="absolute inset-0"
           style={{
             background:
-              "linear-gradient(120deg, rgba(249,249,249,0.9) 0%, rgba(58,124,165,0.85) 55%, rgba(9,9,9,0.9) 100%)",
+              "linear-gradient(118deg, rgba(217,220,214,0.92) 0%, rgba(0,145,173,0.72) 52%, rgba(9,9,9,0.94) 100%)",
           }}
         />
       )}
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_-10%,rgba(255,240,190,0.35),transparent_55%),radial-gradient(circle_at_80%_110%,rgba(255,155,0,0.4),transparent_60%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_-12%,rgba(8,76,97,0.38),transparent_55%),radial-gradient(circle_at_82%_112%,rgba(0,145,173,0.42),transparent_60%)]" />
       <div className="relative z-10 flex h-full w-full items-center justify-center">
         {children}
       </div>
