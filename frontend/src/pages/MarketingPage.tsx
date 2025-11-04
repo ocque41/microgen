@@ -46,7 +46,7 @@ export function MarketingPage() {
         strategy="fixed"
         blurAmount="22px"
         height="220px"
-        className="z-[9988]"
+        className="z-[9000]"
         backgroundColor="rgba(9,9,9,0.98)"
       />
       {/* Plan Step 2: fixed bottom blur now layered under navigation shell. */}
@@ -171,8 +171,8 @@ export function MarketingPage() {
               </div>
               <img
                 src="/logo-4.png"
-                alt="Microagents wordmark"
-                className="hidden h-14 w-14 object-contain md:block md:self-start"
+                alt="Microagents logo"
+                className="hidden h-9 w-9 object-contain md:block md:self-start"
                 loading="lazy"
               />
               {/* Plan Step 5: unified nav/footer branding with logo (4). */}

@@ -96,14 +96,12 @@
   height: 100%;
   object-fit: cover;
   opacity: 0;
-  transform: scale(1) rotate(-1deg);
-  transition: opacity 0.9s ease, transform 5s ease;
-  will-change: opacity, transform;
+  transition: opacity 0.9s ease;
+  will-change: opacity;
 }
 
 .hero__visual-frame--active {
   opacity: 1;
-  transform: scale(1.04) rotate(1.6deg);
   z-index: 2;
 }
 
@@ -118,7 +116,6 @@
   display: grid;
   place-items: center;
   pointer-events: none;
-  animation: heroArtifactFade 5s ease-in-out infinite;
 }
 
 .hero__artifact-glow {
@@ -137,28 +134,20 @@
   width: clamp(6.5rem, 15vw, 11rem);
   height: clamp(6.5rem, 15vw, 11rem);
   object-fit: contain;
-  animation: heroLogoSpin 5s linear infinite;
   mix-blend-mode: screen;
-  opacity: 0.9;
+  opacity: 0;
+  transition: opacity 0.9s ease;
+  will-change: opacity;
 }
 
-@keyframes heroLogoSpin {
-  from {
-    transform: rotate(0deg) scale(1);
-  }
-  to {
-    transform: rotate(360deg) scale(1.02);
-  }
+.hero__artifact-logo--active {
+  opacity: 0.92;
+  z-index: 3;
 }
 
-@keyframes heroArtifactFade {
-  0%,
-  100% {
-    opacity: 0.9;
-  }
-  50% {
-    opacity: 0.65;
-  }
+.hero__artifact-logo--inactive {
+  opacity: 0;
+  z-index: 2;
 }
 
 @media (max-width: 720px) {

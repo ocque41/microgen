@@ -32,8 +32,6 @@ export function HeroSection() {
     return () => window.clearInterval(interval);
   }, [frames.length]);
 
-  const activeFrame = frames[activeIndex];
-
   return (
     <section className="hero" data-hero-section>
       <div className="hero__layout">
@@ -62,14 +60,20 @@ export function HeroSection() {
                 )}
               />
             ))}
-            <div key={activeFrame.id} className="hero__artifact" aria-hidden="true">
+            <div className="hero__artifact" aria-hidden="true">
               <div className="hero__artifact-glow" />
-              <img
-                src={activeFrame.logoSrc}
-                alt=""
-                role="presentation"
-                className="hero__artifact-logo"
-              />
+              {frames.map((frame, index) => (
+                <img
+                  key={`${frame.id}-logo`}
+                  src={frame.logoSrc}
+                  alt=""
+                  role="presentation"
+                  className={cn(
+                    "hero__artifact-logo",
+                    index === activeIndex ? "hero__artifact-logo--active" : "hero__artifact-logo--inactive",
+                  )}
+                />
+              ))}
             </div>
           </div>
           {/* Plan Step 4: swapped shader for rotating hero imagery with logo artifact. */}
