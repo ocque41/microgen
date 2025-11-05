@@ -1,22 +1,22 @@
 :root {
   color-scheme: dark;
   --brand-color-background: #090909;
-  --brand-color-surface: #242423;
-  --brand-color-surface-muted: #333533;
-  --brand-color-surface-glow: #3a7ca5;
-  --brand-color-border: #001427;
-  --brand-color-border-strong: color-mix(in srgb, #001427 65%, #ffffff 15%);
-  --brand-color-text: #d9dcd6;
-  --brand-color-text-secondary: #c5c9c2;
-  --brand-color-text-muted: #a8aea6;
-  --brand-color-accent: #0091ad;
-  --brand-color-accent-strong: color-mix(in srgb, #0091ad 78%, #22aecd 22%);
-  --brand-color-accent-soft: color-mix(in srgb, #0091ad 20%, transparent);
+  --brand-color-surface: #21201c;
+  --brand-color-surface-muted: #2f2d28;
+  --brand-color-surface-glow: #9d937c;
+  --brand-color-border: #171c12;
+  --brand-color-border-strong: color-mix(in srgb, #171c12 65%, #f9f9f9 15%);
+  --brand-color-text: #f9f9f9;
+  --brand-color-text-secondary: #ccc5a3;
+  --brand-color-text-muted: #9d937c;
+  --brand-color-accent: #e8cca3;
+  --brand-color-accent-strong: color-mix(in srgb, #e8cca3 72%, #ccc5a3 28%);
+  --brand-color-accent-soft: color-mix(in srgb, #e8cca3 18%, transparent);
   --brand-color-critical: #eb6424;
   --brand-color-positive: #9ceaef;
   --brand-color-warning: #fa9500;
   --brand-color-info: #1b9aaa;
-  --brand-focus-outline: 0 0 0 3px color-mix(in srgb, #1985a1 70%, transparent);
+  --brand-focus-outline: 0 0 0 3px color-mix(in srgb, #e8cca3 70%, transparent);
 
   --brand-space-3xs: 0.25rem; /* 4px */
   --brand-space-2xs: 0.5rem; /* 8px */

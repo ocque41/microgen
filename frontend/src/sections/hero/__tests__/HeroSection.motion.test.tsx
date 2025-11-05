@@ -5,17 +5,13 @@ import { renderToString } from "react-dom/server";
 import { HeroSection } from "../HeroSection";
 
 describe("HeroSection", () => {
-  it("renders the new brand headline and messaging", () => {
+  it("renders the hero gallery with all configured images", () => {
     const markup = renderToString(<HeroSection />);
 
-    expect(markup).toContain("microagents");
-    expect(markup).toContain("AI FOR BUSINESS");
-    expect(markup).toContain("NOW FOR EVERY TASK");
-  });
-
-  it("exposes the gradient card container", () => {
-    const markup = renderToString(<HeroSection />);
-
-    expect(markup).toContain("hero__gradient-card");
+    expect(markup).toContain("data-hero-section");
+    expect(markup).toContain("data-hero-gallery");
+    expect(markup).toContain('src="/hero section (1).png"');
+    expect(markup).toContain('src="/pic.png"');
+    expect(markup).toContain('src="/pic1.png"');
   });
 });

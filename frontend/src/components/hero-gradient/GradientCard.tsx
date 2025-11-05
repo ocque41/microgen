@@ -73,9 +73,9 @@ type GradientCardProps = {
 };
 
 const DEFAULT_COLORS: Required<GradientColors> = {
-  top: "#242423",
+  top: "#2f2d28",
   bottom: "#090909",
-  accent: "#0091ad",
+  accent: "#e8cca3",
 };
 
 const DEFAULT_NOISE: Required<NoiseSettings> = {

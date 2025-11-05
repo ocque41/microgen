@@ -62,7 +62,7 @@ export function MarketingPage() {
             >
               <TransitionLink
                 to="/"
-                className="relative flex h-12 w-12 shrink-0 items-center justify-center transition-transform duration-200 hover:scale-105 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3a7ca5] md:h-10 md:w-10"
+                className="relative flex h-12 w-12 shrink-0 items-center justify-center transition-transform duration-200 hover:scale-105 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--accent-primary)] md:h-10 md:w-10"
                 aria-label="Microagents home"
               >
                 <img
@@ -82,7 +82,7 @@ export function MarketingPage() {
               </div>
               <TransitionLink
                 to="/signup"
-                className="ml-auto inline-flex items-center justify-center rounded-full px-7 py-3 text-base font-semibold text-[#3a7ca5] transition-transform duration-200 hover:scale-105 whitespace-nowrap md:ml-0 md:px-4 md:py-1.5 md:text-sm"
+                className="ml-auto inline-flex items-center justify-center rounded-full px-7 py-3 text-base font-semibold text-[color:var(--accent-primary)] transition-transform duration-200 hover:scale-105 whitespace-nowrap md:ml-0 md:px-4 md:py-1.5 md:text-sm"
               >
                 Get Started
               </TransitionLink>
@@ -145,7 +145,7 @@ export function MarketingPage() {
               <div className="flex justify-start">
                 <TransitionLink
                   to="/signup"
-                  className="inline-flex items-center justify-center px-8 py-3 text-xl font-semibold text-[#3a7ca5] transition-transform duration-200 hover:scale-105 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#3a7ca5]"
+                  className="inline-flex items-center justify-center px-8 py-3 text-xl font-semibold text-[color:var(--accent-primary)] transition-transform duration-200 hover:scale-105 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--accent-primary)]"
                 >
                   Get Started
                 </TransitionLink>
@@ -204,7 +204,7 @@ export function MarketingPage() {
               {/* Plan Step 5: unified nav/footer branding with logo (4). */}
             </div>
             <div className="flex flex-1 items-center justify-center">
-              <h2 className="hero__title text-[#3a7ca5]">
+              <h2 className="hero__title text-[color:var(--accent-primary)]">
                 MICROAGENTS
               </h2>
             </div>

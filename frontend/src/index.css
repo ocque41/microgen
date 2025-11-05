@@ -10,31 +10,31 @@
     --letter-spacing-base: 0.4px;
 
     --background: 0 0% 4%;
-    --foreground: 90 8% 85%;
-    --muted: 120 2% 20%;
-    --muted-foreground: 105 5% 67%;
-    --popover: 60 1% 14%;
-    --popover-foreground: 90 8% 85%;
-    --card: 60 1% 14%;
-    --card-foreground: 90 8% 85%;
-    --border: 209 100% 8%;
-    --input: 209 100% 8%;
-    --primary: 190 100% 34%;
+    --foreground: 0 0% 98%;
+    --muted: 43 8% 17%;
+    --muted-foreground: 50 29% 72%;
+    --popover: 48 8% 12%;
+    --popover-foreground: 0 0% 98%;
+    --card: 48 8% 12%;
+    --card-foreground: 0 0% 98%;
+    --border: 90 22% 9%;
+    --input: 90 22% 9%;
+    --primary: 36 60% 77%;
     --primary-foreground: 0 0% 4%;
-    --secondary: 120 2% 20%;
-    --secondary-foreground: 90 8% 85%;
+    --secondary: 43 8% 17%;
+    --secondary-foreground: 50 29% 72%;
     --accent: var(--accent-primary);
     --accent-foreground: var(--accent-inverse);
-    --accent-hover: color-mix(in srgb, var(--accent) 78%, #22aecd 22%);
+    --accent-hover: color-mix(in srgb, var(--accent) 72%, #ccc5a3 28%);
     --destructive: 19 83% 53%;
     --destructive-foreground: 0 0% 4%;
     --ring: var(--accent);
 
-    --chart-1: 190 100% 34%;
-    --chart-2: 36 100% 49%;
-    --chart-3: 184 72% 77%;
+    --chart-1: 36 60% 77%;
+    --chart-2: 50 29% 72%;
+    --chart-3: 42 14% 55%;
     --chart-4: 19 83% 53%;
-    --chart-5: 187 73% 39%;
+    --chart-5: 43 8% 17%;
 
     --surface-background: var(--brand-color-background);
     --surface-base: var(--brand-color-surface);
