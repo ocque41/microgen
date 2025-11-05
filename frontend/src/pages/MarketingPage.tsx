@@ -95,10 +95,11 @@ export function MarketingPage() {
         <HowItWorksSection />
 
         <section
-          className="relative mt-32 flex w-full flex-col justify-center bg-[#090909] px-6 py-24 sm:px-10 md:mt-48 lg:px-16 xl:mt-56 xl:px-20"
+          className="relative mt-48 flex w-full flex-col justify-center bg-[#090909] px-6 py-24 sm:px-10 md:mt-64 lg:px-16 xl:mt-72 xl:px-20"
           style={{ minHeight: "100vh", height: "100svh", boxSizing: "border-box" }}
         >
           {/* Plan Spacing Step 2: top margin added so pricing stage has clear separation from previous section. */}
+          {/* Plan V10 Step 2: margin increased to account for taller hero above. */}
           {/* Plan Step 3: pricing stage locks to viewport height while padding respects box model. */}
           <div
             className="mx-auto flex w-full flex-1 flex-col justify-center gap-16 text-left"
@@ -153,8 +154,9 @@ export function MarketingPage() {
         </section>
         {/* Plan Step 3: pricing container now anchors to viewport dimensions with flex centering. */}
 
-        <footer className="relative z-[12000] mt-32 flex min-h-screen flex-col justify-between px-6 py-14 text-[color:rgba(244,241,234,0.78)] sm:mt-40 md:mt-48 lg:px-12 xl:mt-56">
+        <footer className="relative z-[12000] mt-48 flex min-h-screen flex-col justify-between px-6 py-14 text-[color:rgba(244,241,234,0.78)] sm:mt-56 md:mt-64 lg:px-12 xl:mt-72">
           {/* Plan Spacing Step 3: elevated top margin keeps footer distinct from pricing block. */}
+          {/* Plan V10 Step 2: footer offset increased to maintain section rhythm after hero expansion. */}
           <div className="flex flex-1 flex-col justify-between gap-16">
             <div className="flex flex-col gap-10 md:flex-row md:items-start md:justify-between">
               {/* Footer refresh step: replaced wordmark text with brand icon for consistent branding */}

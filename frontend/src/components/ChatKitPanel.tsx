@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { ChatKit, useChatKit } from "@openai/chatkit-react";
 import {
   CHATKIT_API_URL,
@@ -15,7 +15,7 @@ import type { UseChatKitReturn } from "@openai/chatkit-react";
 
 export type ChatKitRegisteredApi = Pick<
   UseChatKitReturn,
-  "focusComposer" | "setThreadId" | "fetchUpdates" | "sendCustomAction"
+  "focusComposer" | "setThreadId" | "fetchUpdates" | "sendCustomAction" | "setComposerValue" | "sendUserMessage"
 >;
 
 export type DemoWidgetMetric = {
@@ -41,6 +41,11 @@ type ChatKitPanelProps = {
   onThemeRequest: (scheme: ColorScheme) => void;
   onReady?: (api: ChatKitRegisteredApi | null) => void;
   onWidgetPayload?: (payload: DemoWidgetPayload | null) => void;
+  onResponseStart?: () => void;
+  onThreadChange?: (threadId: string | null) => void;
+  onThreadLoadStart?: (threadId: string) => void;
+  onThreadLoadEnd?: (threadId: string) => void;
+  onLogEvent?: (entry: { name: string; data?: Record<string, unknown> }) => void;
 };
 
 export function ChatKitPanel({
@@ -49,9 +54,13 @@ export function ChatKitPanel({
   onThemeRequest,
   onReady,
   onWidgetPayload,
+  onResponseStart,
+  onThreadChange,
+  onThreadLoadStart,
+  onThreadLoadEnd,
+  onLogEvent,
 }: ChatKitPanelProps) {
   const processedFacts = useRef(new Set<string>());
-  const [widgetPreview, setWidgetPreview] = useState<DemoWidgetPayload | null>(null);
   const { authenticatedFetch } = useBackendAuth();
 
   const chatkit = useChatKit({
@@ -119,7 +128,6 @@ export function ChatKitPanel({
       if (invocation.name === "show_demo_widget") {
         const payload = normalizeDemoWidget(invocation.params);
         if (payload) {
-          setWidgetPreview(payload);
           onWidgetPayload?.(payload);
           return { success: true };
         }
@@ -128,17 +136,29 @@ export function ChatKitPanel({
 
       return { success: false };
     },
+    onResponseStart: () => {
+      onResponseStart?.();
+    },
     onResponseEnd: () => {
       onResponseEnd();
     },
-    onThreadChange: () => {
+    onThreadChange: ({ threadId }) => {
       processedFacts.current.clear();
-      setWidgetPreview(null);
       onWidgetPayload?.(null);
+      onThreadChange?.(threadId ?? null);
+    },
+    onThreadLoadStart: ({ threadId }) => {
+      onThreadLoadStart?.(threadId);
+    },
+    onThreadLoadEnd: ({ threadId }) => {
+      onThreadLoadEnd?.(threadId);
     },
     onError: ({ error }) => {
       // ChatKit handles displaying the error to the user
       console.error("ChatKit error", error);
+    },
+    onLog: (event) => {
+      onLogEvent?.(event);
     },
   });
 
@@ -152,61 +172,17 @@ export function ChatKitPanel({
       setThreadId: chatkit.setThreadId,
       fetchUpdates: chatkit.fetchUpdates,
       sendCustomAction: chatkit.sendCustomAction,
+      setComposerValue: chatkit.setComposerValue,
+      sendUserMessage: chatkit.sendUserMessage,
     };
     onReady(api);
 
     return () => {
       onReady(null);
     };
-  }, [chatkit.focusComposer, chatkit.setThreadId, chatkit.fetchUpdates, chatkit.sendCustomAction, onReady]);
+  }, [chatkit.focusComposer, chatkit.setThreadId, chatkit.fetchUpdates, chatkit.sendCustomAction, chatkit.setComposerValue, chatkit.sendUserMessage, onReady]);
 
-  return (
-    <div
-      className="relative h-full w-full overflow-hidden rounded-3xl shadow-[0_40px_120px_-90px_rgba(0,0,0,0.85)]"
-      style={{
-        backgroundColor: "color-mix(in srgb, var(--text-primary) 14%, transparent)",
-      }}
-    >
-      {widgetPreview ? (
-        <div className="pointer-events-auto absolute inset-x-4 top-4 z-10 space-y-3 rounded-2xl border border-border/40 bg-surface-background/80 p-4 backdrop-blur">
-          <div className="flex items-start justify-between gap-2">
-            <div>
-              <p className="text-xs uppercase tracking-wide text-text-muted">Streaming widget</p>
-              <p className="text-sm font-semibold text-text">{widgetPreview.title}</p>
-              {widgetPreview.caption ? <p className="text-xs text-text-muted">{widgetPreview.caption}</p> : null}
-            </div>
-            <button
-              type="button"
-              className="text-xs font-medium text-text-muted transition hover:text-text"
-              onClick={() => {
-                setWidgetPreview(null);
-                onWidgetPayload?.(null);
-              }}
-            >
-              Clear
-            </button>
-          </div>
-          {widgetPreview.metrics?.length ? (
-            <div className="grid gap-2">
-              {widgetPreview.metrics.map((metric) => (
-                <div key={metric.id} className="flex items-baseline justify-between rounded-xl border border-border/30 bg-surface-elevated/30 px-3 py-2 text-xs">
-                  <span className="text-text-muted">{metric.label}</span>
-                  <span className="text-sm font-semibold text-text">{metric.value}</span>
-                </div>
-              ))}
-            </div>
-          ) : null}
-          <details className="rounded-xl border border-border/20 bg-surface-elevated/20 p-2 text-[11px] text-text-muted">
-            <summary className="cursor-pointer text-text">Raw payload</summary>
-            <pre className="mt-2 max-h-32 overflow-auto whitespace-pre-wrap text-[10px] leading-relaxed">
-              {JSON.stringify(widgetPreview.raw, null, 2)}
-            </pre>
-          </details>
-        </div>
-      ) : null}
-      <ChatKit control={chatkit.control} className="block h-full w-full" />
-    </div>
-  );
+  return <ChatKit control={chatkit.control} className="block h-full w-full" />;
 }
 
 function normalizeDemoWidget(params: Record<string, unknown>): DemoWidgetPayload | null {
