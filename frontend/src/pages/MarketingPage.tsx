@@ -1,7 +1,6 @@
 import type { CSSProperties } from "react";
 import { useEffect } from "react";
 import { TransitionLink } from "@/components/motion/TransitionLink";
-import { ProgressiveBlur } from "@/components/effects/ProgressiveBlur";
 import { publicAsset } from "@/lib/publicAsset";
 import { marketingTheme } from "@/lib/marketingTheme";
 import { HeroSection } from "@/sections/hero";
@@ -43,26 +42,16 @@ export function MarketingPage() {
 
   return (
     <div className="relative min-h-screen overflow-x-hidden text-text" style={marketingThemeStyles}>
-      <div className="mesh-background pointer-events-none" />
-      <ProgressiveBlur
-        position="bottom"
-        strategy="fixed"
-        blurAmount="22px"
-        height="220px"
-        className="z-[9000]"
-        backgroundColor="rgba(9,9,9,0.98)"
-      />
-      {/* Plan Step 2: fixed bottom blur now layered under navigation shell. */}
       <div className="relative">
         <section className="relative isolate z-[12000] flex justify-center" aria-label="Primary navigation">
           <div className="pointer-events-none fixed inset-x-0 bottom-6 z-[9999] flex w-full justify-center px-3 sm:px-6">
             <nav
-              className="pointer-events-auto relative z-[10000] flex w-full max-w-[26rem] items-center gap-3 rounded-full bg-[rgba(9,9,9,0.82)] px-5 py-2 text-sm shadow-[0_12px_32px_rgba(0,0,0,0.35)] backdrop-blur-sm md:max-w-[22rem] md:gap-1.5 md:bg-transparent md:px-3 md:py-1.5 md:text-xs md:shadow-none"
+              className="pointer-events-auto relative z-[10000] flex w-full max-w-[26rem] items-center gap-3 rounded-full bg-[#090909] px-5 py-2 text-sm md:max-w-[22rem] md:gap-1.5 md:px-3 md:py-1.5 md:text-xs"
               aria-label="Main navigation"
             >
               <TransitionLink
                 to="/"
-                className="relative flex h-12 w-12 shrink-0 items-center justify-center transition-transform duration-200 hover:scale-105 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--accent-primary)] md:h-10 md:w-10"
+                className="relative flex h-12 w-12 shrink-0 items-center justify-center transition-transform duration-200 hover:scale-105 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f9f9f9] md:h-10 md:w-10"
                 aria-label="Microagents home"
               >
                 <img
@@ -73,16 +62,16 @@ export function MarketingPage() {
                 />
               </TransitionLink>
               <div className="hidden flex-1 items-center justify-center gap-2 font-medium text-[#f9f9f9] md:flex">
-                <TransitionLink to="/pricing" className="text-[#f9f9f9] transition-colors duration-200 hover:text-white whitespace-nowrap">
+                <TransitionLink to="/pricing" className="text-[#f9f9f9] transition-opacity duration-200 hover:opacity-80 whitespace-nowrap">
                   Models
                 </TransitionLink>
-                <TransitionLink to="/login" className="text-[#f9f9f9] transition-colors duration-200 hover:text-white whitespace-nowrap">
+                <TransitionLink to="/login" className="text-[#f9f9f9] transition-opacity duration-200 hover:opacity-80 whitespace-nowrap">
                   Login
                 </TransitionLink>
               </div>
               <TransitionLink
                 to="/signup"
-                className="ml-auto inline-flex items-center justify-center rounded-full px-7 py-3 text-base font-semibold text-[color:var(--accent-primary)] transition-transform duration-200 hover:scale-105 whitespace-nowrap md:ml-0 md:px-4 md:py-1.5 md:text-sm"
+                className="ml-auto inline-flex items-center justify-center rounded-full border border-[#f9f9f9] px-7 py-3 text-base font-semibold text-[#f9f9f9] transition-transform duration-200 hover:scale-105 whitespace-nowrap md:ml-0 md:px-4 md:py-1.5 md:text-sm"
               >
                 Get Started
               </TransitionLink>
