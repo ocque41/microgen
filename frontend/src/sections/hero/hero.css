@@ -62,9 +62,9 @@
   font-family: "InterVariable", "Inter", "Helvetica Neue", Arial, sans-serif;
   font-variation-settings: "wght" 320;
   font-weight: 400;
-  font-size: clamp(3.14rem, 12.74vw, 16.7rem);
-  letter-spacing: clamp(-0.07em, calc(-0.1em + 0.05vw), -0.025em);
-  line-height: clamp(0.82, calc(0.72 + 0.04vw), 0.9);
+  font-size: clamp(3rem, 11.8vw, 15.5rem);
+  letter-spacing: clamp(-0.065em, calc(-0.09em + 0.045vw), -0.022em);
+  line-height: clamp(0.84, calc(0.74 + 0.035vw), 0.92);
   text-transform: uppercase;
   margin-bottom: var(--hero-divider-spacing);
   width: 100%;
@@ -80,7 +80,7 @@
   /* Plan V4 Step 2: refined clamp and wrapping keep title visible across devices while staying massive. */
   /* Plan V5 Step 2: ensure continuous word integrity while scaling across layouts. */
   /* Plan V5 Step 3: shared class keeps footer MICROAGENTS wordmark aligned with hero updates. */
-  /* Plan V6 Step 1: global title clamp trimmed ~2% to keep hero wordmark fully in frame. */
+  /* Plan V6 Step 1: global title clamp trimmed again so laptop/desktop wordmark remains fully visible. */
 }
 
 .hero__divider {
@@ -209,16 +209,8 @@
   }
 
   .hero__title {
-    font-size: clamp(2.36rem, 17.64vw, 6.37rem);
-    letter-spacing: -0.06em;
-    line-height: 0.88;
-    overflow-wrap: normal;
-    word-break: keep-all;
-    text-wrap: balance;
-    /* Plan V3 Step 2: tightened mobile tracking to keep title inside narrow widths. */
-    /* Plan V5 Step 1: mobile font sizing reduced so MICROAGENTS stays on screen without splitting. */
-    /* Plan V5 Step 2: enforce intact word behavior on small screens. */
-    /* Plan V6 Step 2: mobile clamp reduced another ~2% to reveal entire wordmark. */
+    display: none;
+    /* Plan V7 Step 2: hide desktop wordmark on mobile for dedicated mobile layout. */
   }
 
   .hero__tagline {

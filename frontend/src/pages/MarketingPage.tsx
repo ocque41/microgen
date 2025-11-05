@@ -57,22 +57,22 @@ export function MarketingPage() {
         <section className="relative isolate z-[12000] flex justify-center" aria-label="Primary navigation">
           <div className="pointer-events-none fixed inset-x-0 bottom-6 z-[9999] flex w-full justify-center px-3 sm:px-6">
             <nav
-              className="pointer-events-auto relative z-[10000] flex w-full max-w-[22rem] items-center gap-1.5 px-3 py-1.5 text-xs"
+              className="pointer-events-auto relative z-[10000] flex w-full max-w-[26rem] items-center gap-3 rounded-full bg-[rgba(9,9,9,0.82)] px-5 py-2 text-sm shadow-[0_12px_32px_rgba(0,0,0,0.35)] backdrop-blur-sm md:max-w-[22rem] md:gap-1.5 md:bg-transparent md:px-3 md:py-1.5 md:text-xs md:shadow-none"
               aria-label="Main navigation"
             >
               <TransitionLink
                 to="/"
-                className="relative flex h-10 w-10 shrink-0 items-center justify-center transition-transform duration-200 hover:scale-105 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3a7ca5]"
+                className="relative flex h-12 w-12 shrink-0 items-center justify-center transition-transform duration-200 hover:scale-105 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3a7ca5] md:h-10 md:w-10"
                 aria-label="Microagents home"
               >
                 <img
                   src="/logo-4.png"
                   alt="Microagents logo"
-                  className="h-9 w-9 object-contain"
+                  className="h-10 w-10 object-contain md:h-9 md:w-9"
                   loading="lazy"
                 />
               </TransitionLink>
-              <div className="flex flex-1 items-center justify-center gap-2 font-medium text-[#f9f9f9]">
+              <div className="hidden flex-1 items-center justify-center gap-2 font-medium text-[#f9f9f9] md:flex">
                 <TransitionLink to="/pricing" className="text-[#f9f9f9] transition-colors duration-200 hover:text-white whitespace-nowrap">
                   Models
                 </TransitionLink>
@@ -82,13 +82,14 @@ export function MarketingPage() {
               </div>
               <TransitionLink
                 to="/signup"
-                className="inline-flex items-center justify-center rounded-full px-4 py-1.5 font-semibold text-[#3a7ca5] transition-transform duration-200 hover:scale-105 whitespace-nowrap"
+                className="ml-auto inline-flex items-center justify-center rounded-full px-7 py-3 text-base font-semibold text-[#3a7ca5] transition-transform duration-200 hover:scale-105 whitespace-nowrap md:ml-0 md:px-4 md:py-1.5 md:text-sm"
               >
                 Get Started
               </TransitionLink>
             </nav>
           </div>
           {/* Plan Step 3: anchored marketing nav to bottom edge for persistent CTA visibility. */}
+          {/* Plan V7 Step 3: mobile nav condensed to logo + CTA with larger tap targets. */}
         </section>
         <HeroSection />
         <HowItWorksSection />
