@@ -1,10 +1,10 @@
 .hero {
   position: relative;
   width: 100%;
-  min-height: 115vh;
-  height: 115svh;
+  min-height: 130vh;
+  height: 130svh;
   background-color: #090909;
-  padding: clamp(10rem, 18vh, 18rem) clamp(0.05rem, 0.4vw, 0.25rem) clamp(6rem, 8vw, 8rem);
+  padding: clamp(14rem, 24vh, 24rem) clamp(0.05rem, 0.4vw, 0.25rem) clamp(8rem, 10vw, 10rem);
   color: #f9f9f9;
   overflow: hidden;
   display: flex;
@@ -20,6 +20,8 @@
   /* Plan V9 Step 1: expanded top padding lowers hero content further into the viewport. */
   /* Plan V10 Step 1: hero height/padding increased substantially to expose full wordmark. */
   /* Plan V10 Step 3: documented additional height so downstream spacing changes are clear. */
+  /* Plan V11 Step 1: hero height/padding expanded again to push content further down. */
+  /* Plan V11 Step 3: documented latest expansion for clarity. */
 }
 
 .hero__layout {
@@ -34,7 +36,7 @@
   justify-content: center;
   flex: 1;
   gap: clamp(2.25rem, 4.8vw, 3.75rem);
-  padding-top: clamp(3rem, 8vh, 9rem);
+  padding-top: clamp(5rem, 12vh, 12rem);
   /* Plan Step 1: widened layout to align wordmark and dividers with gradient bounds. */
   /* Plan Step 2: layout flex centering keeps hero content balanced within viewport height. */
   /* Plan Step 3: boosted max width to 98vw so hero nearly touches viewport edges on all screens. */
@@ -48,6 +50,7 @@
   /* Plan V8 Step 3: tuned vertical gap after width adjustments to balance headline and gallery. */
   /* Plan V9 Step 2: added inner top padding to seat wordmark within expanded hero offset. */
   /* Plan V10 Step 1: increased inner padding to accompany taller hero height. */
+  /* Plan V11 Step 1: layout padding raised again for deeper title offset. */
 }
 
 .hero__headline {
