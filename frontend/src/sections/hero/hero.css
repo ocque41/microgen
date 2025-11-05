@@ -23,14 +23,14 @@
   position: relative;
   z-index: 1;
   width: 100%;
-  max-width: min(2400px, calc(100vw - 0.1rem));
+  max-width: min(1600px, 92vw);
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: stretch;
   justify-content: center;
   flex: 1;
-  gap: clamp(1.75rem, 4.5vw, 3.5rem);
+  gap: clamp(2.25rem, 4.8vw, 3.75rem);
   /* Plan Step 1: widened layout to align wordmark and dividers with gradient bounds. */
   /* Plan Step 2: layout flex centering keeps hero content balanced within viewport height. */
   /* Plan Step 3: boosted max width to 98vw so hero nearly touches viewport edges on all screens. */
@@ -38,8 +38,10 @@
   /* Plan V2 Step 1: expanded layout span to 99vw for near edge-to-edge presentation. */
   /* Plan V3 Step 1: layout now capped to calc(100vw - 0.25rem) for almost edge-to-edge reach. */
   /* Plan V4 Step 1: updated clamp pushes container to calc(100vw - 0.1rem) for near full width. */
+  /* Plan V8 Step 1: tightened desktop max width (1600px/92vw) to stabilize wordmark framing. */
   /* Plan V2 Step 3: stretch alignment ensures headline and visual share identical footprint. */
   /* Plan V3 Step 3: reduced vertical gap keeps headline visible within viewport heights. */
+  /* Plan V8 Step 3: tuned vertical gap after width adjustments to balance headline and gallery. */
 }
 
 .hero__headline {
@@ -48,13 +50,14 @@
   align-items: stretch;
   text-align: center;
   width: 100%;
-  max-width: min(2400px, calc(100vw - 0.1rem));
+  max-width: min(1600px, 92vw);
   margin-inline: auto;
   /* Plan Step 1: stretch headline container so dividers align with gradient width. */
   /* Plan V2 Step 2: headline shares same bounding width as visual for perfect parallel dividers. */
   /* Plan V3 Step 1: headline width matches latest near edge-to-edge bounds. */
   /* Plan V4 Step 1: headline width tracks latest calc(100vw - 0.1rem) bound. */
   /* Plan V4 Step 3: stretch alignment locks dividers and visuals into 90° parallel edges. */
+  /* Plan V8 Step 1: headline constrained alongside layout for consistent framing. */
 }
 
 .hero__title {
@@ -62,9 +65,9 @@
   font-family: "InterVariable", "Inter", "Helvetica Neue", Arial, sans-serif;
   font-variation-settings: "wght" 320;
   font-weight: 400;
-  font-size: clamp(3rem, 11.8vw, 15.5rem);
-  letter-spacing: clamp(-0.065em, calc(-0.09em + 0.045vw), -0.022em);
-  line-height: clamp(0.84, calc(0.74 + 0.035vw), 0.92);
+  font-size: clamp(4rem, 9vw, 12rem);
+  letter-spacing: clamp(-0.05em, calc(-0.07em + 0.02vw), -0.02em);
+  line-height: clamp(0.9, calc(0.82 + 0.02vw), 1);
   text-transform: uppercase;
   margin-bottom: var(--hero-divider-spacing);
   width: 100%;
@@ -81,6 +84,7 @@
   /* Plan V5 Step 2: ensure continuous word integrity while scaling across layouts. */
   /* Plan V5 Step 3: shared class keeps footer MICROAGENTS wordmark aligned with hero updates. */
   /* Plan V6 Step 1: global title clamp trimmed again so laptop/desktop wordmark remains fully visible. */
+  /* Plan V8 Step 2: refreshed clamp/spacing keeps desktop wordmark bold yet inside refined bounds. */
 }
 
 .hero__divider {
@@ -119,7 +123,7 @@
 
 .hero__visual-wrapper {
   width: 100%;
-  max-width: min(2400px, calc(100vw - 0.1rem));
+  max-width: min(1600px, 92vw);
   display: flex;
   justify-content: center;
   align-items: stretch;
@@ -129,12 +133,13 @@
   /* Plan V3 Step 1: wrapper updated to latest near edge-to-edge bounds. */
   /* Plan V3 Step 3: stretch alignment locks visual edges parallel with headline dividers. */
   /* Plan V4 Step 1: wrapper adopts calc(100vw - 0.1rem) width for near full-bleed feel. */
+  /* Plan V8 Step 1: wrapper matches refined layout width for balanced margins. */
 }
 
 .hero__visual {
   position: relative;
   width: 100%;
-  max-width: min(2400px, calc(100vw - 0.1rem));
+  max-width: min(1600px, 92vw);
   min-height: clamp(22rem, 70vw, 44rem);
   aspect-ratio: 16 / 9;
   border-radius: 0;
@@ -148,6 +153,7 @@
   /* Plan V3 Step 3: fixed aspect ratio keeps edges parallel to dividers regardless of viewport height. */
   /* Plan V4 Step 1: visual width extends to calc(100vw - 0.1rem) for maximum span. */
   /* Plan V4 Step 3: parallelism checked between visual edges and headline dividers. */
+  /* Plan V8 Step 1: visual bounds align with constrained layout for desktop readability. */
 }
 
 .hero__visual-frame {
