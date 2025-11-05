@@ -2,8 +2,8 @@ import type { ReactNode } from "react";
 
 import { publicAsset } from "../../lib/publicAsset";
 
-const BORDER_COLOR = "rgba(244, 241, 234, 0.36)";
-const TEXT_SOFT = "color-mix(in srgb, var(--text-primary) 68%, transparent)";
+const BORDER_COLOR = "rgba(249, 249, 249, 0.16)";
+const TEXT_SOFT = "rgba(249, 249, 249, 0.68)";
 const TITLE_SPACING_STYLE = {
   letterSpacing: "calc(var(--letter-spacing-base) - 1.5px)",
   lineHeight: "10px",
@@ -97,7 +97,7 @@ export function HowItWorksSection() {
         return (
           <article
             key={step.id}
-            className="relative flex min-h-screen flex-col bg-[#090909] md:flex-row"
+          className="relative flex min-h-screen flex-col bg-[#090909] md:flex-row"
             aria-labelledby={`how-it-works-${step.id}`}
           >
             <div
@@ -114,7 +114,7 @@ export function HowItWorksSection() {
               />
               <div className="relative z-[1] flex h-full flex-col gap-10 px-6 py-16 sm:px-10 sm:py-20 lg:px-16 xl:px-20 xl:py-24">
                 <header className="border-b pb-10" style={{ borderColor: BORDER_COLOR, borderBottomWidth: "3px" }}>
-                  <div className="flex items-baseline gap-4 text-sm font-semibold uppercase tracking-[0.6em] text-[color:rgba(244,241,234,0.55)]">
+                  <div className="flex items-baseline gap-4 text-sm font-semibold uppercase tracking-[0.6em] text-[rgba(249,249,249,0.65)]">
                     <span>{String(index + 1).padStart(2, "0")}</span>
                     <span className="tracking-[0.3em]">Step</span>
                   </div>
@@ -122,14 +122,14 @@ export function HowItWorksSection() {
                     className="mt-6 flex items-center gap-3 text-left text-2xl font-semibold sm:text-3xl md:text-4xl"
                     id={`how-it-works-${step.id}`}
                   >
-                    <span className="text-base font-semibold uppercase tracking-[0.4em] text-[color:rgba(244,241,234,0.45)]">—</span>
+                    <span className="text-base font-semibold uppercase tracking-[0.4em] text-[rgba(249,249,249,0.4)]">—</span>
                     <span style={TITLE_SPACING_STYLE}>{step.title}</span>
                   </div>
                 </header>
 
                 <div className="flex flex-1 flex-col gap-8 justify-end">
                   <p
-                    className="text-lg font-medium leading-relaxed text-[color:rgba(249,249,249,0.88)] sm:text-xl"
+                    className="text-lg font-medium leading-relaxed text-[#f9f9f9] sm:text-xl"
                     style={TEXT_SPACING_STYLE}
                   >
                     {step.highlight}
@@ -144,15 +144,15 @@ export function HowItWorksSection() {
 
                 {nextStep ? (
                   <footer className="border-t pt-8" style={{ borderColor: BORDER_COLOR, borderTopWidth: "3px" }}>
-                    <p className="text-xs uppercase tracking-[0.4em] text-[color:rgba(244,241,234,0.45)]">Next</p>
-                    <p className="mt-3 text-sm font-medium uppercase tracking-[0.3em] text-[color:rgba(244,241,234,0.65)]">
+                    <p className="text-xs uppercase tracking-[0.4em] text-[rgba(249,249,249,0.4)]">Next</p>
+                    <p className="mt-3 text-sm font-medium uppercase tracking-[0.3em] text-[rgba(249,249,249,0.65)]">
                       {String(index + 2).padStart(2, "0")} — {nextStep.title}
                     </p>
                   </footer>
                 ) : (
                   <footer className="border-t pt-8" style={{ borderColor: BORDER_COLOR, borderTopWidth: "3px" }}>
-                    <p className="text-xs uppercase tracking-[0.4em] text-[color:rgba(244,241,234,0.45)]">You&apos;re ready</p>
-                    <p className="mt-3 text-sm font-medium uppercase tracking-[0.3em] text-[color:rgba(244,241,234,0.65)]">
+                    <p className="text-xs uppercase tracking-[0.4em] text-[rgba(249,249,249,0.4)]">You&apos;re ready</p>
+                    <p className="mt-3 text-sm font-medium uppercase tracking-[0.3em] text-[rgba(249,249,249,0.65)]">
                       Launch your microagents
                     </p>
                   </footer>
@@ -160,23 +160,12 @@ export function HowItWorksSection() {
               </div>
             </div>
 
-            <div
-              className="relative h-[55vh] w-full overflow-hidden border-t md:h-auto md:min-h-screen md:w-[42%]"
-              style={{ borderColor: BORDER_COLOR, borderTopWidth: "3px" }}
-            >
+            <div className="relative h-[55vh] w-full overflow-hidden md:h-auto md:min-h-screen md:w-[42%]">
               <img
                 src={step.imageSrc}
                 alt={step.imageAlt}
-                className={`absolute inset-0 h-full w-full object-cover object-center transition-transform duration-500 ease-out ${index === 0 ? "scale-[1.55] sm:scale-[1.35] md:scale-[1.2]" : index === 1 ? "scale-[1.12]" : "scale-100"}`}
+                className="absolute inset-0 h-full w-full object-cover object-center"
                 loading="lazy"
-              />
-              <div
-                className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(58,124,165,0.22),transparent_55%)] mix-blend-screen"
-                aria-hidden="true"
-              />
-              <div
-                className="absolute inset-0 bg-[linear-gradient(180deg,rgba(9,9,9,0.1)_0%,rgba(9,9,9,0.55)_100%)]"
-                aria-hidden="true"
               />
             </div>
           </article>

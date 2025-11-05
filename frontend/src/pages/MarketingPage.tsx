@@ -134,7 +134,7 @@ export function MarketingPage() {
               <div className="flex justify-start">
                 <TransitionLink
                   to="/signup"
-                  className="inline-flex items-center justify-center px-8 py-3 text-xl font-semibold text-[color:var(--accent-primary)] transition-transform duration-200 hover:scale-105 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--accent-primary)]"
+                  className="inline-flex items-center justify-center px-8 py-3 text-xl font-semibold text-[#f9f9f9] transition-transform duration-200 hover:scale-105 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f9f9f9]"
                 >
                   Get Started
                 </TransitionLink>
@@ -193,7 +193,7 @@ export function MarketingPage() {
               {/* Plan Step 5: unified nav/footer branding with logo (4). */}
             </div>
             <div className="flex flex-1 items-center justify-center">
-              <h2 className="hero__title text-[color:var(--accent-primary)]">
+              <h2 className="text-4xl font-semibold tracking-[0.6em] text-[#f9f9f9] sm:text-5xl">
                 MICROAGENTS
               </h2>
             </div>
