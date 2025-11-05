@@ -20,22 +20,21 @@ type StickyCardProps = {
 };
 
 function StickyCard({ index, image, progress, range, targetScale }: StickyCardProps) {
-  const cardRef = useRef<HTMLDivElement>(null);
   const scale = useTransform(progress, range, [1, targetScale]);
 
   return (
-    <div ref={cardRef} className="sticky top-0 flex items-center justify-center">
+    <div className="sticky top-0 flex items-center justify-center">
       <motion.figure
         style={{
           scale,
-          top: `calc(-5vh + ${index * 32 + 220}px)`,
+          top: `calc(-12vh + ${index * 48 + 160}px)`,
         }}
-        className="relative -top-1/4 flex h-[320px] w-[min(90vw,520px)] origin-top overflow-hidden rounded-[32px] border border-white/12 bg-white/5 shadow-[0_32px_120px_rgba(0,0,0,0.45)] backdrop-blur-xl transition-transform duration-500 will-change-transform md:h-[380px] md:w-[min(70vw,640px)] lg:h-[420px] lg:w-[min(60vw,720px)]"
+        className="relative -top-1/3 flex w-[min(94vw,780px)] origin-top flex-col items-center overflow-visible rounded-[40px] transition-transform duration-500 will-change-transform"
       >
         <img
           src={image.src}
           alt={image.alt}
-          className="h-full w-full object-cover"
+          className="w-full max-h-[780px] rounded-[40px] object-contain"
           loading="lazy"
         />
       </motion.figure>
@@ -53,21 +52,18 @@ export function HeroImageStack({ images }: HeroImageStackProps) {
   return (
     <section
       ref={containerRef}
-      className="relative flex w-full flex-col items-center justify-center pb-[70vh] pt-[35vh]"
+      className="relative flex w-full flex-col items-center justify-center pb-[80vh] pt-[28vh]"
       aria-label="Product imagery preview"
     >
-      <div className="pointer-events-none absolute left-1/2 top-[16%] -translate-x-1/2 text-center text-[11px] uppercase tracking-[0.28em] text-white/40">
-        scroll to explore
-      </div>
       {images.map((image, index) => {
-        const targetScale = Math.max(0.55, 1 - (images.length - index - 1) * 0.12);
+        const targetScale = Math.max(0.35, 1 - (images.length - index - 1) * 0.2);
         return (
           <StickyCard
             key={image.id}
             index={index}
             image={image}
             progress={scrollYProgress}
-            range={[index * 0.25, 1]}
+            range={[index * 0.15, 0.85]}
             targetScale={targetScale}
           />
         );
@@ -75,4 +71,3 @@ export function HeroImageStack({ images }: HeroImageStackProps) {
     </section>
   );
 }
-

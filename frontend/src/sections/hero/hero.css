@@ -2,7 +2,7 @@
   width: 100%;
   min-height: 100vh;
   padding: clamp(6rem, 18vh, 12rem) clamp(1.25rem, 6vw, 4rem);
-  background: radial-gradient(circle at top, rgba(255, 255, 255, 0.08), transparent 55%), #090909;
+  background: #090909;
   display: flex;
   flex-direction: column;
   align-items: center;
