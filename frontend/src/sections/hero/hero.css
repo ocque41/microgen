@@ -4,7 +4,7 @@
   min-height: 100vh;
   height: 100svh;
   background-color: #090909;
-  padding: clamp(3.25rem, 3.4vw, 4.25rem) clamp(0.05rem, 0.4vw, 0.25rem) clamp(4rem, 6vw, 6rem);
+  padding: clamp(6rem, 11vh, 12rem) clamp(0.05rem, 0.4vw, 0.25rem) clamp(4rem, 6vw, 6rem);
   color: #f9f9f9;
   overflow: hidden;
   display: flex;
@@ -17,6 +17,7 @@
   /* Plan V3 Step 1: micro-gutter dialed down again so section nearly touches viewport edges. */
   /* Plan V4 Step 1: inline padding reduced to hairline gutter for almost full-bleed layout. */
   /* Plan V6 Step 3: top padding nudged down so hero wordmark clears safe areas. */
+  /* Plan V9 Step 1: expanded top padding lowers hero content further into the viewport. */
 }
 
 .hero__layout {
@@ -31,6 +32,7 @@
   justify-content: center;
   flex: 1;
   gap: clamp(2.25rem, 4.8vw, 3.75rem);
+  padding-top: clamp(1.5rem, 4vh, 5rem);
   /* Plan Step 1: widened layout to align wordmark and dividers with gradient bounds. */
   /* Plan Step 2: layout flex centering keeps hero content balanced within viewport height. */
   /* Plan Step 3: boosted max width to 98vw so hero nearly touches viewport edges on all screens. */
@@ -42,6 +44,7 @@
   /* Plan V2 Step 3: stretch alignment ensures headline and visual share identical footprint. */
   /* Plan V3 Step 3: reduced vertical gap keeps headline visible within viewport heights. */
   /* Plan V8 Step 3: tuned vertical gap after width adjustments to balance headline and gallery. */
+  /* Plan V9 Step 2: added inner top padding to seat wordmark within expanded hero offset. */
 }
 
 .hero__headline {
