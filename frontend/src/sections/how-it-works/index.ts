@@ -1,2 +1,1 @@
 export { HowItWorksSection } from "./HowItWorksSection";
-

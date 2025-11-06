@@ -1,177 +1,149 @@
-import type { ReactNode } from "react";
+"use client";
 
-import { publicAsset } from "../../lib/publicAsset";
+import { AnimatePresence, motion } from "framer-motion";
+import React, { useState } from "react";
 
-const BORDER_COLOR = "rgba(249, 249, 249, 0.16)";
-const TEXT_SOFT = "rgba(249, 249, 249, 0.68)";
-const TITLE_SPACING_STYLE = {
-  letterSpacing: "calc(var(--letter-spacing-base) - 1.5px)",
-  lineHeight: "10px",
-} as const;
-const TEXT_SPACING_STYLE = {
-  letterSpacing: "calc(var(--letter-spacing-base) - 0.5px)",
-  lineHeight: "18px",
-} as const;
+import { cn } from "@/lib/utils";
 
-type Step = {
-  id: string;
-  title: string;
-  highlight: string;
-  description: ReactNode;
-  imageSrc: string;
-  imageAlt: string;
-};
-
-const steps: Step[] = [
+const steps = [
   {
-    id: "brief",
-    title: "Clarify the brief",
-    highlight: "Capture the workflow, guardrails, and success metrics so everyone sees the same definition of done.",
-    imageSrc: publicAsset("sheets.png"),
-    imageAlt: "Kickoff spreadsheet composed of workflow guardrails",
-    description: (
-      <>
-        <p>
-          Gather policies, escalation paths, and expected outputs inside a shared kickoff canvas. Legal, operators, and product stay in the same view, so approval never drifts into a side thread.
-        </p>
-        <p>
-          Teams annotate the canvas live while transcripts and tool traces flow in, making it obvious what the automation should and should not attempt on day one.
-        </p>
-      </>
-    ),
+    id: "solve",
+    eyebrow: "Step 01",
+    title: "Solve the most crucial repetitive tasks",
+    summary:
+      "Pinpoint the work that drains velocity — discovery calls, follow-ups, weekly reporting — and scope the first win.",
   },
   {
-    id: "approve",
-    title: "Approve the agent",
-    highlight: "Run shadow sessions in a guided sandbox before production traffic ever hits the API.",
-    imageSrc: publicAsset("crystal-cable.jpeg"),
-    imageAlt: "Illuminated crystal data cable suspended in the air",
-    description: (
-      <>
-        <p>
-          Every proposed action streams into a review lane with pinned evidence. Compliance flips switches, operators leave inline feedback, and product sees exactly how the sequence behaves.
-        </p>
-        <p>
-          When the run looks right, the same panel publishes a sign-off record that travels with the workflow for future audits.
-        </p>
-      </>
-    ),
+    id: "automate",
+    eyebrow: "Step 02",
+    title: "Automate the workflows",
+    summary:
+      "Pair subject matter experts with our operators to translate playbooks into dependable agent routines.",
   },
   {
-    id: "run",
-    title: "Run with confidence",
-    highlight: "Launch the automation with real-time accountability dashboards and human-ready escalation trails.",
-    imageSrc: publicAsset("export (1).png"),
-    imageAlt: "Glassy workflow export sheet with modular cards",
-    description: (
-      <>
-        <p>
-          Live traces replay decisions, tool calls, and handoffs without leaving the dashboard. If something drifts from policy, teams can pause instantly or rewind to the signed-off version.
-        </p>
-        <p>
-          Usage metrics, retention signals, and safety alerts stay anchored in one glass pane so leaders know what the agent did—and why—at a glance.
-        </p>
-      </>
-    ),
+    id: "schedule",
+    eyebrow: "Step 03",
+    title: "Schedule actions and reviews",
+    summary:
+      "Set cadences for outreach, enrichments, and syncs so the agent never misses the next best move.",
+  },
+  {
+    id: "notify",
+    eyebrow: "Step 04",
+    title: "Notify stakeholders in real time",
+    summary:
+      "Route alerts to Slack, email, and dashboards whenever the agent completes work or detects blockers.",
+  },
+  {
+    id: "manage",
+    eyebrow: "Step 05",
+    title: "Manage and refine together",
+    summary:
+      "Review transcripts, tweak prompts, and stack new processes as the agent proves value week over week.",
   },
 ];
+
+const HoverExpandSteps = ({ className }: { className?: string }) => {
+  const [activeIndex, setActiveIndex] = useState<number>(0);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 24 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, ease: "easeOut" }}
+      className={cn("relative w-full max-w-4xl", className)}
+    >
+      <div className="flex w-full flex-col gap-3">
+        {steps.map((step, index) => {
+          const isActive = activeIndex === index;
+
+          return (
+            <motion.button
+              key={step.id}
+              type="button"
+              onMouseEnter={() => setActiveIndex(index)}
+              onFocus={() => setActiveIndex(index)}
+              onClick={() => setActiveIndex(index)}
+              initial={false}
+              animate={{
+                height: isActive ? 260 : 68,
+                paddingTop: isActive ? 28 : 18,
+                paddingBottom: isActive ? 28 : 18,
+              }}
+              transition={{ duration: 0.28, ease: "easeInOut" }}
+              className={cn(
+                "group relative flex w-full flex-col overflow-hidden rounded-3xl border border-white/12 bg-white/5 px-6 text-left backdrop-blur",
+                "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white/70",
+              )}
+            >
+              <div className="flex items-center justify-between text-sm uppercase tracking-[0.35em] text-white/40">
+                <span>{step.eyebrow}</span>
+                <AnimatePresence>{isActive && <ActiveIndicator />}</AnimatePresence>
+              </div>
+              <motion.p
+                layout
+                className="mt-3 text-lg font-semibold leading-snug text-white sm:text-xl"
+              >
+                {step.title}
+              </motion.p>
+              <AnimatePresence>
+                {isActive && (
+                  <motion.p
+                    key={`${step.id}-summary`}
+                    initial={{ opacity: 0, y: 12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 12 }}
+                    transition={{ duration: 0.26, ease: "easeOut" }}
+                    className="mt-4 max-w-[48ch] text-base leading-relaxed text-white/70"
+                  >
+                    {step.summary}
+                  </motion.p>
+                )}
+              </AnimatePresence>
+            </motion.button>
+          );
+        })}
+      </div>
+    </motion.div>
+  );
+};
+
+const ActiveIndicator = () => (
+  <motion.span
+    initial={{ opacity: 0, x: 12 }}
+    animate={{ opacity: 1, x: 0 }}
+    exit={{ opacity: 0, x: 12 }}
+    transition={{ duration: 0.24, ease: "easeOut" }}
+    className="rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[0.65rem] font-medium tracking-[0.2em] text-white"
+  >
+    ACTIVE
+  </motion.span>
+);
 
 export function HowItWorksSection() {
   return (
     <section
-      aria-label="How Microagents works"
-      className="relative mt-32 mb-32 pb-32 md:mt-48 md:mb-48 md:pb-40 xl:mt-56 xl:mb-56 xl:pb-48"
-      data-how-it-works
+      aria-labelledby="how-it-works-title"
+      className="relative isolate flex w-full justify-center bg-[#101010] px-6 py-32 sm:px-10 lg:px-16"
     >
-      <div className="flex flex-col gap-4 px-6 pb-12 text-left sm:px-10 lg:px-16 xl:px-20">
-        <h2
-          className="text-3xl font-semibold text-[color:rgba(249,249,249,0.94)] sm:text-4xl md:text-5xl"
-          style={TITLE_SPACING_STYLE}
-        >
-          How it works
-        </h2>
+      <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+        <div className="absolute left-1/2 top-0 h-[520px] w-[520px] -translate-x-1/2 -translate-y-1/3 rounded-full bg-[#1c1c1c] opacity-70 blur-3xl" />
+        <div className="absolute inset-x-12 bottom-[18%] h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
       </div>
-      {steps.map((step, index) => {
-        const nextStep = steps[index + 1];
-
-        return (
-          <article
-            key={step.id}
-          className="relative flex min-h-screen flex-col bg-[#090909] md:flex-row"
-            aria-labelledby={`how-it-works-${step.id}`}
+      <div className="mx-auto flex w-full max-w-6xl flex-col items-center gap-12 text-white">
+        <div className="flex flex-col items-center text-center">
+          <span className="text-xs uppercase tracking-[0.45em] text-white/40">How it works</span>
+          <h2
+            id="how-it-works-title"
+            className="mt-4 max-w-3xl text-3xl font-semibold leading-tight sm:text-4xl md:text-5xl"
           >
-            <div
-              className="relative flex-1 border-t"
-              style={{ borderColor: BORDER_COLOR, borderTopWidth: "3px" }}
-            >
-              <div
-                className="absolute left-6 top-16 bottom-16 hidden md:block"
-                style={{
-                  backgroundColor: BORDER_COLOR,
-                  width: "3px",
-                }}
-                aria-hidden="true"
-              />
-              <div className="relative z-[1] flex h-full flex-col gap-10 px-6 py-16 sm:px-10 sm:py-20 lg:px-16 xl:px-20 xl:py-24">
-                <header className="border-b pb-10" style={{ borderColor: BORDER_COLOR, borderBottomWidth: "3px" }}>
-                  <div className="flex items-baseline gap-4 text-sm font-semibold uppercase tracking-[0.6em] text-[rgba(249,249,249,0.65)]">
-                    <span>{String(index + 1).padStart(2, "0")}</span>
-                    <span className="tracking-[0.3em]">Step</span>
-                  </div>
-                  <div
-                    className="mt-6 flex items-center gap-3 text-left text-2xl font-semibold sm:text-3xl md:text-4xl"
-                    id={`how-it-works-${step.id}`}
-                  >
-                    <span className="text-base font-semibold uppercase tracking-[0.4em] text-[rgba(249,249,249,0.4)]">—</span>
-                    <span style={TITLE_SPACING_STYLE}>{step.title}</span>
-                  </div>
-                </header>
-
-                <div className="flex flex-1 flex-col gap-8 justify-end">
-                  <p
-                    className="text-lg font-medium leading-relaxed text-[#f9f9f9] sm:text-xl"
-                    style={TEXT_SPACING_STYLE}
-                  >
-                    {step.highlight}
-                  </p>
-                  <div
-                    className="space-y-5 text-base leading-relaxed sm:text-lg"
-                    style={{ ...TEXT_SPACING_STYLE, color: TEXT_SOFT }}
-                  >
-                    {step.description}
-                  </div>
-                </div>
-
-                {nextStep ? (
-                  <footer className="border-t pt-8" style={{ borderColor: BORDER_COLOR, borderTopWidth: "3px" }}>
-                    <p className="text-xs uppercase tracking-[0.4em] text-[rgba(249,249,249,0.4)]">Next</p>
-                    <p className="mt-3 text-sm font-medium uppercase tracking-[0.3em] text-[rgba(249,249,249,0.65)]">
-                      {String(index + 2).padStart(2, "0")} — {nextStep.title}
-                    </p>
-                  </footer>
-                ) : (
-                  <footer className="border-t pt-8" style={{ borderColor: BORDER_COLOR, borderTopWidth: "3px" }}>
-                    <p className="text-xs uppercase tracking-[0.4em] text-[rgba(249,249,249,0.4)]">You&apos;re ready</p>
-                    <p className="mt-3 text-sm font-medium uppercase tracking-[0.3em] text-[rgba(249,249,249,0.65)]">
-                      Launch your microagents
-                    </p>
-                  </footer>
-                )}
-              </div>
-            </div>
-
-            <div className="relative h-[55vh] w-full overflow-hidden md:h-auto md:min-h-screen md:w-[42%]">
-              <img
-                src={step.imageSrc}
-                alt={step.imageAlt}
-                className="absolute inset-0 h-full w-full object-cover object-center"
-                loading="lazy"
-              />
-            </div>
-          </article>
-        );
-      })}
-      {/* Plan Spacing Step 1: expanded section margins/padding to keep How It Works clearly separated. */}
+            Start with the work that matters, expand into a fully managed operator
+          </h2>
+        </div>
+        <HoverExpandSteps className="w-full" />
+      </div>
     </section>
   );
 }
+
+export { HoverExpandSteps };

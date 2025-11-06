@@ -1,4 +1,4 @@
-import { Skiper16 } from "../components/skip";
+import ReactLenis from "lenis/react";
 import type { CSSProperties } from "react";
 import { useEffect } from "react";
 import { TransitionLink } from "@/components/motion/TransitionLink";
@@ -41,10 +41,11 @@ export function MarketingPage() {
   }, [marketingTheme.background]);
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden text-text" style={marketingThemeStyles}>
-      <ProgressiveBlur position="top" className="z-[1]" />
-      <ProgressiveBlur position="bottom" className="z-[1]" />
-      <div className="relative">
+    <ReactLenis root>
+      <div className="relative min-h-screen overflow-x-hidden text-text" style={marketingThemeStyles}>
+        <ProgressiveBlur position="top" className="z-[1]" />
+        <ProgressiveBlur position="bottom" className="z-[1]" />
+        <div className="relative">
         <section className="relative isolate z-[12000] flex justify-center" aria-label="Primary navigation">
           <div className="pointer-events-none fixed inset-x-0 bottom-6 z-[9999] flex w-full justify-center px-3 sm:px-6">
             <nav
@@ -83,12 +84,6 @@ export function MarketingPage() {
           {/* Plan V7 Step 3: mobile nav condensed to logo + CTA with larger tap targets. */}
         </section>
         <HeroSection />
-{/* Skiper card stack */}
-<section className="relative flex justify-center px-4 py-24 sm:px-6 md:px-8">
-  <div className="w-full max-w-[1600px] flex justify-center">
-    <Skiper16 />
-  </div>
-</section>
         <HowItWorksSection />
         <section
           className="relative mt-64 flex w-full flex-col justify-center bg-[#090909] px-6 py-24 sm:px-10 md:mt-80 lg:px-16 xl:mt-96 xl:px-20"
@@ -216,7 +211,8 @@ export function MarketingPage() {
           </div>
         </footer>
         {/* Plan Step 1: elevated footer z-index so legal links sit above fixed progressive blur. */}
+        </div>
       </div>
-    </div>
+    </ReactLenis>
   );
 }
