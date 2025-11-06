@@ -11,7 +11,9 @@ export function HeroSection() {
             alt="Microagents insignia"
             loading="lazy"
           />
-          <h1 className="hero__headline">Operational clarity, without the glow</h1>
+          <h1 className="hero__headline">
+            <span className="hero__headline-emphasis">Operational</span> clarity, without the glow
+          </h1>
           <p className="hero__description">
             A monochrome canvas keeps the interface steady while your automations carry the detail. Scroll to fold through real teams, from kickoff canvas to audit trail, all built on the same black-and-white surface.
           </p>

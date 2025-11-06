@@ -6,6 +6,7 @@ import { publicAsset } from "@/lib/publicAsset";
 import { marketingTheme } from "@/lib/marketingTheme";
 import { HeroSection } from "@/sections/hero";
 import { HowItWorksSection } from "@/sections/how-it-works";
+import { Skiper16 } from "../../app/components/Skiper16";
 
 const marketingThemeStyles = {
   "--marketing-background-color": marketingTheme.background,
@@ -82,6 +83,7 @@ export function MarketingPage() {
           {/* Plan V7 Step 3: mobile nav condensed to logo + CTA with larger tap targets. */}
         </section>
         <HeroSection />
+        <Skiper16 />
         <HowItWorksSection />
 
         <section
