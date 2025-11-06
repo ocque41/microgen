@@ -5,11 +5,9 @@ import { motion, useScroll, useTransform, MotionValue } from "framer-motion";
 import ReactLenis from "lenis/react";
 
 const projects = [
-  { title: "Project 1", src: "/images/lummi/img8.png" },
-  { title: "Project 2", src: "/images/lummi/img14.png" },
-  { title: "Project 3", src: "/images/lummi/img10.png" },
-  { title: "Project 4", src: "/images/lummi/img15.png" },
-  { title: "Project 5", src: "/images/lummi/img12.png" },
+  { title: "Project 1", src: "/public/hero section (1).png" },
+  { title: "Project 2", src: "/public/pic.png" },
+  { title: "Project 3", src: "/public/pic1.png" },
 ];
 
 type StickyCardProps = {
