@@ -1,93 +1,106 @@
 "use client";
 
 import { motion, useScroll, useTransform } from "framer-motion";
-import React, { useRef, useMemo } from "react";
 import ReactLenis from "lenis/react";
+import React, { useRef } from "react";
 
-const stackImages = [
-  { title: "Frame One", src: "/hero section (1).png" },
-  { title: "Frame Two", src: "/pic.png" },
-  { title: "Frame Three", src: "/pic1.png" },
+const projects = [
+  {
+    title: "Project 1",
+    src: "/images/lummi/img8.png",
+  },
+  {
+    title: "Project 2",
+    src: "/images/lummi/img14.png",
+  },
+  {
+    title: "Project 3",
+    src: "/images/lummi/img10.png",
+  },
+  {
+    title: "Project 4",
+    src: "/images/lummi/img15.png",
+  },
+  {
+    title: "Project 5",
+    src: "/images/lummi/img12.png",
+  },
 ];
 
-const resolvePublicPath = (path: string) => {
-  if (!path) return path;
-  const segments = path
-    .split("/")
-    .filter(Boolean)
-    .map((segment) => encodeURIComponent(segment));
-  return `/${segments.join("/")}`;
-};
-
-const StickyImageCard = ({
-  index,
+const StickyCard_001 = ({
+  i,
   title,
   src,
   progress,
   range,
   targetScale,
 }: {
-  index: number;
+  i: number;
   title: string;
   src: string;
   progress: any;
   range: [number, number];
   targetScale: number;
 }) => {
+  const container = useRef<HTMLDivElement>(null);
   const scale = useTransform(progress, range, [1, targetScale]);
-  const resolvedSrc = useMemo(() => resolvePublicPath(src), [src]);
 
   return (
-    <div className="sticky top-0 flex items-center justify-center">
+    <div
+      ref={container}
+      className="sticky top-0 flex items-center justify-center"
+    >
       <motion.div
         style={{
           scale,
-          top: `calc(-5vh + ${index * 20 + 250}px)`,
-          zIndex: 100 - index,
+          top: `calc(-5vh + ${i * 20 + 250}px)`,
         }}
-        className="relative flex h-[340px] w-[520px] origin-top overflow-hidden rounded-[32px] bg-black/10 shadow-xl"
+        className="rounded-4xl relative -top-1/4 flex h-[300px] w-[500px] origin-top flex-col overflow-hidden"
       >
-        <img src={resolvedSrc} alt={title} className="h-full w-full object-cover" />
+        <img src={src} alt={title} className="h-full w-full object-cover" />
       </motion.div>
     </div>
   );
 };
 
 const Skiper16 = () => {
-  const containerRef = useRef<HTMLElement>(null);
+  const container = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
-    target: containerRef,
+    target: container,
     offset: ["start start", "end end"],
   });
 
   return (
     <ReactLenis root>
-      <section
-        ref={containerRef}
+      <main
+        ref={container}
         className="relative flex w-full flex-col items-center justify-center pb-[100vh] pt-[50vh]"
       >
-        {stackImages.map((item, index) => {
+        <div className="absolute left-1/2 top-[10%] grid -translate-x-1/2 content-start justify-items-center gap-6 text-center">
+          <span className="after:from-background after:to-foreground relative max-w-[12ch] text-xs uppercase leading-tight opacity-40 after:absolute after:left-1/2 after:top-full after:h-16 after:w-px after:bg-gradient-to-b after:content-['']">
+            scroll down to see card stack
+          </span>
+        </div>
+        {projects.map((project, i) => {
           const targetScale = Math.max(
             0.5,
-            1 - (stackImages.length - index - 1) * 0.1
+            1 - (projects.length - i - 1) * 0.1,
           );
-
           return (
-            <StickyImageCard
-              key={item.title}
-              index={index}
-              title={item.title}
-              src={item.src}
+            <StickyCard_001
+              key={`p_${i}`}
+              i={i}
+              {...project}
               progress={scrollYProgress}
-              range={[index * 0.25, 1]}
+              range={[i * 0.25, 1]}
               targetScale={targetScale}
             />
           );
         })}
-      </section>
+      </main>
     </ReactLenis>
   );
 };
 
-export { Skiper16 };
-export default Skiper16;
+export { Skiper16, StickyCard_001 };
+
