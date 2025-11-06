@@ -7,100 +7,128 @@ import { cn } from "@/lib/utils";
 
 const steps = [
   {
-    id: "solve",
-    eyebrow: "Step 01",
-    title: "Solve the most crucial repetitive tasks",
-    summary:
-      "Pinpoint the work that drains velocity — discovery calls, follow-ups, weekly reporting — and scope the first win.",
+    id: "step-1",
+    title: "What is the first thing you think about when it comes to working?",
+    details: ["(No specific answer provided yet — probably meant to lead into the next node.)"],
+    image: "/pic (4).png",
   },
   {
-    id: "automate",
-    eyebrow: "Step 02",
-    title: "Automate the workflows",
-    summary:
-      "Pair subject matter experts with our operators to translate playbooks into dependable agent routines.",
+    id: "step-2",
+    title: "What eats the most time in a normal week?",
+    details: [
+      "Sourcing / finding targets / keeping the pipeline full",
+      "Collecting data from PDFs, emails, data sheets, etc.",
+      "Cleaning / normalizing data in Excel (formatting, duplicates)",
+      "Building or updating slides, memos, or IC decks",
+      "Reviewing reporting (portfolio, LP/GP, etc.)",
+      "Ad hoc tasks just to check that analysis from teammates is correct",
+    ],
+    image: "/pic (7).png",
   },
   {
-    id: "schedule",
-    eyebrow: "Step 03",
-    title: "Schedule actions and reviews",
-    summary:
-      "Set cadences for outreach, enrichments, and syncs so the agent never misses the next best move.",
+    id: "step-3",
+    title: "What’s the most annoying part of that task?",
+    details: ["Say one part"],
+    image: "/pic10.png",
   },
   {
-    id: "notify",
-    eyebrow: "Step 04",
-    title: "Notify stakeholders in real time",
-    summary:
-      "Route alerts to Slack, email, and dashboards whenever the agent completes work or detects blockers.",
+    id: "step-4",
+    title: "When you try a new tool / AI, what are you actually hoping for?",
+    details: ["Do everything", "Do something", "Work with me together"],
+    image: "/pic (6).png",
   },
   {
-    id: "manage",
-    eyebrow: "Step 05",
-    title: "Manage and refine together",
-    summary:
-      "Review transcripts, tweak prompts, and stack new processes as the agent proves value week over week.",
+    id: "step-5",
+    title: "How structured is your environment?",
+    details: [
+      "Pipelines set up",
+      "Decided tools already track deals/companies in a system (Affinity, HubSpot, Airtable, Excel)",
+      "Mostly run on files, email, and Slack",
+      "Mix and it changes deal to deal",
+    ],
+    image: "/pic9.png",
   },
 ];
 
 const HoverExpandSteps = ({ className }: { className?: string }) => {
-  const [activeIndex, setActiveIndex] = useState<number>(0);
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+
+  const resetIfActive = (index: number) => {
+    setActiveIndex((prev) => (prev === index ? null : prev));
+  };
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 24 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, ease: "easeOut" }}
-      className={cn("relative w-full max-w-4xl", className)}
+      className={cn("relative w-full max-w-5xl", className)}
     >
-      <div className="flex w-full flex-col gap-3">
+      <div className="flex w-full flex-col gap-5">
         {steps.map((step, index) => {
           const isActive = activeIndex === index;
 
           return (
-            <motion.button
-              key={step.id}
-              type="button"
-              onMouseEnter={() => setActiveIndex(index)}
-              onFocus={() => setActiveIndex(index)}
-              onClick={() => setActiveIndex(index)}
-              initial={false}
-              animate={{
-                height: isActive ? 260 : 68,
-                paddingTop: isActive ? 28 : 18,
-                paddingBottom: isActive ? 28 : 18,
-              }}
-              transition={{ duration: 0.28, ease: "easeInOut" }}
-              className={cn(
-                "group relative flex w-full flex-col overflow-hidden rounded-3xl border border-white/12 bg-white/5 px-6 text-left backdrop-blur",
-                "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white/70",
-              )}
-            >
-              <div className="flex items-center justify-between text-sm uppercase tracking-[0.35em] text-white/40">
-                <span>{step.eyebrow}</span>
-                <AnimatePresence>{isActive && <ActiveIndicator />}</AnimatePresence>
+            <div key={step.id} className="flex items-stretch gap-4">
+              <div className="flex w-10 items-center justify-center text-base font-semibold tracking-[0.2em] text-white/40">
+                {String(index + 1).padStart(2, "0")}
               </div>
-              <motion.p
-                layout
-                className="mt-3 text-lg font-semibold leading-snug text-white sm:text-xl"
-              >
-                {step.title}
-              </motion.p>
-              <AnimatePresence>
-                {isActive && (
-                  <motion.p
-                    key={`${step.id}-summary`}
-                    initial={{ opacity: 0, y: 12 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 12 }}
-                    transition={{ duration: 0.26, ease: "easeOut" }}
-                    className="mt-4 max-w-[48ch] text-base leading-relaxed text-white/70"
-                  >
-                    {step.summary}
-                  </motion.p>
+              <motion.button
+                type="button"
+                onMouseEnter={() => setActiveIndex(index)}
+                onMouseLeave={() => resetIfActive(index)}
+                onFocus={() => setActiveIndex(index)}
+                onBlur={(event) => {
+                  if (!event.currentTarget.contains(event.relatedTarget as Node)) {
+                    resetIfActive(index);
+                  }
+                }}
+                onClick={() => setActiveIndex(index)}
+                initial={false}
+                animate={{
+                  height: isActive ? 330 : 150,
+                }}
+                transition={{ duration: 0.3, ease: "easeInOut" }}
+                className={cn(
+                  "group relative flex w-full overflow-hidden rounded-[28px] bg-transparent text-left",
+                  "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white/70",
                 )}
-              </AnimatePresence>
-            </motion.button>
+              >
+                <img
+                  src={step.image}
+                  alt={step.title}
+                  className={cn(
+                    "h-full w-full object-cover transition-opacity duration-300",
+                    isActive ? "opacity-30" : "opacity-100",
+                  )}
+                />
+
+                <AnimatePresence>
+                  {isActive && (
+                    <motion.div
+                      key={`${step.id}-content`}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 20 }}
+                      transition={{ duration: 0.25, ease: "easeOut" }}
+                      className="absolute inset-0 flex h-full w-full flex-col justify-end bg-gradient-to-t from-[#090909] via-[#090909]/85 to-transparent px-8 pb-8"
+                    >
+                      <p className="text-sm font-semibold uppercase tracking-[0.35em] text-white/60">
+                        Step {index + 1}
+                      </p>
+                      <h3 className="mt-2 text-2xl font-semibold text-white">
+                        {step.title}
+                      </h3>
+                      <ul className="mt-4 space-y-1.5 text-base leading-relaxed text-white/80">
+                        {step.details.map((detail) => (
+                          <li key={detail}>{detail}</li>
+                        ))}
+                      </ul>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.button>
+            </div>
           );
         })}
       </div>
@@ -108,38 +136,19 @@ const HoverExpandSteps = ({ className }: { className?: string }) => {
   );
 };
 
-const ActiveIndicator = () => (
-  <motion.span
-    initial={{ opacity: 0, x: 12 }}
-    animate={{ opacity: 1, x: 0 }}
-    exit={{ opacity: 0, x: 12 }}
-    transition={{ duration: 0.24, ease: "easeOut" }}
-    className="rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[0.65rem] font-medium tracking-[0.2em] text-white"
-  >
-    ACTIVE
-  </motion.span>
-);
-
 export function HowItWorksSection() {
   return (
     <section
       aria-labelledby="how-it-works-title"
-      className="relative isolate flex w-full justify-center bg-[#101010] px-6 py-32 sm:px-10 lg:px-16"
+      className="relative isolate flex w-full justify-center bg-[#090909] px-6 py-28 sm:px-10 lg:px-16"
     >
-      <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-        <div className="absolute left-1/2 top-0 h-[520px] w-[520px] -translate-x-1/2 -translate-y-1/3 rounded-full bg-[#1c1c1c] opacity-70 blur-3xl" />
-        <div className="absolute inset-x-12 bottom-[18%] h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-      </div>
-      <div className="mx-auto flex w-full max-w-6xl flex-col items-center gap-12 text-white">
-        <div className="flex flex-col items-center text-center">
-          <span className="text-xs uppercase tracking-[0.45em] text-white/40">How it works</span>
-          <h2
-            id="how-it-works-title"
-            className="mt-4 max-w-3xl text-3xl font-semibold leading-tight sm:text-4xl md:text-5xl"
-          >
-            Start with the work that matters, expand into a fully managed operator
-          </h2>
-        </div>
+      <div className="mx-auto flex w-full max-w-6xl flex-col items-center gap-10 text-white">
+        <h2
+          id="how-it-works-title"
+          className="text-center text-3xl font-semibold leading-tight sm:text-4xl md:text-5xl"
+        >
+          Start by mapping the repetitive questions, then let the agent work the plan
+        </h2>
         <HoverExpandSteps className="w-full" />
       </div>
     </section>
