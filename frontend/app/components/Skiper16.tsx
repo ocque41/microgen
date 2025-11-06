@@ -43,6 +43,7 @@ const StickyCard_001 = ({
   targetScale: number;
 }) => {
   const container = useRef<HTMLDivElement>(null);
+
   const scale = useTransform(progress, range, [1, targetScale]);
 
   return (
@@ -104,3 +105,4 @@ const Skiper16 = () => {
 
 export { Skiper16, StickyCard_001 };
 
+// Source: https://skiper-ui.com/v1/skiper16
