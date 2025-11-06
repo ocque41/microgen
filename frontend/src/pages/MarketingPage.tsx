@@ -1,6 +1,7 @@
 import type { CSSProperties } from "react";
 import { useEffect } from "react";
 import { TransitionLink } from "@/components/motion/TransitionLink";
+import { ProgressiveBlur } from "@/components/effects/ProgressiveBlur";
 import { publicAsset } from "@/lib/publicAsset";
 import { marketingTheme } from "@/lib/marketingTheme";
 import { HeroSection } from "@/sections/hero";
@@ -38,15 +39,15 @@ export function MarketingPage() {
     };
   }, [marketingTheme.background]);
 
-  
-
   return (
     <div className="relative min-h-screen overflow-x-hidden text-text" style={marketingThemeStyles}>
+      <ProgressiveBlur position="top" className="z-[1]" />
+      <ProgressiveBlur position="bottom" className="z-[1]" />
       <div className="relative">
         <section className="relative isolate z-[12000] flex justify-center" aria-label="Primary navigation">
           <div className="pointer-events-none fixed inset-x-0 bottom-6 z-[9999] flex w-full justify-center px-3 sm:px-6">
             <nav
-              className="pointer-events-auto relative z-[10000] flex w-full max-w-[26rem] items-center gap-3 rounded-full bg-[#090909] px-5 py-2 text-sm md:max-w-[22rem] md:gap-1.5 md:px-3 md:py-1.5 md:text-xs"
+              className="pointer-events-auto relative z-[10000] flex w-full max-w-[26rem] items-center gap-3 rounded-full px-5 py-2 text-sm md:max-w-[22rem] md:gap-1.5 md:px-3 md:py-1.5 md:text-xs"
               aria-label="Main navigation"
             >
               <TransitionLink
@@ -71,7 +72,7 @@ export function MarketingPage() {
               </div>
               <TransitionLink
                 to="/signup"
-                className="ml-auto inline-flex items-center justify-center rounded-full border border-[#f9f9f9] px-7 py-3 text-base font-semibold text-[#f9f9f9] transition-transform duration-200 hover:scale-105 whitespace-nowrap md:ml-0 md:px-4 md:py-1.5 md:text-sm"
+                className="ml-auto inline-flex items-center justify-center rounded-full px-7 py-3 text-base font-semibold text-[#f9f9f9] transition-transform duration-200 hover:scale-105 whitespace-nowrap md:ml-0 md:px-4 md:py-1.5 md:text-sm"
               >
                 Get Started
               </TransitionLink>

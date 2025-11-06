@@ -1,6 +1,6 @@
 import "./hero.css";
 
-import { Skiper16 } from "@/components/Skiper16";
+import { Skiper16 } from "../../../app/components/Skiper16";
 
 export function HeroSection() {
   return (
