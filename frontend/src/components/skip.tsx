@@ -44,6 +44,7 @@ const StickyCard_001 = ({
 }) => {
   const container = useRef<HTMLDivElement>(null);
 
+  // turn scroll progress into a scale for this card
   const scale = useTransform(progress, range, [1, targetScale]);
 
   return (
@@ -54,6 +55,7 @@ const StickyCard_001 = ({
       <motion.div
         style={{
           scale,
+          // shift each card down a bit so they "fan"
           top: `calc(-5vh + ${i * 20 + 250}px)`,
         }}
         className="rounded-4xl relative -top-1/4 flex h-[300px] w-[500px] origin-top flex-col overflow-hidden"
@@ -66,6 +68,9 @@ const StickyCard_001 = ({
 
 const Skiper16 = () => {
   const container = useRef<HTMLDivElement>(null);
+
+  // scrollYProgress = number 0 → 1 based on container scroll
+  // exactly how Motion explains it in their useScroll docs. :contentReference[oaicite:1]{index=1}
   const { scrollYProgress } = useScroll({
     target: container,
     offset: ["start start", "end end"],
@@ -77,12 +82,16 @@ const Skiper16 = () => {
         ref={container}
         className="relative flex w-full flex-col items-center justify-center pb-[100vh] pt-[50vh]"
       >
+        {/* heading / hint */}
         <div className="absolute left-1/2 top-[10%] grid -translate-x-1/2 content-start justify-items-center gap-6 text-center">
           <span className="after:from-background after:to-foreground relative max-w-[12ch] text-xs uppercase leading-tight opacity-40 after:absolute after:left-1/2 after:top-full after:h-16 after:w-px after:bg-gradient-to-b after:content-['']">
             scroll down to see card stack
           </span>
         </div>
+
+        {/* cards */}
         {projects.map((project, i) => {
+          // deeper cards scale a bit smaller
           const targetScale = Math.max(
             0.5,
             1 - (projects.length - i - 1) * 0.1,
@@ -105,4 +114,3 @@ const Skiper16 = () => {
 
 export { Skiper16, StickyCard_001 };
 
-// Source: https://skiper-ui.com/v1/skiper16

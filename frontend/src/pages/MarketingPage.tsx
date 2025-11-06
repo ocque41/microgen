@@ -1,3 +1,4 @@
+import { Skiper16 } from "../components/skip";
 import type { CSSProperties } from "react";
 import { useEffect } from "react";
 import { TransitionLink } from "@/components/motion/TransitionLink";
@@ -6,7 +7,6 @@ import { publicAsset } from "@/lib/publicAsset";
 import { marketingTheme } from "@/lib/marketingTheme";
 import { HeroSection } from "@/sections/hero";
 import { HowItWorksSection } from "@/sections/how-it-works";
-import { Skiper16 } from "../../app/components/Skiper16";
 
 const marketingThemeStyles = {
   "--marketing-background-color": marketingTheme.background,
@@ -83,9 +83,13 @@ export function MarketingPage() {
           {/* Plan V7 Step 3: mobile nav condensed to logo + CTA with larger tap targets. */}
         </section>
         <HeroSection />
-        <Skiper16 />
+{/* Skiper card stack */}
+<section className="relative flex justify-center px-4 py-24 sm:px-6 md:px-8">
+  <div className="w-full max-w-[1600px] flex justify-center">
+    <Skiper16 />
+  </div>
+</section>
         <HowItWorksSection />
-
         <section
           className="relative mt-64 flex w-full flex-col justify-center bg-[#090909] px-6 py-24 sm:px-10 md:mt-80 lg:px-16 xl:mt-96 xl:px-20"
           style={{ minHeight: "100vh", height: "100svh", boxSizing: "border-box" }}
