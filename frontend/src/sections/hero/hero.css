@@ -26,7 +26,8 @@
 .hero__eyebrow {
   margin: 0;
   font-size: 0.75rem;
-  letter-spacing: 0.6em;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: rgba(249, 249, 249, 0.7);
 }

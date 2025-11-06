@@ -7,7 +7,7 @@ export function HeroSection() {
     <section className="hero" data-hero-section>
       <div className="hero__content">
         <header className="hero__header">
-          <p className="hero__eyebrow">Microagents</p>
+          <p className="hero__eyebrow">MICROAGENTS</p>
           <h1 className="hero__headline">Operational clarity, without the glow</h1>
           <p className="hero__description">
             A monochrome canvas keeps the interface steady while your automations carry the detail. Scroll to fold through real teams, from kickoff canvas to audit trail, all built on the same black-and-white surface.
