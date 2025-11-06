@@ -11,18 +11,27 @@ type StackImage = {
 
 const stackImages: StackImage[] = [
   {
-    title: "Focus",
+    title: "Frame One",
     src: "/hero section (1).png",
   },
   {
-    title: "Pulse",
+    title: "Frame Two",
     src: "/pic.png",
   },
   {
-    title: "Drift",
+    title: "Frame Three",
     src: "/pic1.png",
   },
 ];
+
+const resolvePublicPath = (path: string) => {
+  if (!path) return path;
+  const segments = path
+    .split("/")
+    .filter(Boolean)
+    .map((segment) => encodeURIComponent(segment));
+  return `/${segments.join("/")}`;
+};
 
 interface StickyImageCardProps extends StackImage {
   index: number;
@@ -41,6 +50,7 @@ const StickyImageCard = ({
 }: StickyImageCardProps) => {
   const cardRef = useRef<HTMLDivElement>(null);
   const scale = useTransform(progress, range, [1, targetScale]);
+  const resolvedSrc = useMemo(() => resolvePublicPath(src), [src]);
 
   return (
     <div ref={cardRef} className="sticky top-0 flex items-center justify-center">
@@ -51,7 +61,7 @@ const StickyImageCard = ({
         }}
         className="relative flex h-[340px] w-[520px] origin-top overflow-hidden rounded-[32px] bg-black/5 shadow-lg"
       >
-        <img src={src} alt={title} className="h-full w-full object-cover" />
+        <img src={resolvedSrc} alt={title} className="h-full w-full object-cover" />
       </motion.div>
     </div>
   );
@@ -72,12 +82,6 @@ export const StackScrollGallery = () => {
         ref={containerRef}
         className="relative flex w-full flex-col items-center justify-center gap-10 pb-[110vh] pt-[45vh]"
       >
-        <div className="pointer-events-none absolute left-1/2 top-[12%] grid -translate-x-1/2 content-start justify-items-center gap-4 text-center">
-          <span className="relative text-xs uppercase tracking-[0.2em] text-foreground/50">
-            Scroll to stack the frames
-          </span>
-        </div>
-
         {items.map((item, index) => {
           const progressStart = Math.min(index / items.length + 0.05 * index, 1);
           const targetScale = Math.max(0.55, 1 - (items.length - index - 1) * 0.12);
@@ -99,4 +103,3 @@ export const StackScrollGallery = () => {
 };
 
 export default StackScrollGallery;
-
