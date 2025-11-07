@@ -43,8 +43,7 @@ export function MarketingPage() {
   return (
     <ReactLenis root>
       <div className="relative min-h-screen overflow-x-hidden text-text" style={marketingThemeStyles}>
-        <ProgressiveBlur position="top" className="z-[1]" />
-        <ProgressiveBlur position="bottom" className="z-[1]" />
+      <ProgressiveBlur position="top" className="z-[1]" />
         <div className="relative">
         <section className="relative isolate z-[12000] flex justify-center" aria-label="Primary navigation">
           <div className="pointer-events-none fixed inset-x-0 bottom-6 z-[9999] flex w-full justify-center px-3 sm:px-6">
@@ -87,12 +86,21 @@ export function MarketingPage() {
         <HowItWorksSection />
         <PricingParallax />
 
-        <footer className="relative z-[12000] mt-64 flex min-h-screen flex-col justify-between px-6 py-14 text-[color:rgba(244,241,234,0.78)] sm:mt-80 md:mt-88 lg:px-12 xl:mt-[calc(120px+18vw)]">
+        <footer className="relative z-[12000] mt-64 flex min-h-screen flex-col justify-between overflow-hidden px-6 py-14 text-[color:rgba(244,241,234,0.78)] sm:mt-80 md:mt-88 lg:px-12 xl:mt-[calc(120px+18vw)]">
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            src="/insignia.mov"
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-20 blur-3xl"
+          />
           {/* Plan Spacing Step 3: elevated top margin keeps footer distinct from pricing block. */}
           {/* Plan V10 Step 2: footer offset increased to maintain section rhythm after hero expansion. */}
           {/* Plan V11 Step 2: footer offset increased again to track the taller hero. */}
           {/* Plan V11 Step 3: documented spacing update to mirror hero adjustments. */}
-          <div className="flex flex-1 flex-col justify-between gap-16">
+          <div className="relative z-10 flex flex-1 flex-col justify-between gap-16">
             <div className="flex flex-col gap-10 md:flex-row md:items-start md:justify-between">
               {/* Footer refresh step: replaced wordmark text with brand icon for consistent branding */}
               <div className="max-w-sm space-y-3 text-left">
@@ -134,25 +142,16 @@ export function MarketingPage() {
               />
               {/* Plan Step 5: unified nav/footer branding with logo (4). */}
             </div>
-            <div className="relative flex flex-1 items-center justify-center overflow-hidden">
-              <video
-                autoPlay
-                loop
-                muted
-                playsInline
-                className="pointer-events-none absolute inset-0 h-[220%] w-[220%] max-w-none object-cover opacity-35 blur-3xl"
-                src="/insignia.mov"
-                aria-hidden="true"
-              />
+            <div className="flex flex-1 items-center justify-center">
               <h2
-                className="relative text-4xl font-semibold tracking-tight text-[#f9f9f9] sm:text-5xl"
+                className="text-4xl font-semibold tracking-tight text-[#f9f9f9] sm:text-5xl"
                 style={{ fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif" }}
               >
                 MICROAGENTS
               </h2>
             </div>
           </div>
-          <div className="flex flex-col gap-6 text-xs text-[color:rgba(244,241,234,0.45)] md:flex-row md:items-center md:justify-between">
+          <div className="relative z-10 flex flex-col gap-6 text-xs text-[color:rgba(244,241,234,0.45)] md:flex-row md:items-center md:justify-between">
             <span>© {new Date().getFullYear()} Microagents, Inc. All rights reserved.</span>
             <div className="flex flex-wrap gap-4">
               <TransitionLink to="/legal" className="text-[#f9f9f9] transition hover:text-white">Legal</TransitionLink>

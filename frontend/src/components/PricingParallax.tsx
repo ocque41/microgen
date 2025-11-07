@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from "react";
 const modelSections = [
   {
     id: "fund",
+    stepLabel: "1",
     title: "Fund model",
     subtitle: "Venture capital · Private equity",
     description:
@@ -31,6 +32,7 @@ const modelSections = [
   },
   {
     id: "flow",
+    stepLabel: "4",
     title: "Flow model",
     subtitle: "Investment · Investment banking",
     description:
@@ -106,9 +108,9 @@ const PricingParallax = () => {
 };
 
 const ModelRow = ({ model, viewportHeight }: { model: ModelSection; viewportHeight: number }) => {
-  const rowRef = useRef<HTMLDivElement>(null);
+  const cardsRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
-    target: rowRef,
+    target: cardsRef,
     offset: ["start end", "end start"],
   });
 
@@ -123,18 +125,19 @@ const ModelRow = ({ model, viewportHeight }: { model: ModelSection; viewportHeig
     openRange,
     [-viewportHeight * 0.3, -viewportHeight * 0.12, viewportHeight * 0.12, viewportHeight * 0.2],
   );
+  const cardsOpacity = useTransform(scrollYProgress, [0, 0.28, 0.65, 1], [0, 1, 1, 0]);
 
   return (
     <div className="mx-auto w-full max-w-6xl px-4 md:px-6 lg:px-8">
-      <div className="mb-10 text-center">
-        <p className="text-xs uppercase tracking-[0.35em] text-white/45">{model.subtitle}</p>
+      <div className="mb-12 text-left sm:text-center">
+        <p className="text-sm uppercase tracking-[0.4em] text-white/35">{model.stepLabel}</p>
         <h3 className="mt-3 text-3xl font-semibold tracking-tight text-white md:text-4xl">{model.title}</h3>
         <p className="mx-auto mt-4 max-w-3xl text-sm tracking-[0.01em] text-white/65 md:text-base">{model.description}</p>
       </div>
-      <div ref={rowRef}>
+      <div ref={cardsRef}>
         <div className="grid items-stretch gap-6 lg:grid-cols-[1.05fr_1.6fr]">
           <motion.article
-            style={{ y: primaryY }}
+            style={{ y: primaryY, opacity: cardsOpacity }}
             className="flex h-full flex-col justify-between rounded-2xl border border-white/5 bg-[#121212] p-6 md:p-8"
           >
             <div className="space-y-4">
@@ -154,15 +157,15 @@ const ModelRow = ({ model, viewportHeight }: { model: ModelSection; viewportHeig
                   {feature}
                 </li>
               ))}
-            </ul>
-          </div>
-          <button className="mt-8 inline-flex items-center justify-center rounded-full bg-white px-5 py-2.5 text-sm font-medium text-black transition hover:bg-white/90">
-            {model.ctaLabel}
-          </button>
-        </motion.article>
+              </ul>
+            </div>
+            <button className="mt-8 inline-flex items-center justify-center rounded-full bg-white px-5 py-2.5 text-sm font-medium text-black transition hover:bg-white/90">
+              {model.ctaLabel}
+            </button>
+          </motion.article>
 
           <motion.div
-            style={{ y: secondaryY }}
+            style={{ y: secondaryY, opacity: cardsOpacity }}
             className="relative overflow-hidden rounded-2xl border border-white/5 bg-[#151515]"
           >
             <div

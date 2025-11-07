@@ -51,7 +51,7 @@
 }
 
 .hero__description {
-  margin: 0;
+  margin: clamp(1rem, 2vh, 1.5rem) 0 0 0;
   max-width: 42ch;
   font-size: clamp(1.05rem, 1.8vw, 1.35rem);
   color: rgba(249, 249, 249, 0.78);
