@@ -7,6 +7,7 @@ import { publicAsset } from "@/lib/publicAsset";
 import { marketingTheme } from "@/lib/marketingTheme";
 import { HeroSection } from "@/sections/hero";
 import { HowItWorksSection } from "@/sections/how-it-works";
+import PricingParallax from "@/components/PricingParallax";
 
 const marketingThemeStyles = {
   "--marketing-background-color": marketingTheme.background,
@@ -85,6 +86,7 @@ export function MarketingPage() {
         </section>
         <HeroSection />
         <HowItWorksSection />
+        <PricingParallax />
         <section
           className="relative mt-64 flex w-full flex-col justify-center bg-[#090909] px-6 py-24 sm:px-10 md:mt-80 lg:px-16 xl:mt-96 xl:px-20"
           style={{ minHeight: "100vh", height: "100svh", boxSizing: "border-box" }}
