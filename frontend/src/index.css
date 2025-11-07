@@ -7,7 +7,7 @@
     color-scheme: dark;
     --radius: var(--radius-lg);
 
-    --letter-spacing-base: 0.4px;
+    --letter-spacing-base: 0.01em;
 
     --background: 0 0% 4%;
     --foreground: 0 0% 98%;
@@ -78,6 +78,18 @@
   textarea,
   label {
     letter-spacing: var(--letter-spacing-base);
+  }
+
+  h1,
+  h2 {
+    letter-spacing: -0.02em;
+  }
+
+  h3,
+  h4,
+  h5,
+  h6 {
+    letter-spacing: -0.005em;
   }
 
   a {
