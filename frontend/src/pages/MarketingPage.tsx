@@ -3,7 +3,6 @@ import type { CSSProperties } from "react";
 import { useEffect } from "react";
 import { TransitionLink } from "@/components/motion/TransitionLink";
 import { ProgressiveBlur } from "@/components/effects/ProgressiveBlur";
-import { publicAsset } from "@/lib/publicAsset";
 import { marketingTheme } from "@/lib/marketingTheme";
 import { HeroSection } from "@/sections/hero";
 import { HowItWorksSection } from "@/sections/how-it-works";
@@ -87,67 +86,6 @@ export function MarketingPage() {
         <HeroSection />
         <HowItWorksSection />
         <PricingParallax />
-        <section
-          className="relative mt-64 flex w-full flex-col justify-center bg-[#090909] px-6 py-24 sm:px-10 md:mt-80 lg:px-16 xl:mt-96 xl:px-20"
-          style={{ minHeight: "100vh", height: "100svh", boxSizing: "border-box" }}
-        >
-          {/* Plan Spacing Step 2: top margin added so pricing stage has clear separation from previous section. */}
-          {/* Plan V10 Step 2: margin increased to account for taller hero above. */}
-          {/* Plan V11 Step 2: margin bumped again for expanded hero. */}
-          {/* Plan V11 Step 3: documented spacing adjustment for traceability. */}
-          {/* Plan Step 3: pricing stage locks to viewport height while padding respects box model. */}
-          <div
-            className="mx-auto flex w-full flex-1 flex-col justify-center gap-16 text-left"
-            style={{ maxWidth: VIEWPORT_MAX_WIDTH }}
-          >
-            <div className="space-y-4">
-              <h2 className="text-3xl font-semibold sm:text-4xl md:text-5xl">Pricing crafted as you build</h2>
-              <p className="text-base sm:text-lg" style={{ color: "color-mix(in srgb, var(--text-primary) 70%, transparent)" }}>
-                Every engagement begins with a live conversation inside your microagent workspace. Share priorities with a pricing co-pilot that listens, models usage, and assembles a commercial path while you shape the agent itself.
-              </p>
-            </div>
-            <div className="grid gap-12 rounded-[5px] bg-[#090909]">
-              <article className="space-y-6">
-                <h3 className="text-2xl font-semibold sm:text-3xl md:text-4xl">How the pilot personalizes your plan</h3>
-                <div className="overflow-hidden rounded-[5px]">
-                  <div className="flex min-h-[420px] w-full items-center justify-center bg-[#090909] px-8 py-12">
-                    <video
-                      src={publicAsset("insignia.mov")}
-                      className="w-full max-w-3xl object-contain transition-transform duration-500 ease-out"
-                      autoPlay
-                      loop
-                      muted
-                      playsInline
-                      aria-label="Insignia animation illustrating pricing flow"
-                    />
-                  </div>
-                </div>
-                <ul className="space-y-1.5 text-base sm:text-lg" style={{ color: "color-mix(in srgb, var(--text-primary) 70%, transparent)" }}>
-                  <li>
-                    <span className="block text-xs font-semibold uppercase tracking-[0.25em] text-[color:rgba(244,241,234,0.45)]">
-                      Frame your goals
-                    </span>
-                    Surface workloads, compliance mandates, and stakeholder expectations as the agent maps capacity.
-                  </li>
-                </ul>
-                <p className="text-base sm:text-lg" style={{ color: "color-mix(in srgb, var(--text-primary) 70%, transparent)", marginTop: "0.65rem" }}>
-                  Your static tier will be per agent, plan your agent and team endorse.
-                </p>
-                {/* Plan Step 1 refinement: matched typography scale with How It Works section */}
-              </article>
-              <div className="flex justify-start">
-                <TransitionLink
-                  to="/signup"
-                  className="inline-flex items-center justify-center px-8 py-3 text-xl font-semibold text-[#f9f9f9] transition-transform duration-200 hover:scale-105 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f9f9f9]"
-                >
-                  Get Started
-                </TransitionLink>
-              </div>
-            </div>
-            {/* Plan Step 2 complete: refreshed CTA copy */}
-          </div>
-        </section>
-        {/* Plan Step 3: pricing container now anchors to viewport dimensions with flex centering. */}
 
         <footer className="relative z-[12000] mt-64 flex min-h-screen flex-col justify-between px-6 py-14 text-[color:rgba(244,241,234,0.78)] sm:mt-80 md:mt-88 lg:px-12 xl:mt-[calc(120px+18vw)]">
           {/* Plan Spacing Step 3: elevated top margin keeps footer distinct from pricing block. */}
@@ -196,8 +134,20 @@ export function MarketingPage() {
               />
               {/* Plan Step 5: unified nav/footer branding with logo (4). */}
             </div>
-            <div className="flex flex-1 items-center justify-center">
-              <h2 className="text-4xl font-semibold tracking-[0.6em] text-[#f9f9f9] sm:text-5xl">
+            <div className="relative flex flex-1 items-center justify-center overflow-hidden">
+              <video
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="pointer-events-none absolute inset-0 h-[220%] w-[220%] max-w-none object-cover opacity-35 blur-3xl"
+                src="/insignia.mov"
+                aria-hidden="true"
+              />
+              <h2
+                className="relative text-4xl font-semibold tracking-tight text-[#f9f9f9] sm:text-5xl"
+                style={{ fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif" }}
+              >
                 MICROAGENTS
               </h2>
             </div>
