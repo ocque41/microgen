@@ -81,8 +81,8 @@ const PricingParallax = () => {
         </header>
 
         <div className="space-y-[26vh]">
-          {modelSections.map((model, index) => (
-            <ModelRow key={model.id} model={model} index={index} />
+          {modelSections.map((model) => (
+            <ModelRow key={model.id} model={model} />
           ))}
         </div>
       </div>
@@ -90,7 +90,7 @@ const PricingParallax = () => {
   );
 };
 
-const ModelRow = ({ model, index }: { model: ModelSection; index: number }) => {
+const ModelRow = ({ model }: { model: ModelSection }) => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -165,11 +165,11 @@ const MotionHero = ({
   panel: ModelSection["panel"];
   cardsOpacity: ReturnType<typeof useTransform>;
 }) => {
-  const glow = useTransform(cardsOpacity, [0, 1], [0.15, 0.55]);
+  const glowShadow = useTransform(cardsOpacity, (value) => `0 40px 120px rgba(1,1,1,${0.15 + value * 0.4})`);
 
   return (
     <motion.div
-      style={{ boxShadow: glow.to((value) => `0 40px 120px rgba(1,1,1,${value})`) }}
+      style={{ boxShadow: glowShadow }}
       className="relative flex h-full flex-col justify-between overflow-hidden rounded-[32px] border border-white/10 bg-[#0d0d0d]"
     >
       <div
