@@ -23,6 +23,7 @@ import { LoginPage } from "../pages/LoginPage";
 import { MarketingPage } from "../pages/MarketingPage";
 import { SignupPage } from "../pages/SignupPage";
 import { stackClientApp } from "../stack";
+import { ProgressiveBlur } from "../components/effects/ProgressiveBlur";
 import { WorkbenchDetailRoute, workbenchDetailAction, workbenchDetailLoader } from "../routes/(workbench)/detail";
 import { WorkbenchIndexRoute } from "../routes/(workbench)/index";
 import { WorkbenchLayout, workbenchLoader } from "../routes/(workbench)/layout";
@@ -77,6 +78,14 @@ function AppLayout() {
       <BackendAuthProvider>
         <StackTheme theme={stackBrandTheme}>
           <StackNavigationBridge />
+          {/* Soft gradient backing for the fixed navbar across pages */}
+          <ProgressiveBlur
+            position="bottom"
+            className="z-[9000]"
+            backgroundColor="rgba(9, 9, 9, 0.96)"
+            height="220px"
+            blurAmount="26px"
+          />
           <Outlet />
         </StackTheme>
       </BackendAuthProvider>

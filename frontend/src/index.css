@@ -61,9 +61,15 @@
     color-scheme: dark;
   }
 
+  html,
+  body,
+  #root {
+    background-color: #090909;
+    background-image: none;
+  }
+
   body {
     @apply m-0 min-h-screen font-sans transition-colors;
-    background: var(--surface-background);
     color: var(--text-primary);
     letter-spacing: var(--letter-spacing-base);
     -webkit-font-smoothing: antialiased;

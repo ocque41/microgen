@@ -6,7 +6,7 @@ import { ProgressiveBlur } from "@/components/effects/ProgressiveBlur";
 import { marketingTheme } from "@/lib/marketingTheme";
 import { HeroSection } from "@/sections/hero";
 import { HowItWorksSection } from "@/sections/how-it-works";
-import PricingParallax from "@/components/PricingParallax";
+import { PricingParallax } from "@/components/PricingParallax";
 
 const marketingThemeStyles = {
   "--marketing-background-color": marketingTheme.background,
