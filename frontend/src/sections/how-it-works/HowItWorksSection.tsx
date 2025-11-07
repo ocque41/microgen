@@ -1,50 +1,60 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import React, { useState } from "react";
+import { useState } from "react";
 
 import { cn } from "@/lib/utils";
 
 const steps = [
   {
-    id: "step-1",
-    title: "What is the first thing you think about when it comes to working?",
-    details: ["(No specific answer provided yet — probably meant to lead into the next node.)"],
+    id: "stage-a",
+    title: "Where does the week actually go?",
+    details: [
+      "Hours disappear into sourcing lists, pulling metrics out of decks, cleaning them in sheets, and restacking slides.",
+      "We start by ingesting those decks, emails, and spreadsheets so you get one structured record without retyping.",
+    ],
     image: "/pic (4).png",
   },
   {
-    id: "step-2",
-    title: "What eats the most time in a normal week?",
+    id: "stage-b",
+    title: "Name the villain in that workflow",
     details: [
-      "Sourcing / finding targets / keeping the pipeline full",
-      "Collecting data from PDFs, emails, data sheets, etc.",
-      "Cleaning / normalizing data in Excel (formatting, duplicates)",
-      "Building or updating slides, memos, or IC decks",
-      "Reviewing reporting (portfolio, LP/GP, etc.)",
-      "Ad hoc tasks just to check that analysis from teammates is correct",
+      "Duplicate entry across CRM, tracker, and memo.",
+      "Metrics show up in ten formats and never match your schema.",
+      "Everyone is chasing the latest attachment across files, email, and Slack.",
+      "We normalize the data and keep one living version so the team stops copy/pasting.",
     ],
     image: "/pic (7).png",
   },
   {
-    id: "step-3",
-    title: "What’s the most annoying part of that task?",
-    details: ["Say one part"],
+    id: "stage-c",
+    title: "Pick your automation comfort level",
+    details: [
+      "Autopilot: the agent reads the deck, updates the deal, and syncs to CRM.",
+      "Assist mode: it drafts the record and you approve or tweak.",
+      "Co-pilot: you lead, the agent fills blanks, links docs, and fetches context.",
+      "Whatever path you choose, the workflow bends to your control, not the other way around.",
+    ],
     image: "/pic10.png",
   },
   {
-    id: "step-4",
-    title: "When you try a new tool / AI, what are you actually hoping for?",
-    details: ["Do everything", "Do something", "Work with me together"],
+    id: "stage-d",
+    title: "Work with the stack you already have",
+    details: [
+      "Affinity, HubSpot, Airtable, Excel — we sit on top of all of it.",
+      "Most deal work still runs through files, email, and Slack; we pull that into one view.",
+      "If a process shifts mid-deal, the workspace shifts with you so nothing gets rebuilt from scratch.",
+    ],
     image: "/pic (6).png",
   },
   {
-    id: "step-5",
-    title: "How structured is your environment?",
+    id: "stage-e",
+    title: "Why this matters right now",
     details: [
-      "Pipelines set up",
-      "Decided tools already track deals/companies in a system (Affinity, HubSpot, Airtable, Excel)",
-      "Mostly run on files, email, and Slack",
-      "Mix and it changes deal to deal",
+      "Inbound volume is up while teams stay small — quick extraction keeps screening moving.",
+      "Switching CRMs or comparing stacks is painful; acting as an overlay avoids another migration.",
+      "Partners still expect polished memos, so automatic standardization frees time for actual evaluation.",
+      "Deal cycles are unpredictable, so trimming the ops drag buys back focus for the calls that count.",
     ],
     image: "/pic9.png",
   },
@@ -52,10 +62,6 @@ const steps = [
 
 const HoverExpandSteps = ({ className }: { className?: string }) => {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
-
-  const resetIfActive = (index: number) => {
-    setActiveIndex((prev) => (prev === index ? null : prev));
-  };
 
   return (
     <motion.div
@@ -76,32 +82,36 @@ const HoverExpandSteps = ({ className }: { className?: string }) => {
               <motion.button
                 type="button"
                 onMouseEnter={() => setActiveIndex(index)}
-                onMouseLeave={() => resetIfActive(index)}
+                onMouseLeave={(event) => {
+                  if (!event.currentTarget.contains(event.relatedTarget as Node)) {
+                    setActiveIndex((prev) => (prev === index ? null : prev));
+                  }
+                }}
                 onFocus={() => setActiveIndex(index)}
                 onBlur={(event) => {
                   if (!event.currentTarget.contains(event.relatedTarget as Node)) {
-                    resetIfActive(index);
+                    setActiveIndex((prev) => (prev === index ? null : prev));
                   }
                 }}
                 onClick={() => setActiveIndex(index)}
-                initial={false}
-                animate={{
-                  height: isActive ? 330 : 150,
-                }}
-                transition={{ duration: 0.3, ease: "easeInOut" }}
+                layout
+                transition={{ duration: 0.35, ease: "easeInOut" }}
                 className={cn(
                   "group relative flex w-full overflow-hidden rounded-[28px] bg-transparent text-left",
                   "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white/70",
                 )}
+                style={{ minHeight: isActive ? 420 : 200 }}
               >
-                <img
-                  src={step.image}
-                  alt={step.title}
-                  className={cn(
-                    "h-full w-full object-cover transition-opacity duration-300",
-                    isActive ? "opacity-30" : "opacity-100",
-                  )}
-                />
+                <div className="absolute inset-0">
+                  <img
+                    src={step.image}
+                    alt={step.title}
+                    className={cn(
+                      "h-full w-full object-cover transition-opacity duration-300",
+                      isActive ? "opacity-30" : "opacity-100",
+                    )}
+                  />
+                </div>
 
                 <AnimatePresence>
                   {isActive && (
@@ -111,7 +121,7 @@ const HoverExpandSteps = ({ className }: { className?: string }) => {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: 20 }}
                       transition={{ duration: 0.25, ease: "easeOut" }}
-                      className="absolute inset-0 flex h-full w-full flex-col justify-end bg-gradient-to-t from-[#090909] via-[#090909]/85 to-transparent px-8 pb-8"
+                      className="absolute inset-0 z-10 flex h-full w-full flex-col justify-end bg-gradient-to-t from-[#090909] via-[#090909]/90 to-transparent px-8 pb-8"
                     >
                       <p className="text-sm font-semibold uppercase tracking-[0.35em] text-white/60">
                         Step {index + 1}
