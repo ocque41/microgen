@@ -60,6 +60,12 @@ const PricingParallax = () => {
     <main className="w-full bg-[#eee] text-black">
       <div className="font-geist flex h-screen items-center justify-center gap-2">
         <div className="absolute left-1/2 top-[10%] grid -translate-x-1/2 content-start justify-items-center gap-6 text-center text-black">
+          {/* Preface copy adds context before the parallax gallery animates */}
+          <h2 className="text-4xl font-semibold uppercase tracking-tight">Investment Model</h2>
+          <p className="max-w-[48ch] text-base text-black/70">
+            We pair automation-first delivery with pragmatic capital deployment so teams can adopt
+            AI copilots without runaway spend.
+          </p>
           <span className="relative max-w-[12ch] text-xs uppercase leading-tight opacity-40 after:absolute after:left-1/2 after:top-full after:h-16 after:w-px after:bg-gradient-to-b after:from-white after:to-black after:content-['']">
             scroll down to see
           </span>
@@ -111,4 +117,3 @@ const Column = ({ images, y }: ColumnProps) => {
 };
 
 export { PricingParallax };
-
