@@ -37,19 +37,19 @@ const PricingParallax = ({ variant = "default" }: PricingParallaxProps) => {
   const isInverted = variant === "inverted";
   const mainBackgroundClass = isInverted
     ? "bg-[#090909] text-[#f9f9f9]"
-    : "bg-[#eee] text-[#090909]";
+    : "bg-[#f9f9f9] text-[#090909]";
   const headlineTextClass = isInverted ? "text-[#f9f9f9]" : "text-[#090909]";
   const bodyTextClass = isInverted ? "text-[#f9f9f9]/70" : "text-[#090909]/70";
   const cueTextClass = isInverted ? "text-[#f9f9f9]/60" : "text-[#090909]/60";
   const cueGradientClass = isInverted
     ? "after:from-[#f9f9f9]/70 after:to-transparent"
-    : "after:from-white after:to-black";
-  const sectionBackgroundClass = isInverted ? "bg-[#090909]" : "bg-white";
+    : "after:from-[#f9f9f9] after:to-[#090909]/30";
+  const sectionBackgroundClass = isInverted ? "bg-[#090909]" : "bg-[#f9f9f9]";
   const cardSurfaceClass = isInverted
     ? "bg-gradient-to-b from-[#090909] via-[#0d0d0d] to-[#050505]"
-    : "bg-gradient-to-b from-white via-white to-[#f3f3f3]";
-  const cardBorderClass = isInverted ? "border-[#f9f9f9]/15" : "border-black/5";
-  const badgeBorderClass = isInverted ? "border-[#f9f9f9]/30" : "border-black/10";
+    : "bg-gradient-to-b from-white via-[#fdfdfd] to-[#f2f2f2]";
+  const cardBorderClass = isInverted ? "border-[#f9f9f9]/15" : "border-[#090909]/10";
+  const badgeBorderClass = isInverted ? "border-[#f9f9f9]/30" : "border-[#090909]/15";
   const badgeTextClass = isInverted ? "text-[#f9f9f9]/70" : "text-[#090909]/60";
   const mobileFeatureTextClass = isInverted ? "text-[#f9f9f9]/60" : "text-[#090909]/50";
 
