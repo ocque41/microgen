@@ -85,6 +85,7 @@ export function MarketingPage() {
         <HeroSection />
         <HowItWorksSection />
         <PricingParallax />
+        <PricingParallax />
 
         <footer className="relative z-[12000] mt-64 flex min-h-screen flex-col justify-between overflow-hidden px-6 py-14 text-[color:rgba(244,241,234,0.78)] sm:mt-80 md:mt-88 lg:px-12 xl:mt-[calc(120px+18vw)]">
           <video
