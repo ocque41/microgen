@@ -60,12 +60,6 @@ const PricingParallax = () => {
     <main className="w-full bg-[#eee] text-black">
       <div className="font-geist flex h-screen items-center justify-center gap-2">
         <div className="absolute left-1/2 top-[10%] grid -translate-x-1/2 content-start justify-items-center gap-6 text-center text-black">
-          {/* Preface copy shown before the parallax gallery starts */}
-          <h2 className="text-4xl font-semibold uppercase tracking-tight">Investment Model</h2>
-          <p className="max-w-[48ch] text-base text-black/70">
-            We pair automation-first delivery with pragmatic capital deployment so teams can adopt
-            AI copilots without runaway spend.
-          </p>
           <span className="relative max-w-[12ch] text-xs uppercase leading-tight opacity-40 after:absolute after:left-1/2 after:top-full after:h-16 after:w-px after:bg-gradient-to-b after:from-white after:to-black after:content-['']">
             scroll down to see
           </span>
@@ -76,6 +70,14 @@ const PricingParallax = () => {
         ref={gallery}
         className="relative box-border flex h-[175vh] gap-[2vw] overflow-hidden bg-white p-[2vw]"
       >
+        <div className="pointer-events-none absolute left-1/2 top-[5%] z-10 grid -translate-x-1/2 content-start justify-items-center gap-4 text-center text-black">
+          {/* Overlay headline so visitors see the Investment Model intro before the parallax engages */}
+          <h2 className="text-4xl font-semibold uppercase tracking-tight">Investment Model</h2>
+          <p className="max-w-[48ch] text-base text-black/70">
+            We pair automation-first delivery with pragmatic capital deployment so teams can adopt AI
+            copilots without runaway spend.
+          </p>
+        </div>
         <Column images={[images[0], images[1], images[2]]} y={y} />
         <Column images={[images[3], images[4], images[5]]} y={y2} />
         <Column images={[images[6], images[7], images[8]]} y={y3} />
