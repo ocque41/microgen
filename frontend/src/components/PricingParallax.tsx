@@ -72,12 +72,12 @@ const PricingParallax = () => {
         className="relative flex h-[175vh] items-start justify-center overflow-hidden bg-white px-[4vw] pt-24"
       >
         <motion.div
-          className="relative mx-auto flex w-full max-w-6xl items-start justify-between gap-6"
+          className="relative mx-auto flex w-full max-w-6xl items-center justify-between gap-10"
           style={{ y: yCard }}
         >
           <FeatureColumn alignment="right" features={leftFeatures} />
 
-          <div className="relative flex w-full max-w-4xl flex-col items-center rounded-[40px] border border-black/5 bg-gradient-to-b from-white via-white to-[#f3f3f3] p-10 shadow-[0_30px_120px_rgba(0,0,0,0.1)]">
+          <div className="relative flex w-full max-w-4xl flex-col items-center rounded-[12px] border border-black/5 bg-gradient-to-b from-white via-white to-[#f3f3f3] p-10 shadow-[0_30px_120px_rgba(0,0,0,0.1)]">
             <span className="mb-4 rounded-full border border-black/10 px-4 py-1 text-xs uppercase tracking-[0.35em] text-black/60">
               Pricing Models
             </span>
@@ -87,15 +87,21 @@ const PricingParallax = () => {
               model tier. Each deployment blends governance, insights, and collaboration for faster
               go-to-market.
             </p>
-            <div className="mt-10 flex w-full flex-wrap items-center justify-between gap-6 rounded-[32px] border border-black/5 bg-white/70 p-8">
-              <div className="flex flex-col gap-2">
-                <span className="text-sm uppercase tracking-[0.3em] text-black/40">Starting at</span>
-                <span className="text-4xl font-semibold text-black">$4.5k <small className="text-base font-normal text-black/60">per model</small></span>
-              </div>
-              <div className="flex flex-col gap-2 text-right">
-                <span className="text-sm uppercase tracking-[0.3em] text-black/40">Support</span>
-                <span className="text-lg font-medium text-black">Enterprise SLAs • Concierge enablement</span>
-              </div>
+            <div className="mt-12 grid w-full grid-cols-1 gap-0 overflow-hidden rounded-[10px] border border-black/5 lg:grid-cols-2">
+              <PlanCard
+                accent="light"
+                label="Pro"
+                price="$4.5k"
+                description="Perfect for growth teams launching copilots across a single business unit."
+                points={["Embedded analytics", "Guided onboarding", "Weekly office hours"]}
+              />
+              <PlanCard
+                accent="dark"
+                label="Business"
+                price="$9.8k"
+                description="Scaled governance, multi-region observability, and proactive model tuning."
+                points={["Dedicated strategist", "24/7 response", "Model drift insurance"]}
+              />
             </div>
 
             <div className="mt-10 grid w-full gap-4 text-center text-sm text-black/50 lg:hidden">
@@ -134,31 +140,62 @@ type FeatureColumnProps = {
 
 const FeatureColumn = ({ alignment, features }: FeatureColumnProps) => {
   const arrow = alignment === "right" ? "→" : "←";
-  const textAlign = alignment === "right" ? "text-right" : "text-left";
-  const justify = alignment === "right" ? "justify-end" : "justify-start";
+  const textAlign = alignment === "right" ? "items-end" : "items-start";
+  const flow = alignment === "right" ? "flex-row" : "flex-row-reverse";
 
   return (
+    <div className={`hidden shrink-0 flex-col items-center lg:flex`}>
+      <div className={`flex h-full min-h-[520px] w-48 flex-col justify-center gap-10 ${textAlign}`}>
+        {features.map((feature) => (
+          <div key={feature} className={`flex ${flow} items-center gap-3 text-lg text-black/75`}>
+            <span className="text-2xl text-black/60">{arrow}</span>
+            <span className="font-medium">{feature}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+type PlanCardProps = {
+  accent: "light" | "dark";
+  label: string;
+  price: string;
+  description: string;
+  points: string[];
+};
+
+const PlanCard = ({ accent, label, price, description, points }: PlanCardProps) => {
+  const isDark = accent === "dark";
+  return (
     <div
-      className={`hidden h-full w-1/4 min-w-[200px] flex-col gap-10 font-geist text-lg text-black/80 lg:flex ${textAlign}`}
+      className={`relative flex h-full flex-col gap-4 rounded-[10px] border border-black/5 p-8 text-left ${isDark ? "bg-neutral-900 text-white" : "bg-white text-black"}`}
     >
-      {features.map((feature) => (
-        <div
-          key={feature}
-          className={`flex items-center gap-3 text-2xl font-medium text-black ${justify}`}
+      <div className="flex items-center justify-between">
+        <span
+          className={`rounded-full px-4 py-1 text-xs uppercase tracking-[0.35em] ${isDark ? "bg-white/10 text-white" : "bg-black/5 text-black/70"}`}
         >
-          {alignment === "right" ? (
-            <>
-              <span className="text-lg font-normal text-black/75">{feature}</span>
-              <span className="text-3xl text-black/60">{arrow}</span>
-            </>
-          ) : (
-            <>
-              <span className="text-3xl text-black/60">{arrow}</span>
-              <span className="text-lg font-normal text-black/75">{feature}</span>
-            </>
-          )}
-        </div>
-      ))}
+          {label}
+        </span>
+        <span className="text-3xl font-semibold">{price}
+          <small className="pl-1 text-sm font-normal opacity-70">/model</small>
+        </span>
+      </div>
+      <p className={`text-base ${isDark ? "text-white/80" : "text-black/70"}`}>{description}</p>
+      <hr className={`${isDark ? "border-white/10" : "border-black/10"}`} />
+      <ul className="flex flex-col gap-2 text-sm">
+        {points.map((point) => (
+          <li key={point} className="flex items-center gap-2">
+            <span className={`h-2 w-2 rounded-full ${isDark ? "bg-white" : "bg-black"}`} />
+            <span className={isDark ? "text-white/80" : "text-black/70"}>{point}</span>
+          </li>
+        ))}
+      </ul>
+      <button
+        className={`mt-auto rounded-full border px-5 py-2 text-sm font-semibold ${isDark ? "border-white/30 text-white" : "border-black/20 text-black"}`}
+      >
+        Talk to sales
+      </button>
     </div>
   );
 };
