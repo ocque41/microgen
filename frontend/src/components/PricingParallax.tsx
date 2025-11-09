@@ -61,7 +61,7 @@ const PricingParallax = () => {
       <div className="font-geist flex h-screen items-center justify-center gap-2">
         <div className="absolute bottom-[12%] left-1/2 grid -translate-x-1/2 content-start justify-items-center gap-6 text-center text-black">
           {/* Preface copy anchored near the gray/white boundary before the gallery opens */}
-          <h2 className="text-4xl font-semibold uppercase tracking-tight">Investment Model</h2>
+          <h2 className="text-4xl font-semibold uppercase tracking-tight">Models</h2>
           <p className="max-w-[48ch] text-base text-black/70">
             We pair automation-first delivery with pragmatic capital deployment so teams can adopt AI
             copilots without runaway spend.
@@ -84,7 +84,7 @@ const PricingParallax = () => {
       <div className="font-geist relative flex h-screen items-center justify-center gap-2">
         <div className="absolute left-1/2 top-[10%] grid -translate-x-1/2 content-start justify-items-center gap-6 text-center text-black">
           {/* Preface copy now lives above the "scroll up" cue per request */}
-          <h2 className="text-4xl font-semibold uppercase tracking-tight">Investment Model</h2>
+          <h2 className="text-4xl font-semibold uppercase tracking-tight">Models</h2>
           <p className="max-w-[48ch] text-base text-black/70">
             We pair automation-first delivery with pragmatic capital deployment so teams can adopt
             AI copilots without runaway spend.
