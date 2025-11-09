@@ -58,8 +58,8 @@ const PricingParallax = () => {
 
   return (
     <main className="w-full bg-[#eee] text-black">
-      <div className="font-geist flex h-screen items-center justify-center gap-2">
-        <div className="absolute bottom-[12%] left-1/2 grid -translate-x-1/2 content-start justify-items-center gap-6 text-center text-black">
+      <div className="font-geist relative flex h-screen items-center justify-center gap-2">
+        <div className="absolute bottom-[12%] left-1/2 z-10 grid -translate-x-1/2 content-start justify-items-center gap-6 text-center text-black">
           {/* Preface copy anchored near the gray/white boundary before the gallery opens */}
           <h2 className="text-4xl font-semibold uppercase tracking-tight">Models</h2>
           <p className="max-w-[48ch] text-base text-black/70">
@@ -82,7 +82,7 @@ const PricingParallax = () => {
         <Column images={[images[6], images[7], images[8]]} y={y4} />
       </div>
       <div className="font-geist relative flex h-screen items-center justify-center gap-2">
-        <div className="absolute left-1/2 top-[10%] grid -translate-x-1/2 content-start justify-items-center gap-6 text-center text-black">
+        <div className="absolute left-1/2 top-[10%] z-10 grid -translate-x-1/2 content-start justify-items-center gap-6 text-center text-black">
           {/* Preface copy now lives above the "scroll up" cue per request */}
           <h2 className="text-4xl font-semibold uppercase tracking-tight">Models</h2>
           <p className="max-w-[48ch] text-base text-black/70">
