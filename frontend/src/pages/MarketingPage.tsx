@@ -83,9 +83,9 @@ export function MarketingPage() {
           {/* Plan V7 Step 3: mobile nav condensed to logo + CTA with larger tap targets. */}
         </section>
         <HeroSection />
+        <PricingParallax variant="inverted" />
+        <PricingParallax />
         <HowItWorksSection />
-        <PricingParallax />
-        <PricingParallax />
 
         <footer className="relative z-[12000] mt-64 flex min-h-screen flex-col justify-between overflow-hidden px-6 py-14 text-[color:rgba(244,241,234,0.78)] sm:mt-80 md:mt-88 lg:px-12 xl:mt-[calc(120px+18vw)]">
           <video

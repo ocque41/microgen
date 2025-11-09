@@ -18,7 +18,11 @@ const rightFeatures = [
   "Auto-save Insights",
 ];
 
-const PricingParallax = () => {
+type PricingParallaxProps = {
+  variant?: "default" | "inverted";
+};
+
+const PricingParallax = ({ variant = "default" }: PricingParallaxProps) => {
   const gallery = useRef<HTMLDivElement>(null);
   const [dimension, setDimension] = useState({ width: 0, height: 0 });
 
@@ -29,6 +33,25 @@ const PricingParallax = () => {
 
   const { height } = dimension;
   const yCard = useTransform(scrollYProgress, [0, 1], [0, height * 1.2]);
+
+  const isInverted = variant === "inverted";
+  const mainBackgroundClass = isInverted
+    ? "bg-[#090909] text-[#f9f9f9]"
+    : "bg-[#eee] text-[#090909]";
+  const headlineTextClass = isInverted ? "text-[#f9f9f9]" : "text-[#090909]";
+  const bodyTextClass = isInverted ? "text-[#f9f9f9]/70" : "text-[#090909]/70";
+  const cueTextClass = isInverted ? "text-[#f9f9f9]/60" : "text-[#090909]/60";
+  const cueGradientClass = isInverted
+    ? "after:from-[#f9f9f9]/70 after:to-transparent"
+    : "after:from-white after:to-black";
+  const sectionBackgroundClass = isInverted ? "bg-[#090909]" : "bg-white";
+  const cardSurfaceClass = isInverted
+    ? "bg-gradient-to-b from-[#090909] via-[#0d0d0d] to-[#050505]"
+    : "bg-gradient-to-b from-white via-white to-[#f3f3f3]";
+  const cardBorderClass = isInverted ? "border-[#f9f9f9]/15" : "border-black/5";
+  const badgeBorderClass = isInverted ? "border-[#f9f9f9]/30" : "border-black/10";
+  const badgeTextClass = isInverted ? "text-[#f9f9f9]/70" : "text-[#090909]/60";
+  const mobileFeatureTextClass = isInverted ? "text-[#f9f9f9]/60" : "text-[#090909]/50";
 
   useEffect(() => {
     const lenis = new Lenis();
@@ -52,16 +75,20 @@ const PricingParallax = () => {
   }, []);
 
   return (
-    <main className="w-full bg-[#eee] text-black">
+    <main className={`w-full ${mainBackgroundClass}`}>
       <div className="font-geist relative flex h-screen items-center justify-center gap-2">
-        <div className="absolute bottom-[12%] left-1/2 z-10 grid -translate-x-1/2 content-start justify-items-center gap-6 text-center text-black">
+        <div
+          className={`absolute bottom-[12%] left-1/2 z-10 grid -translate-x-1/2 content-start justify-items-center gap-6 text-center ${headlineTextClass}`}
+        >
           {/* Preface copy anchored near the gray/white boundary before the gallery opens */}
           <h2 className="text-4xl font-semibold uppercase tracking-tight">Models</h2>
-          <p className="max-w-[48ch] text-base text-black/70">
+          <p className={`max-w-[48ch] text-base ${bodyTextClass}`}>
             We pair automation-first delivery with pragmatic capital deployment so teams can adopt AI
             copilots without runaway spend.
           </p>
-          <span className="relative max-w-[12ch] text-xs uppercase leading-tight opacity-40 after:absolute after:left-1/2 after:top-full after:h-16 after:w-px after:bg-gradient-to-b after:from-white after:to-black after:content-['']">
+          <span
+            className={`relative max-w-[12ch] text-xs uppercase leading-tight opacity-60 ${cueTextClass} after:absolute after:left-1/2 after:top-full after:h-16 after:w-px after:bg-gradient-to-b after:content-[''] ${cueGradientClass}`}
+          >
             scroll down to see
           </span>
         </div>
@@ -69,25 +96,33 @@ const PricingParallax = () => {
 
       <section
         ref={gallery}
-        className="relative flex h-[175vh] items-start justify-center overflow-hidden bg-white px-[4vw] pt-24"
+        className={`relative flex h-[175vh] items-start justify-center overflow-hidden ${sectionBackgroundClass} px-[4vw] pt-24`}
       >
         <motion.div
           className="relative mx-auto flex w-full max-w-6xl items-center justify-between gap-10"
           style={{ y: yCard }}
         >
-          <FeatureColumn alignment="right" features={leftFeatures} />
+          <FeatureColumn alignment="right" features={leftFeatures} inverted={isInverted} />
 
-          <div className="relative flex w-full max-w-4xl flex-col items-center rounded-[12px] border border-black/5 bg-gradient-to-b from-white via-white to-[#f3f3f3] p-10 shadow-[0_30px_120px_rgba(0,0,0,0.1)]">
-            <span className="mb-4 rounded-full border border-black/10 px-4 py-1 text-xs uppercase tracking-[0.35em] text-black/60">
+          <div
+            className={`relative flex w-full max-w-4xl flex-col items-center rounded-[12px] border ${cardBorderClass} ${cardSurfaceClass} p-10 shadow-[0_30px_120px_rgba(0,0,0,0.1)]`}
+          >
+            <span
+              className={`mb-4 rounded-full border px-4 py-1 text-xs uppercase tracking-[0.35em] ${badgeBorderClass} ${badgeTextClass}`}
+            >
               Pricing Models
             </span>
-            <h3 className="font-geist text-5xl font-semibold text-black">Loaded with Features</h3>
-            <p className="mt-3 max-w-2xl text-center text-base text-black/60">
+            <h3 className={`font-geist text-5xl font-semibold text-center ${headlineTextClass}`}>
+              Loaded with Features
+            </h3>
+            <p className={`mt-3 max-w-2xl text-center text-base ${bodyTextClass}`}>
               Experience a comprehensive suite of automation-ready capabilities bundled into every
               model tier. Each deployment blends governance, insights, and collaboration for faster
               go-to-market.
             </p>
-            <div className="mt-12 grid w-full grid-cols-1 gap-0 overflow-hidden rounded-[10px] border border-black/5 lg:grid-cols-2">
+            <div
+              className={`mt-12 grid w-full grid-cols-1 gap-0 overflow-hidden rounded-[10px] border ${cardBorderClass} lg:grid-cols-2`}
+            >
               <PlanCard
                 accent="light"
                 label="Pro"
@@ -104,7 +139,7 @@ const PricingParallax = () => {
               />
             </div>
 
-            <div className="mt-10 grid w-full gap-4 text-center text-sm text-black/50 lg:hidden">
+            <div className={`mt-10 grid w-full gap-4 text-center text-sm ${mobileFeatureTextClass} lg:hidden`}>
               {[...leftFeatures, ...rightFeatures].map((feature) => (
                 <p key={feature} className="py-2 text-base font-medium">
                   {feature}
@@ -113,18 +148,22 @@ const PricingParallax = () => {
             </div>
           </div>
 
-          <FeatureColumn alignment="left" features={rightFeatures} />
+          <FeatureColumn alignment="left" features={rightFeatures} inverted={isInverted} />
         </motion.div>
       </section>
       <div className="font-geist relative flex h-screen items-center justify-center gap-2">
-        <div className="absolute left-1/2 top-[10%] z-10 grid -translate-x-1/2 content-start justify-items-center gap-6 text-center text-black">
+        <div
+          className={`absolute left-1/2 top-[10%] z-10 grid -translate-x-1/2 content-start justify-items-center gap-6 text-center ${headlineTextClass}`}
+        >
           {/* Preface copy now lives above the "scroll up" cue per request */}
           <h2 className="text-4xl font-semibold uppercase tracking-tight">Models</h2>
-          <p className="max-w-[48ch] text-base text-black/70">
+          <p className={`max-w-[48ch] text-base ${bodyTextClass}`}>
             We pair automation-first delivery with pragmatic capital deployment so teams can adopt
             AI copilots without runaway spend.
           </p>
-          <span className="relative max-w-[12ch] text-xs uppercase leading-tight opacity-40 after:absolute after:left-1/2 after:top-full after:h-16 after:w-px after:bg-gradient-to-b after:from-white after:to-black after:content-['']">
+          <span
+            className={`relative max-w-[12ch] text-xs uppercase leading-tight opacity-60 ${cueTextClass} after:absolute after:left-1/2 after:top-full after:h-16 after:w-px after:bg-gradient-to-b after:content-[''] ${cueGradientClass}`}
+          >
             scroll Up to see
           </span>
         </div>
@@ -136,19 +175,22 @@ const PricingParallax = () => {
 type FeatureColumnProps = {
   alignment: "left" | "right";
   features: string[];
+  inverted?: boolean;
 };
 
-const FeatureColumn = ({ alignment, features }: FeatureColumnProps) => {
+const FeatureColumn = ({ alignment, features, inverted = false }: FeatureColumnProps) => {
   const arrow = alignment === "right" ? "→" : "←";
   const textAlign = alignment === "right" ? "items-end" : "items-start";
   const flow = alignment === "right" ? "flex-row" : "flex-row-reverse";
+  const arrowColor = inverted ? "text-[#f9f9f9]/60" : "text-[#090909]/50";
+  const featureColor = inverted ? "text-[#f9f9f9]" : "text-[#090909]";
 
   return (
     <div className={`hidden shrink-0 flex-col items-center lg:flex`}>
       <div className={`flex h-full min-h-[520px] w-48 flex-col justify-center gap-10 ${textAlign}`}>
         {features.map((feature) => (
-          <div key={feature} className={`flex ${flow} items-center gap-3 text-lg text-black/75`}>
-            <span className="text-2xl text-black/60">{arrow}</span>
+          <div key={feature} className={`flex ${flow} items-center gap-3 text-lg ${featureColor}`}>
+            <span className={`text-2xl ${arrowColor}`}>{arrow}</span>
             <span className="font-medium">{feature}</span>
           </div>
         ))}
@@ -169,11 +211,17 @@ const PlanCard = ({ accent, label, price, description, points }: PlanCardProps) 
   const isDark = accent === "dark";
   return (
     <div
-      className={`relative flex h-full flex-col gap-4 rounded-[10px] border border-black/5 p-8 text-left ${isDark ? "bg-neutral-900 text-white" : "bg-white text-black"}`}
+      className={`relative flex h-full flex-col gap-4 rounded-[10px] border p-8 text-left ${
+        isDark
+          ? "border-[#f9f9f9]/20 bg-[#0c0c0c] text-[#f9f9f9]"
+          : "border-[#090909]/10 bg-[#f9f9f9] text-[#090909]"
+      }`}
     >
       <div className="flex items-center justify-between">
         <span
-          className={`rounded-full px-4 py-1 text-xs uppercase tracking-[0.35em] ${isDark ? "bg-white/10 text-white" : "bg-black/5 text-black/70"}`}
+          className={`rounded-full px-4 py-1 text-xs uppercase tracking-[0.35em] ${
+            isDark ? "bg-white/10 text-[#f9f9f9]/80" : "bg-[#090909]/5 text-[#090909]/70"
+          }`}
         >
           {label}
         </span>
@@ -181,18 +229,20 @@ const PlanCard = ({ accent, label, price, description, points }: PlanCardProps) 
           <small className="pl-1 text-sm font-normal opacity-70">/model</small>
         </span>
       </div>
-      <p className={`text-base ${isDark ? "text-white/80" : "text-black/70"}`}>{description}</p>
-      <hr className={`${isDark ? "border-white/10" : "border-black/10"}`} />
+      <p className={`text-base ${isDark ? "text-[#f9f9f9]/75" : "text-[#090909]/70"}`}>{description}</p>
+      <hr className={`${isDark ? "border-white/10" : "border-[#090909]/15"}`} />
       <ul className="flex flex-col gap-2 text-sm">
         {points.map((point) => (
           <li key={point} className="flex items-center gap-2">
-            <span className={`h-2 w-2 rounded-full ${isDark ? "bg-white" : "bg-black"}`} />
-            <span className={isDark ? "text-white/80" : "text-black/70"}>{point}</span>
+            <span className={`h-2 w-2 rounded-full ${isDark ? "bg-[#f9f9f9]" : "bg-[#090909]"}`} />
+            <span className={isDark ? "text-[#f9f9f9]/75" : "text-[#090909]/70"}>{point}</span>
           </li>
         ))}
       </ul>
       <button
-        className={`mt-auto rounded-full border px-5 py-2 text-sm font-semibold ${isDark ? "border-white/30 text-white" : "border-black/20 text-black"}`}
+        className={`mt-auto rounded-full border px-5 py-2 text-sm font-semibold ${
+          isDark ? "border-white/30 text-[#f9f9f9]" : "border-[#090909]/30 text-[#090909]"
+        }`}
       >
         Talk to sales
       </button>
