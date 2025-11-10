@@ -92,8 +92,10 @@
 .hero__subline {
   margin: clamp(0.2rem, 0.8vh, 0.45rem) 0 0 0;
   display: inline-flex;
+  flex-wrap: wrap;
   align-items: flex-end;
-  column-gap: clamp(0.6rem, 1vw, 1rem);
+  column-gap: clamp(1rem, 2vw, 2.5rem);
+  row-gap: clamp(0.2rem, 0.6vh, 0.35rem);
   letter-spacing: 0.28em;
   text-transform: uppercase;
   font-size: clamp(0.85rem, 1.4vw, 1rem);
@@ -123,6 +125,7 @@
   text-transform: uppercase;
   line-height: 1.2;
   flex: 0 0 auto;
+  padding-right: clamp(0.4rem, 1vw, 0.9rem);
 }
 
 .hero__animated-word span {
