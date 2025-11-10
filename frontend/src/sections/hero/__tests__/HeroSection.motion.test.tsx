@@ -9,9 +9,10 @@ describe("HeroSection", () => {
     const markup = renderToString(<HeroSection />);
 
     expect(markup).toContain("data-hero-section");
-    expect(markup).toContain("clarity, without the glow");
+    expect(markup).toContain("MICROAGENTS");
     expect(markup).toContain("automated");
     expect(markup).toContain("BPMNs");
-    expect(markup).toMatch(/\+\d/);
+    expect(markup).toContain("hero__counter-plus");
+    expect(markup).toMatch(/hero__counter-value">\d/);
   });
 });

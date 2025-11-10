@@ -65,13 +65,22 @@ const useLoop = (delay = 2200) => {
 
 const AnimatedWord = ({ words }: { words: string[] }) => {
   const { key } = useLoop();
+  const longestWord = useMemo(() => {
+    return words.reduce((longest, word) => {
+      return word.length > longest.length ? word : longest;
+    }, words[0] ?? "");
+  }, [words]);
 
   const currentWord = useMemo(() => {
     return words[key % words.length];
   }, [key, words]);
 
   return (
-    <span className="hero__animated-word" aria-live="polite">
+    <span
+      className="hero__animated-word"
+      aria-live="polite"
+      style={{ minWidth: `${longestWord.length + 0.25}ch` }}
+    >
       <AnimatePresence mode="popLayout" initial={false}>
         <motion.span
           key={key}
@@ -106,14 +115,15 @@ export function HeroSection() {
           />
           <h1 className="hero__headline">
             <span className="hero__headline-emphasis hero__headline-counter">
-              {formatDayCounter(daysElapsed)}
+              <span className="hero__counter-plus">+</span>
+              <span className="hero__counter-value">{formatDayCounter(daysElapsed).slice(1)}</span>
             </span>
           </h1>
           <p className="hero__subline">
             <AnimatedWord words={animatedTerms} />
             <span className="hero__subline-static">automated</span>
           </p>
-          <p className="hero__tagline">clarity, without the glow</p>
+          <h2 className="hero__tagline">MICROAGENTS</h2>
           <p className="hero__description">
             A monochrome canvas keeps the interface steady while your automations carry the detail.
             Scroll to fold through real teams, from kickoff canvas to audit trail, all built on the same
