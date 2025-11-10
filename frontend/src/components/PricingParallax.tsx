@@ -56,29 +56,44 @@ const PricingParallax = ({ variant = "default" }: PricingParallaxProps) => {
   const mobileFeatureTextClass = isInverted ? "text-[#f9f9f9]/60" : "text-[#090909]/50";
 
   useEffect(() => {
-    const lenis = new Lenis();
+    if (typeof window === "undefined") {
+      return undefined;
+    }
 
-    const raf = (time: number) => {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    };
+    const enableSmooth = window.innerWidth >= 768;
+    let lenis: Lenis | null = null;
+    let rafId = 0;
 
     const resize = () => {
       setDimension({ width: window.innerWidth, height: window.innerHeight });
     };
 
+    if (enableSmooth) {
+      lenis = new Lenis();
+      const raf = (time: number) => {
+        lenis?.raf(time);
+        rafId = requestAnimationFrame(raf);
+      };
+      rafId = requestAnimationFrame(raf);
+    } else {
+      resize();
+    }
+
     window.addEventListener("resize", resize);
-    requestAnimationFrame(raf);
-    resize();
+    if (enableSmooth) {
+      resize();
+    }
 
     return () => {
       window.removeEventListener("resize", resize);
+      if (rafId) cancelAnimationFrame(rafId);
+      lenis?.destroy();
     };
   }, []);
 
   return (
     <main className={`w-full ${mainBackgroundClass}`}>
-      <div className="font-geist relative flex min-h-[70vh] items-center justify-center gap-2 lg:h-screen">
+      <div className="font-geist relative flex min-h-[45vh] items-center justify-center gap-2 lg:min-h-[70vh] lg:h-screen">
         <div
           className={`absolute bottom-[12%] left-1/2 z-10 grid -translate-x-1/2 content-start justify-items-center gap-6 text-center ${headlineTextClass}`}
         >
@@ -98,7 +113,7 @@ const PricingParallax = ({ variant = "default" }: PricingParallaxProps) => {
 
       <section
         ref={gallery}
-        className={`relative flex min-h-[140vh] flex-col items-center justify-center overflow-hidden ${sectionBackgroundClass} px-4 py-16 lg:h-[175vh] lg:flex-row lg:px-[4vw] lg:py-24`}
+        className={`relative flex min-h-[110vh] flex-col items-center justify-center overflow-hidden ${sectionBackgroundClass} px-4 py-10 md:min-h-[125vh] lg:h-[160vh] lg:flex-row lg:px-[4vw] lg:py-24`}
       >
         <motion.div
           className="relative mx-auto flex w-full max-w-6xl flex-col items-center justify-center gap-10 lg:flex-row lg:items-center lg:justify-between"
@@ -153,7 +168,7 @@ const PricingParallax = ({ variant = "default" }: PricingParallaxProps) => {
           <FeatureColumn alignment="left" features={rightFeatures} inverted={isInverted} />
         </motion.div>
       </section>
-      <div className="font-geist relative flex min-h-[70vh] items-center justify-center gap-2 lg:h-screen">
+      <div className="font-geist relative flex min-h-[45vh] items-center justify-center gap-2 lg:min-h-[70vh] lg:h-screen">
         <div
           className={`absolute left-1/2 top-[10%] z-10 grid -translate-x-1/2 content-start justify-items-center gap-6 text-center ${headlineTextClass}`}
         >
