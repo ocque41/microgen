@@ -4,8 +4,6 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import "./hero.css";
 
 const MS_IN_DAY = 24 * 60 * 60 * 1000;
-// Freeze the hero counter to the launch day so it advances globally, not per visitor session.
-const HERO_COUNTER_START = new Date("2024-06-03T00:00:00Z").getTime();
 const MIN_COUNTER_DIGITS = 2;
 
 const formatDayCounter = (days: number) => {
@@ -13,7 +11,26 @@ const formatDayCounter = (days: number) => {
   return `+${days.toString().padStart(digits, "0")}`;
 };
 
-const useDailyCounter = (start: number) => {
+const resolveCounterStart = () => {
+  const envValue = import.meta.env.VITE_HERO_COUNTER_START;
+
+  if (typeof envValue === "string" && envValue.trim().length > 0) {
+    const asNumber = Number(envValue);
+    if (!Number.isNaN(asNumber)) {
+      return asNumber;
+    }
+
+    const parsed = Date.parse(envValue);
+    if (!Number.isNaN(parsed)) {
+      return parsed;
+    }
+  }
+
+  return Date.now();
+};
+
+const useDailyCounter = (explicitStart?: number) => {
+  const [start] = useState(() => explicitStart ?? resolveCounterStart());
   const calculateDays = useCallback(() => {
     return Math.max(0, Math.floor((Date.now() - start) / MS_IN_DAY));
   }, [start]);
@@ -71,7 +88,7 @@ const AnimatedWord = ({ words }: { words: string[] }) => {
 };
 
 export function HeroSection() {
-  const daysElapsed = useDailyCounter(HERO_COUNTER_START);
+  const daysElapsed = useDailyCounter();
   const animatedTerms = useMemo(
     () => ["BPMNs", "Workflows", "Frameworks", "Pipelines", "Playbooks"],
     [],
@@ -91,12 +108,12 @@ export function HeroSection() {
             <span className="hero__headline-emphasis hero__headline-counter">
               {formatDayCounter(daysElapsed)}
             </span>
-            clarity, without the glow
           </h1>
           <p className="hero__subline">
             <AnimatedWord words={animatedTerms} />
             <span className="hero__subline-static">automated</span>
           </p>
+          <p className="hero__tagline">clarity, without the glow</p>
           <p className="hero__description">
             A monochrome canvas keeps the interface steady while your automations carry the detail.
             Scroll to fold through real teams, from kickoff canvas to audit trail, all built on the same
