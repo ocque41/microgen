@@ -79,7 +79,7 @@ const AnimatedWord = ({ words }: { words: string[] }) => {
     <span
       className="hero__animated-word"
       aria-live="polite"
-      style={{ minWidth: `${longestWord.length + 0.25}ch` }}
+      style={{ width: `${Math.max(longestWord.length, 1) + 1}ch` }}
     >
       <AnimatePresence mode="popLayout" initial={false}>
         <motion.span
@@ -114,7 +114,7 @@ export function HeroSection() {
             loading="lazy"
           />
           <h1 className="hero__headline">
-            <span className="hero__headline-emphasis hero__headline-counter">
+            <span className="hero__headline-emphasis hero__headline-counter" aria-label="Operational days counter">
               <span className="hero__counter-plus">+</span>
               <span className="hero__counter-value">{formatDayCounter(daysElapsed).slice(1)}</span>
             </span>

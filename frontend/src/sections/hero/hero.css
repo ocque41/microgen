@@ -37,7 +37,7 @@
   margin: 0;
   display: flex;
   align-items: flex-start;
-  font-size: clamp(3.1rem, 10vw, 6rem);
+  font-size: clamp(3.4rem, 11vw, 6.3rem);
   font-family: "Plus Jakarta Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-weight: 400;
   letter-spacing: -0.01em;
@@ -52,17 +52,14 @@
 
 .hero__headline-counter {
   display: inline-flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: flex-start;
-  gap: clamp(0.35rem, 1vw, 0.6rem);
+  gap: clamp(0.2rem, 0.6vw, 0.35rem);
   padding: 0;
   border: none;
   border-radius: 0;
   font-size: 1em;
   font-weight: 600;
-  font-variant-numeric: tabular-nums;
-  font-feature-settings: "tnum";
-  letter-spacing: 0.28em;
   white-space: nowrap;
   min-width: 5ch;
   text-transform: uppercase;
@@ -70,15 +67,19 @@
 
 .hero__counter-plus {
   display: inline-flex;
-  align-items: baseline;
-  font-size: 0.7em;
+  align-items: center;
+  font-size: 1em;
   letter-spacing: normal;
+  line-height: 1;
 }
 
 .hero__counter-value {
   display: inline-flex;
-  align-items: baseline;
-  letter-spacing: 0.28em;
+  align-items: center;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+  letter-spacing: clamp(0.05em, 0.12vw, 0.12em);
+  line-height: 1;
 }
 
 .hero__description {
@@ -91,8 +92,8 @@
 .hero__subline {
   margin: clamp(0.2rem, 0.8vh, 0.45rem) 0 0 0;
   display: inline-flex;
-  align-items: baseline;
-  gap: clamp(0.5rem, 1vw, 0.9rem);
+  align-items: flex-end;
+  column-gap: clamp(0.6rem, 1vw, 1rem);
   letter-spacing: 0.28em;
   text-transform: uppercase;
   font-size: clamp(0.85rem, 1.4vw, 1rem);
@@ -116,21 +117,25 @@
 .hero__animated-word {
   display: inline-flex;
   overflow: hidden;
-  height: 1.2em;
+  height: 1.5em;
   color: #f9f9f9;
   font-weight: 600;
   text-transform: uppercase;
+  line-height: 1.2;
+  flex: 0 0 auto;
 }
 
 .hero__animated-word span {
   display: inline-flex;
+  min-width: 100%;
 }
 
 .hero__subline-static {
   display: inline-flex;
-  align-items: center;
+  align-items: flex-end;
   opacity: 0.9;
   white-space: nowrap;
+  flex: 0 0 auto;
 }
 
 .hero__gallery {
