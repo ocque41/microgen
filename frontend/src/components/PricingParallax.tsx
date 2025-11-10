@@ -32,7 +32,9 @@ const PricingParallax = ({ variant = "default" }: PricingParallaxProps) => {
   });
 
   const { height } = dimension;
-  const yCard = useTransform(scrollYProgress, [0, 1], [0, height * 1.2]);
+  const yCard = useTransform(scrollYProgress, [0, 1], [0, height * 0.9]);
+  const isMobile = dimension.width < 1024;
+  const parallaxStyle = !isMobile ? { y: yCard } : undefined;
 
   const isInverted = variant === "inverted";
   const mainBackgroundClass = isInverted
@@ -76,7 +78,7 @@ const PricingParallax = ({ variant = "default" }: PricingParallaxProps) => {
 
   return (
     <main className={`w-full ${mainBackgroundClass}`}>
-      <div className="font-geist relative flex h-screen items-center justify-center gap-2">
+      <div className="font-geist relative flex min-h-[70vh] items-center justify-center gap-2 lg:h-screen">
         <div
           className={`absolute bottom-[12%] left-1/2 z-10 grid -translate-x-1/2 content-start justify-items-center gap-6 text-center ${headlineTextClass}`}
         >
@@ -96,11 +98,11 @@ const PricingParallax = ({ variant = "default" }: PricingParallaxProps) => {
 
       <section
         ref={gallery}
-        className={`relative flex h-[175vh] items-start justify-center overflow-hidden ${sectionBackgroundClass} px-[4vw] pt-24`}
+        className={`relative flex min-h-[140vh] flex-col items-center justify-center overflow-hidden ${sectionBackgroundClass} px-4 py-16 lg:h-[175vh] lg:flex-row lg:px-[4vw] lg:py-24`}
       >
         <motion.div
-          className="relative mx-auto flex w-full max-w-6xl items-center justify-between gap-10"
-          style={{ y: yCard }}
+          className="relative mx-auto flex w-full max-w-6xl flex-col items-center justify-center gap-10 lg:flex-row lg:items-center lg:justify-between"
+          style={parallaxStyle}
         >
           <FeatureColumn alignment="right" features={leftFeatures} inverted={isInverted} />
 
@@ -139,7 +141,7 @@ const PricingParallax = ({ variant = "default" }: PricingParallaxProps) => {
               />
             </div>
 
-            <div className={`mt-10 grid w-full gap-4 text-center text-sm ${mobileFeatureTextClass} lg:hidden`}>
+            <div className={`mt-10 grid w-full gap-4 text-center text-sm ${mobileFeatureTextClass} md:hidden`}>
               {[...leftFeatures, ...rightFeatures].map((feature) => (
                 <p key={feature} className="py-2 text-base font-medium">
                   {feature}
@@ -151,7 +153,7 @@ const PricingParallax = ({ variant = "default" }: PricingParallaxProps) => {
           <FeatureColumn alignment="left" features={rightFeatures} inverted={isInverted} />
         </motion.div>
       </section>
-      <div className="font-geist relative flex h-screen items-center justify-center gap-2">
+      <div className="font-geist relative flex min-h-[70vh] items-center justify-center gap-2 lg:h-screen">
         <div
           className={`absolute left-1/2 top-[10%] z-10 grid -translate-x-1/2 content-start justify-items-center gap-6 text-center ${headlineTextClass}`}
         >
@@ -186,7 +188,7 @@ const FeatureColumn = ({ alignment, features, inverted = false }: FeatureColumnP
   const featureColor = inverted ? "text-[#f9f9f9]" : "text-[#090909]";
 
   return (
-    <div className={`hidden shrink-0 flex-col items-center lg:flex`}>
+    <div className={`hidden shrink-0 flex-col items-center md:flex`}>
       <div className={`flex h-full min-h-[520px] w-48 flex-col justify-center gap-10 ${textAlign}`}>
         {features.map((feature) => (
           <div key={feature} className={`flex ${flow} items-center gap-3 text-lg ${featureColor}`}>
