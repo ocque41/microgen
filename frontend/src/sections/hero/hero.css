@@ -50,11 +50,58 @@
   line-height: inherit;
 }
 
+.hero__headline-counter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(0.15rem, 1vw, 0.4rem) clamp(0.65rem, 2vw, 1.2rem);
+  border: 1px solid rgba(249, 249, 249, 0.28);
+  border-radius: 999px;
+  font-size: calc(1em + 0.15rem);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+  letter-spacing: 0.12em;
+  white-space: nowrap;
+  min-width: 5.2ch;
+  text-transform: uppercase;
+}
+
 .hero__description {
   margin: clamp(1rem, 2vh, 1.5rem) 0 0 0;
   max-width: 42ch;
   font-size: clamp(1.05rem, 1.8vw, 1.35rem);
   color: rgba(249, 249, 249, 0.78);
+}
+
+.hero__subline {
+  margin: clamp(0.6rem, 1vh, 0.9rem) 0 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4ch;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  font-size: clamp(0.85rem, 1.4vw, 1rem);
+  color: rgba(249, 249, 249, 0.62);
+}
+
+.hero__animated-word {
+  display: inline-flex;
+  overflow: hidden;
+  height: 1.3em;
+  color: #f9f9f9;
+  font-weight: 600;
+}
+
+.hero__animated-word span {
+  display: inline-flex;
+}
+
+.hero__subline-static {
+  display: inline-flex;
+  align-items: center;
+  opacity: 0.9;
 }
 
 .hero__gallery {
