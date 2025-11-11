@@ -116,7 +116,7 @@ const PricingParallax = ({ variant = "default" }: PricingParallaxProps) => {
         className={`relative flex min-h-[110vh] flex-col items-center justify-center overflow-hidden ${sectionBackgroundClass} px-4 py-10 md:min-h-[125vh] lg:h-[160vh] lg:flex-row lg:px-[4vw] lg:py-24`}
       >
         <motion.div
-          className="relative mx-auto flex w-full max-w-6xl flex-col items-center justify-center gap-10 lg:flex-row lg:items-center lg:justify-between"
+          className="relative mx-auto flex w-full max-w-[90rem] flex-col items-center justify-center gap-10 lg:flex-row lg:items-center lg:justify-center lg:gap-16"
           style={parallaxStyle}
         >
           <FeatureColumn alignment="right" features={leftFeatures} inverted={isInverted} />
