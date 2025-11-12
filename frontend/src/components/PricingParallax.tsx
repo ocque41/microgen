@@ -24,18 +24,21 @@ type PricingParallaxProps = {
 
 const PricingParallax = ({ variant = "default" }: PricingParallaxProps) => {
   const gallery = useRef<HTMLDivElement>(null);
-  const [dimension, setDimension] = useState({ width: 0, height: 0 });
+  const [dimension, setDimension] = useState({ width: 0, height: 0, viewport: 0 });
 
   const { scrollYProgress } = useScroll({
     target: gallery,
     offset: ["start end", "end start"],
   });
 
-  const { height } = dimension;
-  const maxOffset = height * 0.25;
-  const yCard = useTransform(scrollYProgress, [0, 0.5, 1], [maxOffset, 0, -maxOffset]);
-  const isMobile = dimension.width < 1024;
-  const parallaxStyle = !isMobile ? { y: yCard } : undefined;
+  const { height, width, viewport } = dimension;
+  const isMobile = width < 1024;
+  const availableScroll = Math.max(height - viewport, 0);
+  const travelLimit = viewport * 0.2;
+  const maxOffset = Math.min(availableScroll * 0.5, travelLimit);
+  const trimmedProgress = useTransform(scrollYProgress, [0.08, 0.92], [0, 1], { clamp: true });
+  const yCard = useTransform(trimmedProgress, [0, 0.5, 1], [maxOffset, 0, -maxOffset]);
+  const parallaxStyle = !isMobile && maxOffset > 0 ? { y: yCard } : undefined;
 
   const isInverted = variant === "inverted";
   const mainBackgroundClass = isInverted
@@ -68,8 +71,9 @@ const PricingParallax = ({ variant = "default" }: PricingParallaxProps) => {
 
     const syncDimensions = () => {
       const width = window.innerWidth;
-      const galleryHeight = gallery.current?.offsetHeight ?? window.innerHeight;
-      setDimension({ width, height: galleryHeight });
+      const viewport = window.innerHeight;
+      const galleryHeight = gallery.current?.offsetHeight ?? viewport;
+      setDimension({ width, height: galleryHeight, viewport });
     };
 
     if (enableSmooth) {
@@ -127,7 +131,7 @@ const PricingParallax = ({ variant = "default" }: PricingParallaxProps) => {
 
       <section
         ref={gallery}
-        className={`relative flex min-h-[115vh] flex-col items-center justify-center overflow-hidden lg:overflow-visible ${sectionBackgroundClass} px-4 py-12 md:min-h-[135vh] lg:min-h-[180vh] xl:min-h-[200vh] lg:flex-row lg:px-[4vw] lg:py-[14vh] xl:py-[16vh]`}
+        className={`relative flex min-h-[105vh] flex-col items-center justify-center overflow-hidden lg:overflow-visible ${sectionBackgroundClass} px-4 py-10 md:min-h-[125vh] lg:min-h-[165vh] xl:min-h-[185vh] lg:flex-row lg:px-[4vw] lg:py-[12vh] xl:py-[14vh]`}
       >
         <motion.div
           className="relative mx-auto flex w-full max-w-[90rem] flex-col items-center justify-center gap-10 lg:flex-row lg:items-center lg:justify-center lg:gap-16"
