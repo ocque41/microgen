@@ -71,6 +71,12 @@ const AnimatedWord = ({ words }: { words: string[] }) => {
     }, words[0] ?? "");
   }, [words]);
 
+  const animatedWidthCh = useMemo(() => {
+    const baseCharacters = Math.max(longestWord.length, 1);
+    const buffer = Math.ceil(baseCharacters * 0.4) + 2;
+    return baseCharacters + buffer;
+  }, [longestWord]);
+
   const currentWord = useMemo(() => {
     return words[key % words.length];
   }, [key, words]);
@@ -79,7 +85,7 @@ const AnimatedWord = ({ words }: { words: string[] }) => {
     <span
       className="hero__animated-word"
       aria-live="polite"
-      style={{ width: `${Math.max(longestWord.length, 1) + 1}ch` }}
+      style={{ width: `${animatedWidthCh}ch` }}
     >
       <AnimatePresence mode="popLayout" initial={false}>
         <motion.span

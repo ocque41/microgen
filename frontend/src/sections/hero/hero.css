@@ -94,12 +94,14 @@
   display: inline-flex;
   flex-wrap: wrap;
   align-items: flex-end;
-  column-gap: clamp(1rem, 2vw, 2.5rem);
+  column-gap: clamp(1.25rem, 3vw, 3rem);
   row-gap: clamp(0.2rem, 0.6vh, 0.35rem);
   letter-spacing: 0.28em;
   text-transform: uppercase;
   font-size: clamp(0.85rem, 1.4vw, 1rem);
   color: rgba(249, 249, 249, 0.62);
+  position: relative;
+  isolation: isolate;
 }
 
 .hero__subline::after {
@@ -118,7 +120,7 @@
 
 .hero__animated-word {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   display: inline-flex;
   overflow: hidden;
   height: 1.5em;
@@ -127,12 +129,14 @@
   text-transform: uppercase;
   line-height: 1.2;
   flex: 0 0 auto;
-  padding-right: clamp(1rem, 2vw, 2rem);
+  padding-right: clamp(1.2rem, 2.6vw, 2.4rem);
+  letter-spacing: 0.18em;
 }
 
 .hero__animated-word span {
   display: inline-flex;
   min-width: 100%;
+  letter-spacing: inherit;
 }
 
 .hero__subline-static {
@@ -142,7 +146,7 @@
   white-space: nowrap;
   flex: 0 0 auto;
   position: relative;
-  z-index: 0;
+  z-index: 1;
 }
 
 .hero__gallery {
