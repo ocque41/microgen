@@ -125,12 +125,12 @@
   overflow: hidden;
   height: 1.5em;
   color: #f9f9f9;
-  font-weight: 600;
+  font-weight: 700;
   text-transform: uppercase;
   line-height: 1.2;
   flex: 0 0 auto;
   padding-right: clamp(1.2rem, 2.6vw, 2.4rem);
-  letter-spacing: 0.18em;
+  letter-spacing: 0.06em;
 }
 
 .hero__animated-word span {

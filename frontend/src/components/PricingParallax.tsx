@@ -32,7 +32,11 @@ const PricingParallax = ({ variant = "default" }: PricingParallaxProps) => {
   });
 
   const { height } = dimension;
-  const yCard = useTransform(scrollYProgress, [0, 1], [0, height * 0.9]);
+  const yCard = useTransform(
+    scrollYProgress,
+    [0, 0.5, 1],
+    [height * 0.35, 0, -height * 0.35],
+  );
   const isMobile = dimension.width < 1024;
   const parallaxStyle = !isMobile ? { y: yCard } : undefined;
 
@@ -113,7 +117,7 @@ const PricingParallax = ({ variant = "default" }: PricingParallaxProps) => {
 
       <section
         ref={gallery}
-        className={`relative flex min-h-[110vh] flex-col items-center justify-center overflow-hidden ${sectionBackgroundClass} px-4 py-10 md:min-h-[125vh] lg:h-[160vh] lg:flex-row lg:px-[4vw] lg:py-24`}
+        className={`relative flex min-h-[130vh] flex-col items-center justify-center overflow-hidden lg:overflow-visible ${sectionBackgroundClass} px-4 py-14 md:min-h-[150vh] lg:min-h-[210vh] xl:min-h-[240vh] lg:flex-row lg:px-[4vw] lg:py-[18vh]`}
       >
         <motion.div
           className="relative mx-auto flex w-full max-w-[90rem] flex-col items-center justify-center gap-10 lg:flex-row lg:items-center lg:justify-center lg:gap-16"
