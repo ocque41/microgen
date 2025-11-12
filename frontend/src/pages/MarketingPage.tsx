@@ -87,16 +87,10 @@ export function MarketingPage() {
         <PricingParallax />
         <HowItWorksSection />
 
-        <footer className="relative z-[12000] mt-64 flex min-h-screen flex-col justify-between overflow-hidden px-6 py-14 text-[color:rgba(244,241,234,0.78)] sm:mt-80 md:mt-88 lg:px-12 xl:mt-[calc(120px+18vw)]">
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            src="/insignia.mov"
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-20 blur-3xl"
-          />
+        <footer
+          className="relative z-[12000] mt-64 flex min-h-screen flex-col justify-between overflow-hidden px-6 py-14 text-[color:rgba(244,241,234,0.78)] sm:mt-80 md:mt-88 lg:px-12 xl:mt-[calc(120px+18vw)]"
+          style={{ backgroundColor: marketingTheme.background }}
+        >
           {/* Plan Spacing Step 3: elevated top margin keeps footer distinct from pricing block. */}
           {/* Plan V10 Step 2: footer offset increased to maintain section rhythm after hero expansion. */}
           {/* Plan V11 Step 2: footer offset increased again to track the taller hero. */}

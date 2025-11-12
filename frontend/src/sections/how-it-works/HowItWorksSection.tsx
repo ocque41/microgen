@@ -3,6 +3,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 
+import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
 
 const steps = [
@@ -62,6 +63,7 @@ const steps = [
 
 const HoverExpandSteps = ({ className }: { className?: string }) => {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const isMobile = useIsMobile();
 
   return (
     <motion.div
@@ -72,11 +74,33 @@ const HoverExpandSteps = ({ className }: { className?: string }) => {
     >
       <div className="flex w-full flex-col gap-5">
         {steps.map((step, index) => {
+          if (isMobile) {
+            return (
+              <div key={step.id} className="flex flex-col overflow-hidden rounded-[24px] bg-[#111]/60 ring-1 ring-white/5">
+                <div className="relative h-48 w-full overflow-hidden">
+                  <img src={step.image} alt={step.title} className="h-full w-full object-cover" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+                  <div className="absolute bottom-4 left-4 text-xs font-semibold uppercase tracking-[0.3em] text-white/70">
+                    Step {String(index + 1).padStart(2, "0")}
+                  </div>
+                </div>
+                <div className="space-y-3 px-5 py-6">
+                  <h3 className="text-xl font-semibold text-white">{step.title}</h3>
+                  <ul className="space-y-2 text-sm leading-relaxed text-white/80">
+                    {step.details.map((detail) => (
+                      <li key={detail}>{detail}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            );
+          }
+
           const isActive = activeIndex === index;
 
           return (
             <div key={step.id} className="flex items-stretch gap-4">
-              <div className="flex w-10 items-center justify-center text-base font-semibold tracking-[0.2em] text-white/40">
+              <div className="hidden w-10 items-center justify-center text-base font-semibold tracking-[0.2em] text-white/40 sm:flex">
                 {String(index + 1).padStart(2, "0")}
               </div>
               <motion.button
