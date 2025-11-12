@@ -32,11 +32,8 @@ const PricingParallax = ({ variant = "default" }: PricingParallaxProps) => {
   });
 
   const { height } = dimension;
-  const yCard = useTransform(
-    scrollYProgress,
-    [0, 0.5, 1],
-    [height * 0.35, 0, -height * 0.35],
-  );
+  const maxOffset = height * 0.25;
+  const yCard = useTransform(scrollYProgress, [0, 0.5, 1], [maxOffset, 0, -maxOffset]);
   const isMobile = dimension.width < 1024;
   const parallaxStyle = !isMobile ? { y: yCard } : undefined;
 
@@ -67,9 +64,12 @@ const PricingParallax = ({ variant = "default" }: PricingParallaxProps) => {
     const enableSmooth = window.innerWidth >= 768;
     let lenis: Lenis | null = null;
     let rafId = 0;
+    let resizeObserver: ResizeObserver | null = null;
 
-    const resize = () => {
-      setDimension({ width: window.innerWidth, height: window.innerHeight });
+    const syncDimensions = () => {
+      const width = window.innerWidth;
+      const galleryHeight = gallery.current?.offsetHeight ?? window.innerHeight;
+      setDimension({ width, height: galleryHeight });
     };
 
     if (enableSmooth) {
@@ -79,17 +79,27 @@ const PricingParallax = ({ variant = "default" }: PricingParallaxProps) => {
         rafId = requestAnimationFrame(raf);
       };
       rafId = requestAnimationFrame(raf);
+      syncDimensions();
     } else {
-      resize();
+      syncDimensions();
     }
 
-    window.addEventListener("resize", resize);
-    if (enableSmooth) {
-      resize();
+    const handleResize = () => {
+      syncDimensions();
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    if (gallery.current && "ResizeObserver" in window) {
+      resizeObserver = new ResizeObserver(() => {
+        syncDimensions();
+      });
+      resizeObserver.observe(gallery.current);
     }
 
     return () => {
-      window.removeEventListener("resize", resize);
+      window.removeEventListener("resize", handleResize);
+      resizeObserver?.disconnect();
       if (rafId) cancelAnimationFrame(rafId);
       lenis?.destroy();
     };
@@ -117,7 +127,7 @@ const PricingParallax = ({ variant = "default" }: PricingParallaxProps) => {
 
       <section
         ref={gallery}
-        className={`relative flex min-h-[130vh] flex-col items-center justify-center overflow-hidden lg:overflow-visible ${sectionBackgroundClass} px-4 py-14 md:min-h-[150vh] lg:min-h-[210vh] xl:min-h-[240vh] lg:flex-row lg:px-[4vw] lg:py-[18vh]`}
+        className={`relative flex min-h-[115vh] flex-col items-center justify-center overflow-hidden lg:overflow-visible ${sectionBackgroundClass} px-4 py-12 md:min-h-[135vh] lg:min-h-[180vh] xl:min-h-[200vh] lg:flex-row lg:px-[4vw] lg:py-[14vh] xl:py-[16vh]`}
       >
         <motion.div
           className="relative mx-auto flex w-full max-w-[90rem] flex-col items-center justify-center gap-10 lg:flex-row lg:items-center lg:justify-center lg:gap-16"

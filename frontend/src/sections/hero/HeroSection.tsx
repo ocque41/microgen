@@ -131,9 +131,7 @@ export function HeroSection() {
           </p>
           <h2 className="hero__tagline">MICROAGENTS</h2>
           <p className="hero__description">
-            Run every workflow your business owns—from sales playbooks to compliance drilldowns—inside a
-            single automated spine. Design, deploy, and audit each process in one view, then let the
-            system advance all of them in parallel while you stay in command.
+            
           </p>
         </header>
       </div>
